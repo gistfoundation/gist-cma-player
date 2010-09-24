@@ -1,0 +1,66 @@
+<!DOCTYPE HTML> 
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<script type="text/javascript" language="javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script> 
+</head>
+
+<body>
+
+  <script type="text/javascript" language="javascript"> 
+    $(document).ready(function () { init(); });
+
+    function init() {
+    alert("Start");
+      try {
+        // The 'src' parameter is mandatory in Opera 10, so have used an empty string "".
+        // Otherwise, an exception is thrown.
+        myAudioObj = new Audio(""); 
+
+        audioObjSupport = !!(myAudioObj.canPlayType);
+        basicAudioSupport = !!(!audioObjSupport ? myAudioObj.play : false);
+
+        if (myAudioObj.canPlayType) {
+          // Currently canPlayType(type) returns: "no", "maybe" or "probably"
+          canPlayOgg = ("no" != myAudioObj.canPlayType("audio/ogg")) && ("" != myAudioObj.canPlayType("audio/ogg"));
+          canPlayMp3 = ("no" != myAudioObj.canPlayType("audio/mpeg")) && ("" != myAudioObj.canPlayType("audio/mpeg"));
+          alert("can play ogg:"+canPlayOgg+" can play mp3:"+canPlayMp3);
+        }
+        else {
+          alert("No media");
+        }
+
+
+      } catch (e) {
+        audioObjSupport = false;
+        basicAudioSupport = false;
+        alert("Problem "+e);
+      }
+    }
+  </script>
+<!-- Commented out section are failed tests in chrome and firefox -->
+<!--
+<audio controls src="http://shoutcast.internet-radio.org.uk:10272/;"></audio>
+<audio controls src="http://icecast.commedia.org.uk:8000/209radio_relay.mp3.m3u"></audio>
+<audio controls src="http://www.sheffieldlive.org/sheffieldlive.m3u"></audio>
+<audio controls src="http://icecast.commedia.org.uk:8000/209radio_relay.mp3.m3u;"></audio>
+<audio controls src="http://icecast.commedia.org.uk:8000/209radio_relay.mp3;"></audio>
+<audio controls src="http://icecast.commedia.org.uk:8000/commbrist.mp3.m3u;"></audio>
+<audio controls src="http://icecast.commedia.org.uk:8000/commbrist.mp3.m3u"></audio>
+<audio controls src="http://icecast.commedia.org.uk:8000/commbrist.ogg.m3u"></audio>
+<audio controls src="http://icecast.commedia.org.uk:8000/commbrist.ogg.m3u;"></audio>
+-->
+
+<audio controls autobuffer>
+  <source src="http://icecast.commedia.org.uk:8000/commbrist.mp3.m3u" />
+  <source src="http://icecast.commedia.org.uk:8000/commbrist.ogg.m3u" />
+  <source src="http://icecast.commedia.org.uk:8000/commbrist.mp3.m3u;" />
+  <source src="http://icecast.commedia.org.uk:8000/commbrist.ogg.m3u;" />
+  No support for auto streams
+</audio>
+
+
+</body>
+
+</html>
