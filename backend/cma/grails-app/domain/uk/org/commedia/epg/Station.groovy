@@ -2,6 +2,9 @@ package uk.org.commedia.epg
 
 class Station {
 
-    static constraints = {
-    }
+  static constraints = {
+  }
+
+  String name
+  String url
 }
