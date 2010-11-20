@@ -1,5 +1,9 @@
 package uk.org.commedia.epg
 
+import grails.converters.JSON
+import grails.converters.XML
+import grails.plugins.springsecurity.Secured
+
 class StationController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -8,9 +12,24 @@ class StationController {
         redirect(action: "list", params: params)
     }
 
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [stationInstanceList: Station.list(params), stationInstanceTotal: Station.count()]
+ 
+   def list = {
+        println "List Stations"
+        def response = null;
+        if(request?.format && request.format != "html"){
+          response = [stationInstanceList: Station.list(), stationInstanceTotal: Station.count()]
+        }
+        else {
+          params.max = Math.min(params.max ? params.int('max') : 10, 100)
+          response = [stationInstanceList: Station.list(params), stationInstanceTotal: Station.count()]
+        }
+
+        withFormat {
+           html response
+            xml { render response as XML }
+            json { render response as JSON }
+        }
+
     }
 
     def create = {

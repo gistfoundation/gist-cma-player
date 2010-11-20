@@ -22,4 +22,4 @@ Apparently, ant clean compile install should then install your app in the runnin
 Instead, I just ran the ant and then manually did "adb install ./bin/cmaplayer-debug.apk"
 
 
-
+Hint: If you need to access a service on localhost from the android emulator, use http://10.0.2.2:8080/app/url instead of localhost. Works a treat.

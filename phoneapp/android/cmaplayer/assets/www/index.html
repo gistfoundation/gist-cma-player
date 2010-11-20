@@ -7,74 +7,60 @@
     <!--<link rel="stylesheet" href="master.css" type="text/css" media="screen" title="no title" charset="utf-8">-->
     <link rel="stylesheet" href="jquery.mobile-1.0a2.min.css" />
     <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>    
-    <script src="jquery-1.4.4.min.js"></script>
-    <script src="jquery.mobile-1.0a2.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="jquery-1.4.4.min.js"></script>    
 
     <script type="text/javascript" charset="utf-8">
-      function init(){
-        document.addEventListener("touchmove", preventBehavior, false);
-        document.addEventListener("deviceready", deviceInfo, true);             
-      }       
-    </script>
 
-    <style type="text/css">	
-      .nav-glyphish .ui-btn .ui-btn-inner { padding-top: 40px !important; }
-      .nav-glyphish .ui-btn .ui-icon { width: 30px!important; height: 30px!important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: none !important; border-radius: none !important; }
-      #star .ui-icon { background:  url(28-star.png) 50% 50% no-repeat; background-size: 26px 26px; }
-      #network .ui-icon { background:  url(55-network.png) 50% 50% no-repeat; background-size: 24px 24px;  }
-      #note .ui-icon { background:  url(65-note.png) 50% 50% no-repeat;  background-size: 15px 24px; }
-      #equalizer .ui-icon { background:  url(95-equalizer.png) 50% 50% no-repeat;  background-size: 26px 24px; }
-    </style> 
+      $(document).ready(function () {
+        // document.addEventListener("touchmove", preventBehavior, false);
+        // document.addEventListener("deviceready", deviceInfo, true);             
+        // $("p").text("The DOM is now loaded and can be manipulated.");
+
+        $.getJSON("http://10.0.2.2:8080/cma/station/list.json", function(data) {
+          alert("data"+data);
+          $.each(data.stationInstanceList, function(i,item){
+            alert(item.url);
+            // $("<img/>").attr("src", item.media.m).appendTo("#images");
+            // if ( i == 3 ) return false;
+          });
+        });
+
+
+
+        // $.get('http://10.0.2.2:8080/cma/station/list.json', function(data) {
+        //   alert('Load was performed.'+data);
+          // $('.stations').html(data);
+        // });
+      });
+
+    </script>
 
   </head>
 
-  <body onload="init();">
+  <body>
 
-    <div data-role="page" id="player">
+    <div id="header">
+      CMA Mobile Radio Player
+    </div>
 
-      <div data-role="header">
-        <h1>CMA Player</h1>
-        <div data-role="navbar" class="nav-glyphish-example" id="playernav">
-          <ul>
-            <li><a href="#player" id="player" data-icon="note" class="ui-btn-active">Player</a></li>
-            <li><a href="#info" id="info" data-icon="star">Info</a></li>
-         </ul>
-        </div><!-- /navbar -->
-      </div><!-- /header -->
+    <div id="body">
 
-      <div data-role="content">
-        <p>Player Page content goes here.</p>    
+      <div id="nowplaying">
+         Now playing area
       </div>
 
-      <div data-role="footer">
-        <h4>Page Footer</h4>
-      </div><!-- /header -->
-
-    </div><!-- /page -->
-
-
-    <div data-role="page" id="info">
-
-      <div data-role="header">
-        <h1>CMA Player</h1>
-        <div data-role="navbar" class="nav-glyphish-example" id="playernav">
-          <ul>
-            <li><a href="#player" id="player" data-icon="note">Player</a></li>
-            <li><a href="#info" id="info" data-icon="star" class="ui-btn-active">Info</a></li>
-         </ul>
-        </div><!-- /navbar -->
-      </div><!-- /header -->
-
-      <div data-role="content">
-        <p>Info Page content goes here.</p>    
+      <div id="tuner">
+        Tuner Area
+        <div id="stations">
+          Stations
+        </div>
       </div>
-
-      <div data-role="footer">
-        <h4>Page Footer</h4>
-      </div><!-- /header -->
 
     </div>
 
+    <div id="footer">
+      Footer Area
+    </div>
 
   </body>
 </html>
