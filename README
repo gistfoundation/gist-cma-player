@@ -1,2 +1,25 @@
 
 This is a collaborative learning project organised by the GIST foundation's mobile development group ( http://thegisthub.net/groups/mobile-developer/ ). The aim is to produce a usable mobile radio player application for the Community Media Association, and along the way learn a little more about mobile development. Initially, we're trying to do everything in HTML5 and then use packaging tools like PhoneGap.
+
+
+
+
+
+Some notes
+
+The android app was first generated with the command
+droidgap gen cmaplayer, and it can be found in the phoneapp,android folder
+
+
+Build/Run cycle
+
+Start the android emulator with 
+emulator @test1
+(Where test1 is the name of a device you have configured using the "android" utility)
+
+Apparently, ant clean compile install should then install your app in the running VM, but I could never get that to work.
+
+Instead, I just ran the ant and then manually did "adb install ./bin/cmaplayer-debug.apk"
+
+
+

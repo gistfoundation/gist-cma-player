@@ -7,7 +7,7 @@
     <!--<link rel="stylesheet" href="master.css" type="text/css" media="screen" title="no title" charset="utf-8">-->
     <link rel="stylesheet" href="jquery.mobile-1.0a2.min.css" />
     <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>    
-    <script src="jquery-1.4.4.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
     <script src="jquery.mobile-1.0a2.min.js"></script>
 
     <script type="text/javascript" charset="utf-8">
@@ -30,51 +30,27 @@
 
   <body onload="init();">
 
-    <div data-role="page" id="player">
+    <div data-role="page">
 
       <div data-role="header">
         <h1>CMA Player</h1>
-        <div data-role="navbar" class="nav-glyphish-example" id="playernav">
+        <div data-role="navbar" class="nav-glyphish-example">
           <ul>
-            <li><a href="#player" id="player" data-icon="note" class="ui-btn-active">Player</a></li>
-            <li><a href="#info" id="info" data-icon="star">Info</a></li>
+            <li><a href="index.html" id="equalizer" data-icon="equalizer">Player</a></li>
+            <li><a href="info.html" id="network" data-icon="network" class="ui-btn-active">Info</a></li>
          </ul>
         </div><!-- /navbar -->
       </div><!-- /header -->
 
-      <div data-role="content">
-        <p>Player Page content goes here.</p>    
-      </div>
+      <div data-role="content">  
+        <p>Info Page content goes here.</p>    
+      </div><!-- /content -->
 
       <div data-role="footer">
         <h4>Page Footer</h4>
       </div><!-- /header -->
 
     </div><!-- /page -->
-
-
-    <div data-role="page" id="info">
-
-      <div data-role="header">
-        <h1>CMA Player</h1>
-        <div data-role="navbar" class="nav-glyphish-example" id="playernav">
-          <ul>
-            <li><a href="#player" id="player" data-icon="note">Player</a></li>
-            <li><a href="#info" id="info" data-icon="star" class="ui-btn-active">Info</a></li>
-         </ul>
-        </div><!-- /navbar -->
-      </div><!-- /header -->
-
-      <div data-role="content">
-        <p>Info Page content goes here.</p>    
-      </div>
-
-      <div data-role="footer">
-        <h4>Page Footer</h4>
-      </div><!-- /header -->
-
-    </div>
-
 
   </body>
 </html>
