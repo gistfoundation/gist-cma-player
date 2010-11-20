@@ -11,26 +11,36 @@
 
     <script type="text/javascript" charset="utf-8">
 
+      var station_list = null;
+
       $(document).ready(function () {
         // document.addEventListener("touchmove", preventBehavior, false);
         // document.addEventListener("deviceready", deviceInfo, true);             
         // $("p").text("The DOM is now loaded and can be manipulated.");
 
+        alert("ok1");
         $.getJSON("http://10.0.2.2:8080/cma/station/list.json", function(data) {
-          alert("data"+data);
-          $.each(data.stationInstanceList, function(i,item){
-            alert(item.url);
+          // alert("data"+data);
+          station_list = data.stationInstanceList;
+          if ( station_list != null ) {
+            alert("Setting up "+station_list[0].name);
+            $("#fred").html('<a href="aa" id="fred">fred</a>');
+            // $("#fred").replaceWith(document.createElement("a").attr("href",station_list[0].url).attr("id","fred").html(station_list[0].name));
+            alert("Done "+station_list[0].url);
+          }
+          else {
+            alert("station list is null");
+          }
+          //   alert("null1");
+          // else
+          //   alert("notnull1");
+          // $.each(data.stationInstanceList, function(i,item){
+            // alert(item.url);
             // $("<img/>").attr("src", item.media.m).appendTo("#images");
             // if ( i == 3 ) return false;
-          });
+          // });
         });
 
-
-
-        // $.get('http://10.0.2.2:8080/cma/station/list.json', function(data) {
-        //   alert('Load was performed.'+data);
-          // $('.stations').html(data);
-        // });
       });
 
     </script>
@@ -46,14 +56,33 @@
     <div id="body">
 
       <div id="nowplaying">
-         Now playing area
+         <table>
+           <tr>
+             <td>
+               <div id="CurrentlyPlaying"/>
+             </td>
+           </tr>
+           <tr>
+             <td>
+               Play | Pause | Favorite
+             </td>
+           </tr>
+         </table>
       </div>
 
       <div id="tuner">
-        Tuner Area
-        <div id="stations">
-          Stations
-        </div>
+        <table><tr><td>All</td><td>Favorites</td><td>Near</td></tr></table>
+
+        <table>
+          <tr>
+            <td>Prev</td>
+            <td id="active_selection">
+              <a id="fred"/>
+            </td>
+            <td>Next</td>
+          </tr>
+        </table>
+
       </div>
 
     </div>
