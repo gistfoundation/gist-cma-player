@@ -14,7 +14,7 @@ class StationController {
 
  
    def list = {
-        println "List Stations"
+        println "List Stations - ${request.format}"
         def response = null;
         if(request?.format && request.format != "html"){
           response = [stationInstanceList: Station.list(), stationInstanceTotal: Station.count()]

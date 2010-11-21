@@ -3,7 +3,8 @@ package uk.org.commedia.epg
 class Station {
 
   String name
-  String url
+  String playlistUrl
+  String streamUrl
   String guid
   String description
   Boolean live=false
@@ -14,7 +15,8 @@ class Station {
 
   static constraints = {
     name(nullable:false)
-    url(nullable:false)
+    playlistUrl(nullable:true)
+    streamUrl(nullable:false)
     guid(blank:false,nullable:false)
     description(size:0..4000,blank:true,nullable:true)
     live(nullable:false)

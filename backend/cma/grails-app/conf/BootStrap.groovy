@@ -13,9 +13,8 @@ class BootStrap {
     def admin_user = User.findByUsername('admin') ?: new User(username: 'admin', password: springSecurityService.encodePassword('admin'), enabled:true).save()
     def cma_user = User.findByUsername('cma') ?: new User(username: 'cma', password: springSecurityService.encodePassword('cma'), enabled:true).save()
 
-    def working_station = Station.findByGuid('TheEyeFM') ?: new Station(name:'TheEyeFM',url:'http://icecast.commedia.org.uk:8000/theeyefm.mp3',guid:'TheEyeFM').save()
-
-    println "Station: ${working_station}"
+    // def working_station = Station.findByGuid('TheEyeFM') ?: new Station(name:'TheEyeFM',url:'http://icecast.commedia.org.uk:8000/theeyefm.mp3',guid:'TheEyeFM').save()
+    // println "Station: ${working_station}"
 
     println "Calling feed sync service"
     feedSyncService.doSync()

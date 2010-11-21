@@ -22,7 +22,8 @@
                         <tr>
                             <g:sortableColumn property="id" title="${message(code: 'station.id.label', default: 'Id')}" />
                             <g:sortableColumn property="name" title="${message(code: 'station.name.label', default: 'Name')}" />
-                            <g:sortableColumn property="url" title="${message(code: 'station.url.label', default: 'URL')}" />
+                            <g:sortableColumn property="streamUrl" title="${message(code: 'station.url.label', default: 'Stream URL')}" />
+                            <g:sortableColumn property="playlistUrl" title="${message(code: 'station.url.label', default: 'Playlist URL')}" />
                         </tr>
                     </thead>
                     <tbody>
@@ -30,7 +31,8 @@
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                             <td><g:link action="show" id="${stationInstance.id}">${fieldValue(bean: stationInstance, field: "id")}</g:link></td>
                             <td>${fieldValue(bean: stationInstance, field: "name")}</td>
-                            <td>${fieldValue(bean: stationInstance, field: "url")}</td>
+                            <td>${fieldValue(bean: stationInstance, field: "streamUrl")}</td>
+                            <td>${fieldValue(bean: stationInstance, field: "playlistUrl")}</td>
                         </tr>
                     </g:each>
                     </tbody>
