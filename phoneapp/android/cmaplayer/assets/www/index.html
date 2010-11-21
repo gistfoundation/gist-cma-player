@@ -52,7 +52,6 @@
         // If we've not played this station before in this session, create a new media object and store it
         // in the station array entry.
         if ( station_list[current_selection].media == null ) {
-          alert("New media for "+station_list[current_selection].streamUrl);
           station_list[current_selection].media = new Media(station_list[current_selection].streamUrl);
         }
 
