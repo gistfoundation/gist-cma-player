@@ -4,10 +4,13 @@
     <meta name="viewport" content="width=320; user-scalable=no" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>PhoneGap</title>
+    <link type="text/css" href="css/ui-darkness/jquery-ui-1.8.6.custom.css" rel="Stylesheet" />  
     <!--<link rel="stylesheet" href="master.css" type="text/css" media="screen" title="no title" charset="utf-8">-->
-    <link rel="stylesheet" href="jquery.mobile-1.0a2.min.css" />
+    <link rel="stylesheet" href="cmaplayer.css" type="text/css" media="screen" title="no title" charset="utf-8">
+
     <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>    
     <script type="text/javascript" charset="utf-8" src="jquery-1.4.4.min.js"></script>    
+    <script type="text/javascript" charset="utf-8" src="jquery-ui-1.8.6.custom.min.js"></script>
 
     <script type="text/javascript" charset="utf-8">
 
@@ -84,20 +87,8 @@
       }
 
       $(document).ready(function () {
-        //$.getJSON("http://10.0.2.2:8080/cma/station/list.json", function(data) {
-          // Store the retrieved list in the station_list global
-        //  station_list = data.stationInstanceList;
-          // For debug really, should create a proper warning.
-        //  if ( station_list == null ) {
-        //    alert("station list is null");
-        //  }
-        //  else {
-            // Update the station browser in the UI with the first available station
-        //    selectStation(0);
-        //  }
-          // $.each(data.stationInstanceList, function(i,item){
-          // });
-        //});
+
+        $( "#tabs" ).tabs();
 
         // Load the array of currently live stations from the backend web service
         $.ajax({
@@ -116,6 +107,7 @@
           },
           url:"http://10.0.2.2:8080/cma/station/list.json"
         });
+
       })
 
     </script>
@@ -128,44 +120,53 @@
       CMA Mobile Radio Player
     </div>
 
-    <div id="body">
+    <div id="tabs">
+      <ul>
+        <li><a href="#player">Player</a></li>
+        <li><a href="#info">Info</a></li>
+      </ul>
 
-      <div id="nowplaying">
-         <table>
-           <tr>
-             <td>
-               <div id="CurrentlyPlaying"/>
-             </td>
-           </tr>
-           <tr>
-             <td>
-               <a href="javascript:playCurrentStation();">Play</a> | <a href="javascript:stopCurrentStation();">Stop</a> | Favorite
-             </td>
-           </tr>
-         </table>
-      </div>
+      <div id="player">
 
-      <div id="tuner">
-        <table><tr><td>All</td><td>Favorites</td><td>Near</td></tr></table>
+        <div id="nowplaying">
+           <table>
+             <tr>
+               <td>
+                 <div id="CurrentlyPlaying"/>
+               </td>
+             </tr>
+             <tr>
+                 <td>
+                 <a href="javascript:playCurrentStation();">Play</a> | <a href="javascript:stopCurrentStation();">Stop</a> | Favorite
+               </td>
+             </tr>
+           </table>
+        </div>
 
-        <table>
-          <tr>
-            <td><a href="javascript:prevStation();">Prev</a></td>
-            <td id="active_selection" width="100%">
-              <div id="selstation"/>
-            </td>
-            <td><a href="javascript:nextStation();">Next</a></td>
-          </tr>
-          <tr>
-            <td colspan="3">
-              <a href="javascript:playCurrentStation()">play</a>
-            </td>
-          </tr>
-        </table>
+        <div id="tuner">
+          <table><tr><td>All</td><td>Favorites</td><td>Near</td></tr></table>
 
-      </div>
+          <table>
+            <tr>
+              <td><a href="javascript:prevStation();">Prev</a></td>
+              <td id="active_selection" width="100%">
+                <div id="selstation"/>
+              </td>
+              <td><a href="javascript:nextStation();">Next</a></td>
+            </tr>
+            <tr>
+              <td colspan="3">
+                <a href="javascript:playCurrentStation()">play</a>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div> <!-- player tab -->
 
-    </div>
+      <div id="info">
+      </div> <!-- info tab -->
+
+    </div> <!-- tabs -->
 
     <div id="footer">
       Footer Area
