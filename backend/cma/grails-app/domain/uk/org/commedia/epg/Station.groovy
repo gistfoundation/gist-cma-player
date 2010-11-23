@@ -12,6 +12,18 @@ class Station {
   String source
   // When did we last see this station
   long lastSeen
+  // Override program name from timetable
+  String progName
+  // When should the overridden program name expire, null=not set, -1=never
+  long progNameExpiry = -1
+  // Override current track
+  String trackName
+  // When should the track name expire (Start time + track length?)
+  long trackNameExpiry = -1
+  // Station Logo URL
+  String stationLogo
+  // Station home page
+  String homePage
 
   static constraints = {
     name(nullable:false)
@@ -21,5 +33,11 @@ class Station {
     description(size:0..4000,blank:true,nullable:true)
     live(nullable:false)
     source(nullable:true)
+    progName(nullable:true)
+    progNameExpiry(nullable:true)
+    trackName(nullable:true)
+    trackNameExpiry(nullable:true)
+    stationLogo(nullable:true)
+    homePage(nullable:true)
   }
 }
