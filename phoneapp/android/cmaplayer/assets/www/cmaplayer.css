@@ -1,3 +1,7 @@
 .ui-tabs .ui-tabs-hide {
      display: none;
 }
+
+#tablist {
+  font-size: .75em;
+}

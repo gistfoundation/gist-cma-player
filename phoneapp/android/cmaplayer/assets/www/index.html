@@ -22,11 +22,13 @@
         if ( station != null && station >= 0 && station < station_list.length ) {
           $("#selstation").html('<div id="selstation">'+station_list[station].name+' '+
                                                         station_list[station].id+' '+
-                                                        station_list[station].guid+' '+
-                                                        station_list[station].source+' '+
+                                                        // station_list[station].guid+' '+
+                                                        // station_list[station].source+' '+
                                                         station_list[station].description+' '+
-                                                        station_list[station].streamUrl+' '+
-                                                        station_list[station].playlistUrl+'</div>');
+                                                        // station_list[station].streamUrl+' '+
+                                                        // station_list[station].playlistUrl+
+                                                        station_list[station].homePage+
+                                                        '</div>');
         }
         else {
           alert("Invalid station");
@@ -50,7 +52,7 @@
         stopCurrentStation();
 
         // Update the text of the currently playing station
-        $("#CurrentlyPlaying").html('<div id="CurrentlyPlaying">'+station_list[current_selection].name+'</div>');
+        $("#CurrentlyPlaying").html('<div id="CurrentlyPlaying">Now playing: '+station_list[current_selection].name+'</div>');
 
         // If we've not played this station before in this session, create a new media object and store it
         // in the station array entry.
@@ -121,13 +123,14 @@
     </div>
 
     <div id="tabs">
-      <ul>
+      <ul id="tablist">
         <li><a href="#player">Player</a></li>
-        <li><a href="#info">Info</a></li>
+        <li><a href="#stations">Stations</a></li>
+        <li><a href="#news">Info</a></li>
+        <li><a href="#about">About</a></li>
       </ul>
 
       <div id="player">
-
         <div id="nowplaying">
            <table>
              <tr>
@@ -144,8 +147,6 @@
         </div>
 
         <div id="tuner">
-          <table><tr><td>All</td><td>Favorites</td><td>Near</td></tr></table>
-
           <table>
             <tr>
               <td><a href="javascript:prevStation();">Prev</a></td>
@@ -163,7 +164,17 @@
         </div>
       </div> <!-- player tab -->
 
-      <div id="info">
+      <div id="stations">
+	All | Favorites | Near
+      </div> <!-- stations tab -->
+
+      <div id="news">
+	General | Events | Funding | Other
+      </div> <!-- info tab -->
+
+      <div id="about">
+	Credits<br/>
+	Donate to CMA
       </div> <!-- info tab -->
 
     </div> <!-- tabs -->
