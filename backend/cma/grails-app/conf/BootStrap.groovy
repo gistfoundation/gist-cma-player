@@ -17,7 +17,7 @@ class BootStrap {
     // println "Station: ${working_station}"
 
     // Create a default CMA news feed
-    def cma_news_feed = Feed.findByPlayerFeedCode('CMA' ?: new Feed(baseUrl:'http://www.commedia.org.uk/feed/',playerFeedCode:'CMA', playerFeedName:'CMA').save()
+    def cma_news_feed = Feed.findByPlayerFeedCode('CMA') ?: new Feed(baseUrl:'http://www.commedia.org.uk/feed/',playerFeedCode:'CMA', playerFeedName:'CMA').save()
 
     println "Calling feed sync service"
     stationFeedSyncService.doSync()

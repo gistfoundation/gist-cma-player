@@ -34,6 +34,9 @@ class StationFeedSyncService {
             station = new Station(name:title,description:description,guid:guid,playlistUrl:link,streamUrl:stream_url,source:"CMRSS")
             station.homePage = getStationHomePage(google,title)
           }
+          else {
+            println "Station ${guid} already in db"
+          }
           station.live = true;
           station.lastSeen = timestamp
           if ( station.save() ) {

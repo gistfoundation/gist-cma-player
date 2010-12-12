@@ -13,8 +13,13 @@ hibernate {
 environments {
     development {
         dataSource {
-            dbCreate = "create-drop" // one of 'create', 'create-drop','update'
-            url = "jdbc:hsqldb:mem:devDB"
+          driverClassName = "com.mysql.jdbc.Driver"
+          dbCreate =  "update" // "create-drop"           // "create"
+          username = "gist"
+          password = "gist"
+          url = "jdbc:mysql://localhost/cmadev?autoReconnect=true&amp;characterEncoding=utf8"
+          //   dbCreate = "create-drop" // one of 'create', 'create-drop','update'
+          //   url = "jdbc:hsqldb:mem:devDB"
         }
     }
     test {

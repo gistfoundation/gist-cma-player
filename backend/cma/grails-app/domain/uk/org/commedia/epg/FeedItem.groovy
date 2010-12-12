@@ -17,5 +17,9 @@ class FeedItem {
 
   static constraints = {
     guid(nullable:true)
+    author(nullable:true)
+    pubDate(nullable:true)
+    source(nullable:true)
+    md5(nullable:true)
   }
 }
