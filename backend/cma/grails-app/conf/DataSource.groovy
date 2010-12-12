@@ -25,8 +25,11 @@ environments {
     }
     production {
         dataSource {
-            dbCreate = "update"
-            url = "jdbc:hsqldb:file:prodDb;shutdown=true"
+          driverClassName = "com.mysql.jdbc.Driver"
+          dbCreate =  "update" // "create-drop"           // "create"
+          username = "gist"
+          password = "gist"
+          url = "jdbc:mysql://localhost/cmalive?autoReconnect=true&amp;characterEncoding=utf8"
         }
     }
 }
