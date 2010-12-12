@@ -16,6 +16,9 @@ class BootStrap {
     // def working_station = Station.findByGuid('TheEyeFM') ?: new Station(name:'TheEyeFM',url:'http://icecast.commedia.org.uk:8000/theeyefm.mp3',guid:'TheEyeFM').save()
     // println "Station: ${working_station}"
 
+    // Create a default CMA news feed
+    def cma_news_feed = Feed.findByPlayerFeedCode('CMA' ?: new Feed(baseUrl:'http://www.commedia.org.uk/feed/',playerFeedCode:'CMA', playerFeedName:'CMA').save()
+
     println "Calling feed sync service"
     stationFeedSyncService.doSync()
   }
