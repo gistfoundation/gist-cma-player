@@ -24,12 +24,15 @@
               </sec:ifNotLoggedIn>
             </div>
 
+            <sec:ifLoggedIn>
               <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
               <span class="menuButton"><g:link class="list" controller="station" action="index">Stations</g:link></span>
-              <sec:ifAnyGranted roles="admin">
-                <span class="menuButton"><g:link class="list" controller="user" action="index">Users</g:link></span>
-                <span class="menuButton"><g:link class="list" controller="role" action="index">Roles</g:link></span>
-              </sec:ifAnyGranted>
+              <span class="menuButton"><g:link class="list" controller="feed" action="index">Feeds</g:link></span>
+            </sec:ifLoggedIn>
+            <sec:ifAnyGranted roles="admin">
+              <span class="menuButton"><g:link class="list" controller="user" action="index">Users</g:link></span>
+              <span class="menuButton"><g:link class="list" controller="role" action="index">Roles</g:link></span>
+            </sec:ifAnyGranted>
         </div>
 
       <g:layoutBody />
