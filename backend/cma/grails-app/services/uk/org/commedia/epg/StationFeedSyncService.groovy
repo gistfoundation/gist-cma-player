@@ -4,7 +4,7 @@ import grails.converters.*
 import groovyx.net.http.RESTClient
 import static groovyx.net.http.ContentType.*
 
-class FeedSyncService {
+class StationFeedSyncService {
 
     static transactional = false
 
