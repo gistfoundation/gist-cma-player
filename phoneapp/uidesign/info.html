@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta name="viewport" content="width=320; user-scalable=no" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>PhoneGap</title>
+    <!--<link rel="stylesheet" href="master.css" type="text/css" media="screen" title="no title" charset="utf-8">-->
+    <link rel="stylesheet" href="jquery.mobile-1.0a2.min.css" />
+    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>    
+    <script src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
+    <script src="jquery.mobile-1.0a2.min.js"></script>
+
+    <script type="text/javascript" charset="utf-8">
+      function init(){
+        document.addEventListener("touchmove", preventBehavior, false);
+        document.addEventListener("deviceready", deviceInfo, true);             
+      }       
+    </script>
+
+    <style type="text/css">	
+      .nav-glyphish .ui-btn .ui-btn-inner { padding-top: 40px !important; }
+      .nav-glyphish .ui-btn .ui-icon { width: 30px!important; height: 30px!important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: none !important; border-radius: none !important; }
+      #star .ui-icon { background:  url(28-star.png) 50% 50% no-repeat; background-size: 26px 26px; }
+      #network .ui-icon { background:  url(55-network.png) 50% 50% no-repeat; background-size: 24px 24px;  }
+      #note .ui-icon { background:  url(65-note.png) 50% 50% no-repeat;  background-size: 15px 24px; }
+      #equalizer .ui-icon { background:  url(95-equalizer.png) 50% 50% no-repeat;  background-size: 26px 24px; }
+    </style> 
+
+  </head>
+
+  <body onload="init();">
+
+    <div data-role="page">
+
+      <div data-role="header">
+        <h1>CMA Player</h1>
+        <div data-role="navbar" class="nav-glyphish-example">
+          <ul>
+            <li><a href="index.html" id="equalizer" data-icon="equalizer">Player</a></li>
+            <li><a href="info.html" id="network" data-icon="network" class="ui-btn-active">Info</a></li>
+         </ul>
+        </div><!-- /navbar -->
+      </div><!-- /header -->
+
+      <div data-role="content">  
+        <p>Info Page content goes here.</p>    
+      </div><!-- /content -->
+
+      <div data-role="footer">
+        <h4>Page Footer</h4>
+      </div><!-- /header -->
+
+    </div><!-- /page -->
+
+  </body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta name="viewport" content="width=320; user-scalable=no" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>PhoneGap</title>
+    <link type="text/css" href="css/ui-darkness/jquery-ui-1.8.6.custom.css" rel="Stylesheet" />  
+    <!--<link rel="stylesheet" href="master.css" type="text/css" media="screen" title="no title" charset="utf-8">-->
+    <link rel="stylesheet" href="cmaplayer.css" type="text/css" media="screen" title="no title" charset="utf-8">
+
+    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>    
+    <script type="text/javascript" charset="utf-8" src="jquery-1.4.4.min.js"></script>    
+    <script type="text/javascript" charset="utf-8" src="jquery-ui-1.8.6.custom.min.js"></script>
+
+    <script type="text/javascript" charset="utf-8">
+
+      var station_list = null;
+      var current_selection = 0;
+      var currently_playing = null;
+
+      function selectStation(station) {
+        if ( station != null && station >= 0 && station < station_list.length ) {
+          $("#selstation").html('<div id="selstation">'+station_list[station].name+' '+
+                                                        station_list[station].id+' '+
+                                                        // station_list[station].guid+' '+
+                                                        // station_list[station].source+' '+
+                                                        station_list[station].description+' '+
+                                                        // station_list[station].streamUrl+' '+
+                                                        // station_list[station].playlistUrl+
+                                                        station_list[station].homePage+
+                                                        '</div>');
+        }
+        else {
+          alert("Invalid station");
+        }
+        // $("#fred").replaceWith(document.createElement("a").attr("href",station_list[0].url).attr("id","fred").html(station_list[0].name));
+        // alert("Done "+station_list[station].url);
+      }
+
+      // Play the station currently selected in the station browser
+      function stopCurrentStation() {
+        if ( currently_playing != null ) {
+           if ( station_list[currently_playing].media != null ) {
+             station_list[currently_playing].media.stop();
+           }
+        }
+      }
+
+      // Play the station currently selected in the station browser
+      function playCurrentStation() {
+        // If there is already a station playing, we should stop any media playing
+        stopCurrentStation();
+
+        // Update the text of the currently playing station
+        $("#CurrentlyPlaying").html('<div id="CurrentlyPlaying">Now playing: '+station_list[current_selection].name+'</div>');
+
+        // If we've not played this station before in this session, create a new media object and store it
+        // in the station array entry.
+        if ( station_list[current_selection].media == null ) {
+          // Commented out
+          // station_list[current_selection].media = new Media(station_list[current_selection].streamUrl);
+          // alert("Here is where the station is created")
+        }
+
+        // Play the media object for this station
+        // station_list[current_selection].media.play();
+        alert("Here is where the station plays")
+
+        // Update the currently playing var so we can stop this station if a different one is selected
+        currently_playing = current_selection;
+      }
+
+      // Advance to the next station in the station browser
+      function nextStation() {
+        // Wrap around at the end of the array
+        if ( current_selection == station_list.length )
+          current_selection = 0;
+        else
+          current_selection++;
+        // update the UI
+        selectStation(current_selection);
+      }
+
+      function prevStation() {
+        // Wrap around at the start of the array
+        if ( current_selection == 0 )
+          current_selection = station_list.length;
+        else
+          current_selection--;
+        // Update the UI
+        selectStation(current_selection);
+      }
+
+      $(document).ready(function () {
+
+        $( "#tabs" ).tabs();
+
+        // Load the array of currently live stations from the backend web service
+        $.ajax({
+          cache:false,
+          success: function(data) {
+            // Store the retrieved list in the station_list global
+            station_list = data.stationInstanceList;
+            // For debug really, should create a proper warning.
+            if ( station_list == null ) {
+              alert("station list is null");
+            }
+            else {
+              // Update the station browser in the UI with the first available station
+              selectStation(0);
+            }
+          },
+          url:"http://data.thegistfoundation.net/cma/station/list.json"
+        });
+
+      })
+
+    </script>
+
+  </head>
+
+  <body>
+
+    <div id="header">
+      CMA Mobile Radio Player
+    </div>
+
+    <div id="tabs">
+      <ul id="tablist">
+        <li><a href="#player">Player</a></li>
+        <li><a href="#stations">Stations</a></li>
+        <li><a href="#news">Info</a></li>
+        <li><a href="#about">About</a></li>
+      </ul>
+
+      <div id="player">
+        <div id="nowplaying">
+           <table>
+             <tr>
+               <td>
+                 <div id="CurrentlyPlaying"/>
+               </td>
+             </tr>
+             <tr>
+                 <td>
+                 <a href="javascript:playCurrentStation();">Play</a> | <a href="javascript:stopCurrentStation();">Stop</a> | Favorite
+               </td>
+             </tr>
+           </table>
+        </div>
+
+        <div id="tuner">
+          <table>
+            <tr>
+              <td><a href="javascript:prevStation();">Prev</a></td>
+              <td id="active_selection" width="100%">
+                <div id="selstation"/>
+              </td>
+              <td><a href="javascript:nextStation();">Next</a></td>
+            </tr>
+            <tr>
+              <td colspan="3">
+                <a href="javascript:playCurrentStation()">play</a>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div> <!-- player tab -->
+
+      <div id="stations">
+	All | Favorites | Near
+      </div> <!-- stations tab -->
+
+      <div id="news">
+	General | Events | Funding | Other
+      </div> <!-- info tab -->
+
+      <div id="about">
+	Credits<br/>
+	Donate to CMA
+      </div> <!-- info tab -->
+
+    </div> <!-- tabs -->
+
+    <div id="footer">
+      Footer Area
+    </div>
+
+  </body>
+</html>
