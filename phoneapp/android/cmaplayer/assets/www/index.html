@@ -90,12 +90,14 @@
 
       $(document).ready(function () {
 
+        alert ("s1");
         $( "#tabs" ).tabs();
 
         // Load the array of currently live stations from the backend web service
         $.ajax({
           cache:false,
           success: function(data) {
+            alert ("s2");
             // Store the retrieved list in the station_list global
             station_list = data.stationInstanceList;
             // For debug really, should create a proper warning.
@@ -104,6 +106,7 @@
             }
             else {
               // Update the station browser in the UI with the first available station
+              alert ("s3");
               selectStation(0);
             }
           },
