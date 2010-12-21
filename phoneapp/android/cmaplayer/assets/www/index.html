@@ -1,3 +1,4 @@
+
 <!DOCTYPE HTML>
 <html>
   <head>
@@ -6,8 +7,7 @@
     <title>PhoneGap</title>
     <link type="text/css" href="css/ui-darkness/jquery-ui-1.8.6.custom.css" rel="Stylesheet" />  
     <!--<link rel="stylesheet" href="master.css" type="text/css" media="screen" title="no title" charset="utf-8">-->
-    <link rel="stylesheet" href="cmaplayer.css" type="text/css" media="screen" title="no title" charset="utf-8">
-
+    <link rel="stylesheet" href="assets/player.css" type="text/css" media="screen" title="no title" charset="utf-8">
     <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>    
     <script type="text/javascript" charset="utf-8" src="jquery-1.4.4.min.js"></script>    
     <script type="text/javascript" charset="utf-8" src="jquery-ui-1.8.6.custom.min.js"></script>
@@ -57,11 +57,14 @@
         // If we've not played this station before in this session, create a new media object and store it
         // in the station array entry.
         if ( station_list[current_selection].media == null ) {
-          station_list[current_selection].media = new Media(station_list[current_selection].streamUrl);
+          // Commented out
+          // station_list[current_selection].media = new Media(station_list[current_selection].streamUrl);
+          // alert("Here is where the station is created")
         }
 
         // Play the media object for this station
-        station_list[current_selection].media.play();
+        // station_list[current_selection].media.play();
+        alert("Here is where the station plays")
 
         // Update the currently playing var so we can stop this station if a different one is selected
         currently_playing = current_selection;
@@ -90,14 +93,12 @@
 
       $(document).ready(function () {
 
-        alert ("s1");
         $( "#tabs" ).tabs();
 
         // Load the array of currently live stations from the backend web service
         $.ajax({
           cache:false,
           success: function(data) {
-            alert ("s2");
             // Store the retrieved list in the station_list global
             station_list = data.stationInstanceList;
             // For debug really, should create a proper warning.
@@ -106,7 +107,6 @@
             }
             else {
               // Update the station browser in the UI with the first available station
-              alert ("s3");
               selectStation(0);
             }
           },
@@ -121,6 +121,183 @@
 
   <body>
 
+<div id="player">
+<ul>
+<li id="buttonhome" class="button green"><a href="#" title="go back to the home screen"><img src="assets/icon_antenna.png"></a></li><li id="buttonvolume" class="button orange"><a href="#" title="change the player volume"><img src="assets/icon_speaker.png"></a></li><li id="buttonplay" class="button orange"><a href="#" title="playing. click to pause"><img src="assets/icon_pause.png"></a></li><li id="buttoncommunity" class="button blue"><a href="#" title="view community info for this station">Community</a></li><li id="stationlogo"><img src="assets/station_default_logo.png" title="Logo for %STATION%. Click to view comminuty info"></li><li id="stationinfo">
+	<ul>
+		<li id="stationtitle">Station Name</li>
+		<li id="stationstatus">Status text or track playing</li>
+	</ul>
+</li>
+</ul>
+</div><div id="stations">
+	<ul class="title">
+		<li id="buttonstationsinfo" class="button green"><a href="#" title="info about this application"><img src="assets/icon_info.png"></a></li><li class="button button">&nbsp;Stations</li>
+	</ul>
+	<ul>
+		<li class="listitem"><ul>
+			<li class="itemlogo"><img src="assets/station_default_logo.png" title="Logo for %STATION%. Click to view station info"></li>
+			<li class="button green itemplay"><a href="#"><img src="assets/icon_play.png"></a></li>
+			<li class="itemtitle">News Title</li>
+			<li class="itemteaser">Teaser Text</li>
+		</ul></li>
+		<li class="listitem"><ul>
+			<li class="button green itemplay"><a href="#"><img src="assets/icon_play.png"></a></li>
+			<li class="itemlogo"><img src="assets/station_default_logo.png" title="Logo for %STATION%. Click to view station info"></li>
+			<li class="itemtitle">News Title</li>
+			<li class="itemteaser">Teaser Text</li>
+		</ul></li>
+		<li class="listitem"><ul>
+			<li class="button green itemplay"><a href="#"><img src="assets/icon_play.png"></a></li>
+			<li class="itemlogo"><img src="assets/station_default_logo.png" title="Logo for %STATION%. Click to view station info"></li>
+			<li class="itemtitle">News Title</li>
+			<li class="itemteaser">Teaser Text Teaser Text Teaser Text Teaser Text Teaser Text Teaser Text Teaser Text</li>
+		</ul></li>
+		<li class="listitem"><ul>
+			<li class="button green itemplay"><a href="#"><img src="assets/icon_play.png"></a></li>
+			<li class="itemlogo"><img src="assets/station_default_logo.png" title="Logo for %STATION%. Click to view station info"></li>
+			<li class="itemtitle">News Title</li>
+			<li class="itemteaser">Teaser Text</li>
+		</ul></li>
+		<li class="listitem"><ul>
+			<li class="button green itemplay"><a href="#"><img src="assets/icon_play.png"></a></li>
+			<li class="itemlogo"><img src="assets/station_default_logo.png" title="Logo for %STATION%. Click to view station info"></li>
+			<li class="itemtitle">News Title</li>
+			<li class="itemteaser">Teaser Text</li>
+		</ul></li>
+		<li class="listitem"><ul>
+			<li class="button green itemplay"><a href="#"><img src="assets/icon_play.png"></a></li>
+			<li class="itemlogo"><img src="assets/station_default_logo.png" title="Logo for %STATION%. Click to view station info"></li>
+			<li class="itemtitle">News Title</li>
+			<li class="itemteaser"></li>
+		</ul></li>
+	</ul>
+</div>
+<div id="community">
+	<ul><li id="buttoncommunityinfo" class="button blue"><a href="#" title="info about this application"><img src="assets/icon_info.png"></a></li><li id="buttonnews" class="button blue"><a href="#" title="read news from this station">News</a></li><li id="buttonlist" class="button blue off"><a href="#" title="read this stations mailing list">List</a></li><li id="buttontwitter" class="button blue off"><a href="#" title="read twitter items mentioning this station">Twitter</a></li>
+	</ul>
+	<div id="news">
+		<ul>
+			<li class="listitem"><ul>
+				<li class="button blue itemmore"><a href="#"><img src="assets/icon_chevron.png"></a></li>
+				<li class="itemdate">18 Dec</li>
+				<li class="itemtitle">News Title</li>
+				<li class="itemteaser">Teaser Text</li>
+			</ul></li>
+			<li class="listitem"><ul>
+				<li class="button blue itemmore"><a href="#"><img src="assets/icon_chevron.png"></a></li>
+				<li class="itemdate">18 Dec</li>
+				<li class="itemtitle">News Title</li>
+				<li class="itemteaser">Teaser Text</li>
+			</ul></li>
+			<li class="listitem"><ul>
+				<li class="button blue itemmore"><a href="#"><img src="assets/icon_chevron.png"></a></li>
+				<li class="itemdate">18 Dec</li>
+				<li class="itemtitle">News Title</li>
+				<li class="itemteaser">Teaser Text</li>
+			</ul></li>
+			<li class="listitem"><ul>
+				<li class="button blue itemmore"><a href="#"><img src="assets/icon_chevron.png"></a></li>
+				<li class="itemdate">18 Dec</li>
+				<li class="itemtitle">News Title</li>
+				<li class="itemteaser">Teaser Text</li>
+			</ul></li>
+			<li class="listitem"><ul>
+				<li class="button blue itemmore"><a href="#"><img src="assets/icon_chevron.png"></a></li>
+				<li class="itemdate">18 Dec</li>
+				<li class="itemtitle">News Title</li>
+				<li class="itemteaser">Teaser Text</li>
+			</ul></li>
+			<li class="listitem"><ul>
+				<li class="button blue itemmore"><a href="#"><img src="assets/icon_chevron.png"></a></li>
+				<li class="itemdate">18 Dec</li>
+				<li class="itemtitle">News Title</li>
+				<li class="itemteaser">Teaser Text</li>
+			</ul></li>
+		</ul>
+	</div>
+	<div id="list">
+	<ul>
+			<li class="listitem"><ul>
+				<li class="button blue itemmore"><a href="#"><img src="assets/icon_chevron.png"></a></li>
+				<li class="itemdate">18 Dec</li>
+				<li class="itemtitle">News Title</li>
+				<li class="itemteaser">Teaser Text</li>
+			</ul></li>
+			<li class="listitem"><ul>
+				<li class="button blue itemmore"><a href="#"><img src="assets/icon_chevron.png"></a></li>
+				<li class="itemdate">18 Dec</li>
+				<li class="itemtitle">News Title</li>
+				<li class="itemteaser">Teaser Text</li>
+			</ul></li>
+			<li class="listitem"><ul>
+				<li class="button blue itemmore"><a href="#"><img src="assets/icon_chevron.png"></a></li>
+				<li class="itemdate">18 Dec</li>
+				<li class="itemtitle">News Title</li>
+				<li class="itemteaser">Teaser Text</li>
+			</ul></li>
+			<li class="listitem"><ul>
+				<li class="button blue itemmore"><a href="#"><img src="assets/icon_chevron.png"></a></li>
+				<li class="itemdate">18 Dec</li>
+				<li class="itemtitle">News Title</li>
+				<li class="itemteaser">Teaser Text</li>
+			</ul></li>
+			<li class="listitem"><ul>
+				<li class="button blue itemmore"><a href="#"><img src="assets/icon_chevron.png"></a></li>
+				<li class="itemdate">18 Dec</li>
+				<li class="itemtitle">News Title</li>
+				<li class="itemteaser">Teaser Text</li>
+			</ul></li>
+			<li class="listitem"><ul>
+				<li class="button blue itemmore"><a href="#"><img src="assets/icon_chevron.png"></a></li>
+				<li class="itemdate">18 Dec</li>
+				<li class="itemtitle">News Title</li>
+				<li class="itemteaser">Teaser Text</li>
+			</ul></li>
+		</ul>
+	</div>
+	<div id="twitter">
+	<ul>
+			<li class="listitem"><ul>
+				<li class="itemavatar"><a href="#"><img src="assets/twitter_default.jpg"></a></li>
+				<li class="itemdate">18 Dec</li>
+				<li class="itemtitle">News Title</li>
+				<li class="itemteaser">Teaser Text</li>
+			</ul></li>
+			<li class="listitem"><ul>
+				<li class="itemavatar"><a href="#"><img src="assets/twitter_default.jpg"></a></li>
+				<li class="itemdate">18 Dec</li>
+				<li class="itemtitle">News Title</li>
+				<li class="itemteaser">Teaser Text</li>
+			</ul></li>
+			<li class="listitem"><ul>
+				<li class="itemavatar"><a href="#"><img src="assets/twitter_default.jpg"></a></li>
+				<li class="itemdate">18 Dec</li>
+				<li class="itemtitle">News Title</li>
+				<li class="itemteaser">Teaser Text</li>
+			</ul></li>
+			<li class="listitem"><ul>
+				<li class="itemavatar"><a href="#"><img src="assets/twitter_default.jpg"></a></li>
+				<li class="itemdate">18 Dec</li>
+				<li class="itemtitle">News Title</li>
+				<li class="itemteaser">Teaser Text</li>
+			</ul></li>
+			<li class="listitem"><ul>
+				<li class="itemavatar"><a href="#"><img src="assets/twitter_default.jpg"></a></li>
+				<li class="itemdate">18 Dec</li>
+				<li class="itemtitle">News Title</li>
+				<li class="itemteaser">Teaser Text</li>
+			</ul></li>
+			<li class="listitem"><ul>
+				<li class="itemavatar"><a href="#"><img src="assets/twitter_default.jpg"></a></li>
+				<li class="itemdate">18 Dec</li>
+				<li class="itemtitle">News Title</li>
+				<li class="itemteaser">Teaser Text</li>
+			</ul></li>
+		</ul>
+	</div>
+</div>
+<!--/* OLD Interface */-->
     <div id="header">
       CMA Mobile Radio Player
     </div>
