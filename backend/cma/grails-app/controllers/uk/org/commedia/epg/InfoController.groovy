@@ -20,18 +20,14 @@ class InfoController {
     response["timestamp"] = timestamp
     response["since"] = since
     response["feeds"] = selected_feeds
+    response["items"] = []
 
     selected_feeds.each {
       def feed = Feed.findByPlayerFeedCode(it)
-      def feed_info = [:]
-      response[feed.playerFeedCode] = feed_info
-      feed_info.feedName = feed.playerFeedName
-      feed_info.desc = feed.description
-      feed_info.items = []
       int count = 0
       FeedItem.findAllByOwner(feed, [sort:'timestamp',order:'desc']).each {
         if ( count++ < max_items ) {
-          feed_info.items.add([it.link, it.description, it.author, it.title, it.pubDate, it.source])
+          response["items"].add([it.link, it.description, it.author, it.title, it.pubDate, it.source])
         }
       }
     }
