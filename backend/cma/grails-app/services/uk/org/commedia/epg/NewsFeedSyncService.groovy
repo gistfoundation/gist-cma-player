@@ -10,7 +10,7 @@ class NewsFeedSyncService {
 
       uk.org.commedia.epg.Feed.list().each { feed ->
         def elapsed = timestamp - ( feed.lastCheck != null ? feed.lastCheck : 0 )
-        if ( elapsed > 60000 ) {
+        if ( elapsed > ( 600000 ) ) { // Every 10 mins (1000*60*10)
 	        println "Checking for new items in ${feed.baseUrl}"
 	        def rss_response_text = feed.baseUrl.toURL().text
 	        def rss = new XmlSlurper().parseText(rss_response_text)
@@ -27,12 +27,12 @@ class NewsFeedSyncService {
 	            def description = itm.description?.text()
 	            def link = itm.link?.text()
               def pubDate = itm.pubDate?.text()
-	            println "Processing station guid:${guid} link:${link} desc:${description} title:${title}"
+	            //println "Processing station guid:${guid} link:${link} desc:${description} title:${title}"
 
               if ( ( guid == null ) || ( guid.length() == 0 ) ) {
-                println "Synthesise guid from md5 of title + description"
+                //println "Synthesise guid from md5 of title + description"
                 guid = (title+" "+description).encodeAsMD5()
-                println "Generated guid = ${guid}"
+                //println "Generated guid = ${guid}"
               }
 
 	            // Discover if we already have this news item in the database.
@@ -40,7 +40,7 @@ class NewsFeedSyncService {
 	              println "looking up item by guid ${feed.id} ${guid}"
 	              def item = FeedItem.findByOwnerAndGuid(feed, guid)
 	              if ( item == null ) {
-	                println "Item not found in database, create record"
+	                // println "Item not found in database, create record"
 	                item = new FeedItem(owner:feed, 
                                       guid:guid,
                                       title:title,
