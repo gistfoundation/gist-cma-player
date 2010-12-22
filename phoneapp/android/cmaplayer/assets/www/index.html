@@ -21,15 +21,17 @@
 
       function selectStation(station) {
         if ( station != null && station >= 0 && station < station_list.length ) {
-          $("#selstation").html('<div id="selstation">'+station_list[station].name+' '+
-                                                        station_list[station].id+' '+
-                                                        // station_list[station].guid+' '+
-                                                        // station_list[station].source+' '+
-                                                        station_list[station].description+' '+
-                                                        // station_list[station].streamUrl+' '+
-                                                        // station_list[station].playlistUrl+
-                                                        station_list[station].homePage+
-                                                        '</div>');
+          // $("#selstation").html('<div id="selstation">'+station_list[station].name+' '+
+          //                                               station_list[station].id+' '+
+          //                                               // station_list[station].guid+' '+
+          //                                               // station_list[station].source+' '+
+          //                                               station_list[station].description+' '+
+          //                                               // station_list[station].streamUrl+' '+
+          //                                               // station_list[station].playlistUrl+
+          //                                               station_list[station].homePage+
+          //                                               '</div>');
+          current_selection = station;
+          playCurrentStation();
         }
         else {
           alert("Invalid station");
@@ -53,19 +55,19 @@
         stopCurrentStation();
 
         // Update the text of the currently playing station
-        $("#CurrentlyPlaying").html('<div id="CurrentlyPlaying">Now playing: '+station_list[current_selection].name+'</div>');
+        $("#stationtitle").html(station_list[current_selection].name);
+        $("#stationstatus").html(station_list[current_selection].description);
 
         // If we've not played this station before in this session, create a new media object and store it
         // in the station array entry.
         if ( station_list[current_selection].media == null ) {
           // Commented out
-          // station_list[current_selection].media = new Media(station_list[current_selection].streamUrl);
+          station_list[current_selection].media = new Media(station_list[current_selection].streamUrl);
           // alert("Here is where the station is created")
         }
 
         // Play the media object for this station
-        // station_list[current_selection].media.play();
-        alert("Here is where the station plays")
+        station_list[current_selection].media.play();
 
         // Update the currently playing var so we can stop this station if a different one is selected
         currently_playing = current_selection;
@@ -94,7 +96,7 @@
 
       $(document).ready(function () {
 
-        $( "#tabs" ).tabs();
+        $('#community').hide();
 
         // Load the array of currently live stations from the backend web service
         $.ajax({
@@ -108,6 +110,9 @@
             }
             else {
               // Update the station browser in the UI with the first available station
+              for ( i=0; i<station_list.length; i++ ) {
+                $('#stationslist').append("<li class=\"listitem\"><ul><li class=\"itemlogo\"><img src=\"station_default_logo.png\" title=\"Logo for %STATION%. Click to view station info\"></li><li class=\"button green itemplay\"><a href=\"#\" onClick=\"javascript:selectStation("+i+")\"><img src=\"icon_play.png\"></a></li><li class=\"itemtitle\">"+station_list[i].name+"</li><li class=\"itemteaser\">"+station_list[i].description+"</li></ul></li>")
+              }
               selectStation(0);
             }
           },
@@ -116,6 +121,15 @@
 
       })
 
+      function stations() {
+        $('#community').hide();
+        $('#stations').show();
+      }
+
+      function community() {
+        $('#stations').hide();
+        $('#community').show();
+      }
     </script>
 
   </head>
@@ -124,7 +138,7 @@
 
 <div id="player">
 <ul>
-<li id="buttonhome" class="button green"><a href="#" title="go back to the home screen"><img src="icon_antenna.png"></a></li><li id="buttonvolume" class="button orange"><a href="#" title="change the player volume"><img src="icon_speaker.png"></a></li><li id="buttonplay" class="button orange"><a href="#" title="playing. click to pause"><img src="icon_pause.png"></a></li><li id="buttoncommunity" class="button blue"><a href="#" title="view community info for this station">Community</a></li><li id="stationlogo"><img src="station_default_logo.png" title="Logo for %STATION%. Click to view comminuty info"></li><li id="stationinfo">
+<li id="buttonhome" class="button green"><a href="#" title="go back to the home screen" onClick="javascript:stations()"><img src="icon_antenna.png"></a></li><li id="buttonvolume" class="button orange"><a href="#" title="change the player volume"><img src="icon_speaker.png"></a></li><li id="buttonplay" class="button orange" onClick="javascript:playCurrentStation()"><a href="#" title="playing. click to pause" onClick="javascript:stopCurrentStation()"><img src="icon_pause.png"></a></li><li id="buttoncommunity" class="button blue"><a href="#"title="view community info for this station" onClick="javascript:community()">Community</a></li><li id="stationlogo"><img src="station_default_logo.png" title="Logo for %STATION%. Click to view comminuty info"></li><li id="stationinfo">
 	<ul>
 		<li id="stationtitle">Station Name</li>
 		<li id="stationstatus">Status text or track playing</li>
@@ -135,45 +149,10 @@
 	<ul class="title">
 		<li id="buttonstationsinfo" class="button green"><a href="#" title="info about this application"><img src="icon_info.png"></a></li><li class="button button">&nbsp;Stations</li>
 	</ul>
-	<ul>
-		<li class="listitem"><ul>
-			<li class="itemlogo"><img src="station_default_logo.png" title="Logo for %STATION%. Click to view station info"></li>
-			<li class="button green itemplay"><a href="#"><img src="icon_play.png"></a></li>
-			<li class="itemtitle">News Title</li>
-			<li class="itemteaser">Teaser Text</li>
-		</ul></li>
-		<li class="listitem"><ul>
-			<li class="button green itemplay"><a href="#"><img src="icon_play.png"></a></li>
-			<li class="itemlogo"><img src="station_default_logo.png" title="Logo for %STATION%. Click to view station info"></li>
-			<li class="itemtitle">News Title</li>
-			<li class="itemteaser">Teaser Text</li>
-		</ul></li>
-		<li class="listitem"><ul>
-			<li class="button green itemplay"><a href="#"><img src="icon_play.png"></a></li>
-			<li class="itemlogo"><img src="station_default_logo.png" title="Logo for %STATION%. Click to view station info"></li>
-			<li class="itemtitle">News Title</li>
-			<li class="itemteaser">Teaser Text Teaser Text Teaser Text Teaser Text Teaser Text Teaser Text Teaser Text</li>
-		</ul></li>
-		<li class="listitem"><ul>
-			<li class="button green itemplay"><a href="#"><img src="icon_play.png"></a></li>
-			<li class="itemlogo"><img src="station_default_logo.png" title="Logo for %STATION%. Click to view station info"></li>
-			<li class="itemtitle">News Title</li>
-			<li class="itemteaser">Teaser Text</li>
-		</ul></li>
-		<li class="listitem"><ul>
-			<li class="button green itemplay"><a href="#"><img src="icon_play.png"></a></li>
-			<li class="itemlogo"><img src="station_default_logo.png" title="Logo for %STATION%. Click to view station info"></li>
-			<li class="itemtitle">News Title</li>
-			<li class="itemteaser">Teaser Text</li>
-		</ul></li>
-		<li class="listitem"><ul>
-			<li class="button green itemplay"><a href="#"><img src="icon_play.png"></a></li>
-			<li class="itemlogo"><img src="station_default_logo.png" title="Logo for %STATION%. Click to view station info"></li>
-			<li class="itemtitle">News Title</li>
-			<li class="itemteaser"></li>
-		</ul></li>
+	<ul id="stationslist">
 	</ul>
 </div>
+
 <div id="community">
 	<ul><li id="buttoncommunityinfo" class="button blue"><a href="#" title="info about this application"><img src="icon_info.png"></a></li><li id="buttonnews" class="button blue"><a href="#" title="read news from this station">News</a></li><li id="buttonlist" class="button blue off"><a href="#" title="read this stations mailing list">List</a></li><li id="buttontwitter" class="button blue off"><a href="#" title="read twitter items mentioning this station">Twitter</a></li>
 	</ul>
@@ -298,71 +277,5 @@
 		</ul>
 	</div>
 </div>
-<!--/* OLD Interface */-->
-    <div id="header">
-      CMA Mobile Radio Player
-    </div>
-
-    <div id="tabs">
-      <ul id="tablist">
-        <li><a href="#player">Player</a></li>
-        <li><a href="#stations">Stations</a></li>
-        <li><a href="#news">Info</a></li>
-        <li><a href="#about">About</a></li>
-      </ul>
-
-      <div id="player">
-        <div id="nowplaying">
-           <table>
-             <tr>
-               <td>
-                 <div id="CurrentlyPlaying"/>
-               </td>
-             </tr>
-             <tr>
-                 <td>
-                 <a href="javascript:playCurrentStation();">Play</a> | <a href="javascript:stopCurrentStation();">Stop</a> | Favorite
-               </td>
-             </tr>
-           </table>
-        </div>
-
-        <div id="tuner">
-          <table>
-            <tr>
-              <td><a href="javascript:prevStation();">Prev</a></td>
-              <td id="active_selection" width="100%">
-                <div id="selstation"/>
-              </td>
-              <td><a href="javascript:nextStation();">Next</a></td>
-            </tr>
-            <tr>
-              <td colspan="3">
-                <a href="javascript:playCurrentStation()">play</a>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div> <!-- player tab -->
-
-      <div id="stations">
-	All | Favorites | Near
-      </div> <!-- stations tab -->
-
-      <div id="news">
-	General | Events | Funding | Other
-      </div> <!-- info tab -->
-
-      <div id="about">
-	Credits<br/>
-	Donate to CMA
-      </div> <!-- info tab -->
-
-    </div> <!-- tabs -->
-
-    <div id="footer">
-      Footer Area
-    </div>
-
   </body>
 </html>

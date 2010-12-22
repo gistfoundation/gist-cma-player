@@ -24,8 +24,9 @@
               </sec:ifNotLoggedIn>
             </div>
 
+            <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
+
             <sec:ifLoggedIn>
-              <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
               <span class="menuButton"><g:link class="list" controller="station" action="index">Stations</g:link></span>
               <span class="menuButton"><g:link class="list" controller="feed" action="index">Feeds</g:link></span>
             </sec:ifLoggedIn>

@@ -11,6 +11,7 @@ class Feed {
   String copyright
   String skipHours
   String skipDays
+  Long lastCheck = 0
 
   Set items = []
 

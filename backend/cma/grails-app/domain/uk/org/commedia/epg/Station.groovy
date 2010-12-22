@@ -39,5 +39,6 @@ class Station {
     trackNameExpiry(nullable:true)
     stationLogo(nullable:true)
     homePage(nullable:true)
+    lastSeen(nullable:true)
   }
 }

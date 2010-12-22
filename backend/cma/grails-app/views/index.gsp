@@ -11,7 +11,7 @@
     </head>
     <body>
         <div id="pageBody">
-          <h2>Community Media Association - Station Management.</h2>
+          <h2>Community Media Association - Mobile Player App Service Layer.</h2>
         </div>
     </body>
 </html>

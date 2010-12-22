@@ -18,6 +18,7 @@ class StationFeedSyncService {
       def rss_response_text = live_feed_url.toURL().text
       // println "Rss response: ${rss_response_text}"
       def rss = new XmlSlurper().parseText(rss_response_text)
+
       // println "Rss: ${rss}"
       rss.channel.item.each {
         try {
@@ -31,7 +32,7 @@ class StationFeedSyncService {
           def station = Station.findByGuid(guid) 
           if ( station == null ) {
             def stream_url = getStreamURL(link);
-            station = new Station(name:title,description:description,guid:guid,playlistUrl:link,streamUrl:stream_url,source:"CMRSS")
+            station = new Station(name:title,description:description,guid:guid,playlistUrl:link,streamUrl:stream_url,source:"CMARSS",lastSeen:timestamp)
             station.homePage = getStationHomePage(google,title)
           }
           else {
@@ -52,6 +53,14 @@ class StationFeedSyncService {
           println "erorr ${e}"
         }
       }
+
+      // Finally, all stations where lastSeen < timestamp should be marked offline (live=false)
+      def offline_stations = Station.findAllByLastSeenLessThan(timestamp)
+      offline_stations.each {
+        it.live = false
+        it.save()
+      }
+
     }
 
     def getStreamURL(playlist_url) {

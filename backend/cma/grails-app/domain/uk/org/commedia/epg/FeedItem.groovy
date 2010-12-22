@@ -12,6 +12,7 @@ class FeedItem {
   String guid
   String md5
   Feed owner
+  long timestamp
 
   static belongsTo = [owner : uk.org.commedia.epg.Feed]
 
