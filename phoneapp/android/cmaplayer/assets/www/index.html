@@ -89,6 +89,7 @@
       $(document).ready(function () {
 
         $('#community').hide();
+        reloadInfo("#newslist","CMA");
         $('#list').hide();
         $('#info').hide();
         $('#twitter').hide();
@@ -102,7 +103,7 @@
           cache:false,
           success: function(data) {
             // Store the retrieved list in the station_list global
-            station_list = data.items;
+            station_list = data.stationInstanceList;
             // For debug really, should create a proper warning.
             if ( station_list == null ) {
               $("#stationtitle").html("There was a problem loading the station list")
@@ -113,7 +114,7 @@
                 $('#stationslist').append("<li class=\"listitem\"><ul><li class=\"itemlogo\"><img src=\"station_default_logo.png\" title=\"Logo for %STATION%. Click to view station info\"></li><li class=\"button green itemplay\"><a href=\"#\" onClick=\"javascript:selectStation("+i+")\"><img src=\"icon_play.png\"></a></li><li class=\"itemtitle\">"+station_list[i].name+"</li><li class=\"itemteaser\">"+station_list[i].description+"</li></ul></li>")
               }
             }
-            $("#stationtitle").html("Select a station below")
+            $("#stationtitle").html("Please select a station to play.")
           },
           url:"http://data.thegistfoundation.net/cma/station/list.json"
         });
