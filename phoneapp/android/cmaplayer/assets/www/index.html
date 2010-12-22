@@ -55,8 +55,10 @@
         stopCurrentStation();
 
         // Update the text of the currently playing station
-        $("#stationtitle").html(station_list[current_selection].name);
-        $("#stationstatus").html(station_list[current_selection].description);
+        $("#stationtitle").html(station_list[current_selection].name+" [buffering...]");
+
+        // Update the currently playing var so we can stop this station if a different one is selected
+        currently_playing = current_selection;
 
         // If we've not played this station before in this session, create a new media object and store it
         // in the station array entry.
@@ -68,9 +70,8 @@
 
         // Play the media object for this station
         station_list[current_selection].media.play();
-
-        // Update the currently playing var so we can stop this station if a different one is selected
-        currently_playing = current_selection;
+        $("#stationtitle").html(station_list[current_selection].name);
+        $("#stationstatus").html(station_list[current_selection].description);
       }
 
       // Advance to the next station in the station browser
@@ -97,6 +98,13 @@
       $(document).ready(function () {
 
         $('#community').hide();
+        $('#list').hide();
+        $('#info').hide();
+        $('#twitter').hide();
+
+        $("#stationtitle").html("Loading Stations.....")
+        $("#stationstatus").html("")
+        $('#stations').show();
 
         // Load the array of currently live stations from the backend web service
         $.ajax({
@@ -106,15 +114,15 @@
             station_list = data.stationInstanceList;
             // For debug really, should create a proper warning.
             if ( station_list == null ) {
-              alert("station list is null");
+              $("#stationtitle").html("There was a problem loading the station list")
             }
             else {
               // Update the station browser in the UI with the first available station
               for ( i=0; i<station_list.length; i++ ) {
                 $('#stationslist').append("<li class=\"listitem\"><ul><li class=\"itemlogo\"><img src=\"station_default_logo.png\" title=\"Logo for %STATION%. Click to view station info\"></li><li class=\"button green itemplay\"><a href=\"#\" onClick=\"javascript:selectStation("+i+")\"><img src=\"icon_play.png\"></a></li><li class=\"itemtitle\">"+station_list[i].name+"</li><li class=\"itemteaser\">"+station_list[i].description+"</li></ul></li>")
               }
-              selectStation(0);
             }
+            $("#stationtitle").html("Select a station below")
           },
           url:"http://data.thegistfoundation.net/cma/station/list.json"
         });
@@ -129,6 +137,34 @@
       function community() {
         $('#stations').hide();
         $('#community').show();
+      }
+
+      function selectInfo() {
+        $('#list').hide();
+        $('#info').hide();
+        $('#news').hide();
+        $('#twitter').hide();
+      }
+
+      function selectNews() {
+        $('#list').hide();
+        $('#info').hide();
+        $('#twitter').hide();
+        $('#news').show();
+      }
+
+      function selectList() {
+        $('#info').hide();
+        $('#twitter').hide();
+        $('#news').hide();
+        $('#list').show();
+      }
+
+      function selectTwitter() {
+        $('#list').hide();
+        $('#info').hide();
+        $('#news').hide();
+        $('#twitter').show();
       }
     </script>
 
@@ -154,8 +190,11 @@
 </div>
 
 <div id="community">
-	<ul><li id="buttoncommunityinfo" class="button blue"><a href="#" title="info about this application"><img src="icon_info.png"></a></li><li id="buttonnews" class="button blue"><a href="#" title="read news from this station">News</a></li><li id="buttonlist" class="button blue off"><a href="#" title="read this stations mailing list">List</a></li><li id="buttontwitter" class="button blue off"><a href="#" title="read twitter items mentioning this station">Twitter</a></li>
+	<ul><li id="buttoncommunityinfo" class="button blue"><a href="#" title="info about this application" onClick="javascript:selectInfo()"><img src="icon_info.png"></a></li><li id="buttonnews" class="button blue"><a href="#" title="read news from this station" onclick="javascript:selectNews()">News</a></li><li id="buttonlist" class="button blue off"><a href="#" title="read this stations mailing list" onclick="javascript:selectList()">List</a></li><li id="buttontwitter" class="button blue off"><a href="#" title="read twitter items mentioning this station"onclick="javascript:selectTwitter()">Twitter</a></li>
 	</ul>
+        <div id="info">
+           Here is the info tab
+        </div>
 	<div id="news">
 		<ul>
 			<li class="listitem"><ul>

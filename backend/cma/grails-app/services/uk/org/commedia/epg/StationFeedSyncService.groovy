@@ -27,7 +27,7 @@ class StationFeedSyncService {
           def description = it.description?.text()
           def link = it.link?.text()
 
-          println "Processing station guid:${guid} link:${link} desc:${description} title:${title}"
+          // println "Processing station guid:${guid} link:${link} desc:${description} title:${title}"
 
           def station = Station.findByGuid(guid) 
           if ( station == null ) {
@@ -36,12 +36,12 @@ class StationFeedSyncService {
             station.homePage = getStationHomePage(google,title)
           }
           else {
-            println "Station ${guid} already in db"
+            // println "Station ${guid} already in db"
           }
           station.live = true;
           station.lastSeen = timestamp
           if ( station.save() ) {
-            println "${station.name} (${station.guid}) - live"
+            // println "${station.name} (${station.guid}) - live"
           }
           else {
             println station.errors.allErrors.each {

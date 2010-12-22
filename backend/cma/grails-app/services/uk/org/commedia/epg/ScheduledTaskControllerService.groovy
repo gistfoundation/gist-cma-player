@@ -7,7 +7,7 @@ class ScheduledTaskControllerService {
     def stationFeedSyncService
 
     def runScheduledTasks() {
-      println "running scheduled tasks"
+      println "running scheduled tasks....."
       stationFeedSyncService.doSync()
       newsFeedSyncService.updateFeeds()
       println "Completed"

@@ -22,5 +22,15 @@ class FeedItem {
     pubDate(nullable:true)
     source(nullable:true)
     md5(nullable:true)
+    timestamp(nullable:true)   
   }
+
+  static mapping = {
+      columns {
+          description type:'text'
+          title type:'text'
+      }
+   }
+
+
 }

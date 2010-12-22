@@ -19,6 +19,12 @@ class BootStrap {
     // Create a default CMA news feed
     def cma_news_feed = Feed.findByPlayerFeedCode('CMA') ?: new Feed(baseUrl:'http://www.commedia.org.uk/feed/',playerFeedCode:'CMA', playerFeedName:'CMA').save()
 
+    def cma_twitter_feed = Feed.findByPlayerFeedCode('CMAT') ?: new Feed(baseUrl:'http://twitter.com/statuses/user_timeline/community_media.rss',
+                                                                         playerFeedCode:'CMAT', playerFeedName:'CMA Twitter').save()
+
+    def cma_list_feed = Feed.findByPlayerFeedCode('CMAL') ?: new Feed(baseUrl:'http://mailman.commedia.org.uk/pipermail/cma-l/rss.xml',
+                                                                     playerFeedCode:'CMAL', playerFeedName:'CMA List').save()
+
     println "Calling feed sync service"
     stationFeedSyncService.doSync()
   }
