@@ -1,20 +1,32 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width; user-scalable=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>PhoneGap</title>
-    <!--
-    <link type="text/css" href="css/ui-darkness/jquery-ui-1.8.6.custom.css" rel="Stylesheet" />  
-    <link rel="stylesheet" href="master.css" type="text/css" media="screen" title="no title" charset="utf-8">
-    <script type="text/javascript" charset="utf-8" src="jquery-ui-1.8.6.custom.min.js"></script>
-    -->
     <link rel="stylesheet" href="player.css" type="text/css" media="screen" title="no title" charset="utf-8">
     <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>    
-    <script type="text/javascript" charset="utf-8" src="jquery-1.4.4.min.js"></script>    
-
+    <script type="text/javascript" charset="utf-8" src="jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="iscroll.js?v3.7.1"></script>
     <script type="text/javascript" charset="utf-8">
 
+	var myScroll;
+	var a = 0;
+	
+	// Check screen size on orientation change
+	window.addEventListener('onorientationchange' in window ? 'orientationchange' : 'resize', setHeight, false);
+	
+	// Change wrapper height based on device orientation. Not strictly needed by iScroll, you may also use pure CSS techniques.
+	function setHeight() {
+		var headerH = document.getElementById('player').offsetHeight,
+			wrapperH = window.innerHeight - headerH;
+		document.getElementById('container').style.height = wrapperH + 'px';
+	}
+	
+	// Prevent the whole screen to scroll when dragging elements outside of the scroller (ie:header/footer).
+	// If you want to use iScroll in a portion of the screen and still be able to use the native scrolling, do *not* preventDefault on touchmove.
+	document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+	
       var station_list = null;
       var current_selection = 0;
       var currently_playing = null;
@@ -87,7 +99,10 @@
       }
 
       $(document).ready(function () {
-
+      
+   		setHeight();
+		myScroll = new iScroll('scroller', {checkDOMChanges: false});
+		
 		$('#buttonpause').hide();
 		$('#stationpage').hide();
         $('#community').hide();
@@ -116,7 +131,9 @@
                 $('#stationslist').append("<li class=\"listitem\"><ul><li class=\"itemlogo\"><img src=\"station_default_logo.png\" title=\"Logo for %STATION%. Click to view station info\"></li><li class=\"button green itemplay\"><a href=\"#\" onClick=\"javascript:selectStation("+i+")\"><img src=\"icon_play.png\"></a></li><li class=\"itemtitle\">"+station_list[i].name+"</li><li class=\"itemteaser\">"+station_list[i].description+"</li></ul></li>")
               }
             }
-            $("#stationtitle").html("Please select a station to play.")
+            $("#stationtitle").html("Please select a station to play.");
+            myScroll.refresh();
+            myScroll.scrollTo(0,0,0);
           },
           url:"http://data.thegistfoundation.net/cma/station/list.json"
         });
@@ -126,11 +143,15 @@
       function stations() {
         $('#community').hide();
         $('#stations').show();
+        myScroll.refresh();
+    	myScroll.scrollTo(0,0,0);
       }
 
       function community() {
         $('#stations').hide();
         $('#community').show();
+        myScroll.refresh();
+        myScroll.scrollTo(0,0,0);
       }
 
       function selectInfo() {
@@ -181,6 +202,8 @@
                 $(element).append("<li class=\"listitem\"><ul><li class=\"itemdate\">18 Dec</li><li class=\"itemtitle\">"+item_list[i][3]+"</li><li class=\"itemteaser\">"+item_list[i][1]+"</li></ul></li>");
               }
             }
+            myScroll.refresh();
+   		    myScroll.scrollTo(0,0,0);
           },
           url:"http://data.thegistfoundation.net/cma/info.json?feed="+feedname
         });
@@ -205,45 +228,42 @@
 </li>
 </ul>
 </div>
-<div id="content">
-<div id="stations">
-  <ul class="title">
-    <li>&nbsp;Stations</li>
-  </ul>
-  <ul id="stationslist">
-  </ul>
+<div id="container">
+<div id="scroller">
+	<div id="stations">
+	  <ul class="title">
+	    <li>&nbsp;Stations</li>
+	  </ul>
+	  <ul id="stationslist">
+	  </ul>
+	</div>
+	<div id="community">
+	   <div id="communitybuttons">
+	  <ul><li id="buttonnews" class="button blue"><a href="#" title="read news from this station" onclick="javascript:selectNews()">News</a></li><li id="buttonlist" class="button blue off"><a href="#" title="read this stations mailing list" onclick="javascript:selectList()">Mailing List</a></li><li id="buttontwitter" class="button blue off"><a href="#" title="read twitter items mentioning this station"onclick="javascript:selectTwitter()">Twitter</a></li>
+	  </ul>
+	  </div>
+	  <div id="news">
+	    <ul id="newslist">
+	    </ul>
+	  </div>
+	  <div id="twitter">
+	    <ul id="twitterlist">
+	    </ul>
+	  </div>
+	  <div id="list">
+	    <ul id="maillist">
+	    </ul>
+	  </div>
+	</div>
+	<div id="stationpage">
+	<ul>
+	    <li id="stationtitle">Station Name</li>
+	    <li id="stationstatus">Station Description</li>
+	    <li id="stationlocation">Location: Station Location</li>
+	    <li id="stationcontact"><ul><li>Email: <a href="mailto:mail@mail.com">mail@mail.com</a></li><li>Tel: <a href="tel:011x26262626">011x26262626</a></li><li>Web: <a href="http://example.com/">http://example.com/</a></li></ul></li>
+	 </ul>
+	</div>
 </div>
-<div id="community">
-   <div id="communitybuttons">
-  <ul><li id="buttonnews" class="button blue"><a href="#" title="read news from this station" onclick="javascript:selectNews()">News</a></li><li id="buttonlist" class="button blue off"><a href="#" title="read this stations mailing list" onclick="javascript:selectList()">Mailing List</a></li><li id="buttontwitter" class="button blue off"><a href="#" title="read twitter items mentioning this station"onclick="javascript:selectTwitter()">Twitter</a></li>
-  </ul>
-  </div>
-  <div id="info">
-    Here is the info tab
-  </div>
-  <div id="news">
-    <ul id="newslist">
-    </ul>
-  </div>
-  <div id="twitter">
-    <ul id="twitterlist">
-    </ul>
-  </div>
-  <div id="list">
-    <ul id="maillist">
-    </ul>
-  </div>
-</div>
-
-<div id="stationpage">
-<ul>
-    <li id="stationtitle">Station Name</li>
-    <li id="stationstatus">Station Description</li>
-    <li id="stationlocation">Location: Station Location</li>
-    <li id="stationcontact"><ul><li>Email: <a href="mailto:mail@mail.com">mail@mail.com</a></li><li>Tel: <a href="tel:011x26262626">011x26262626</a></li><li>Web: <a href="http://example.com/">http://example.com/</a></li></ul></li>
- </ul>
-</div>
-
 </div>
 
   </body>

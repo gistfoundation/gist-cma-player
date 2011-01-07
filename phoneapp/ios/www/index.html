@@ -1,45 +1,272 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML>
 <html>
   <head>
-	<!-- Change this if you want to allow scaling -->
-    <meta name="viewport" content="width=default-width; user-scalable=no" />
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-
-    <title>Canstreamer</title>
-	
-	<!-- iPad/iPhone specific css below, add after your main css >
-	<link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />		
-	<link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />		
-	-->
-	<!-- If you application is targeting iOS BEFORE 4.0 you MUST put json2.js from http://www.JSON.org/json2.js into your www directory and include it here -->
-	<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+    <title>PhoneGap</title>
+    <link rel="stylesheet" href="player.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>    
+    <script type="text/javascript" charset="utf-8" src="jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="iscroll.js?v3.7.1"></script>
     <script type="text/javascript" charset="utf-8">
 
+	var myScroll;
+	var a = 0;
+	
+	// Check screen size on orientation change
+	window.addEventListener('onorientationchange' in window ? 'orientationchange' : 'resize', setHeight, false);
+	
+	// Change wrapper height based on device orientation. Not strictly needed by iScroll, you may also use pure CSS techniques.
+	function setHeight() {
+		var headerH = document.getElementById('player').offsetHeight,
+			wrapperH = window.innerHeight - headerH;
+		document.getElementById('container').style.height = wrapperH + 'px';
+	}
+	
+	// Prevent the whole screen to scroll when dragging elements outside of the scroller (ie:header/footer).
+	// If you want to use iScroll in a portion of the screen and still be able to use the native scrolling, do *not* preventDefault on touchmove.
+	document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+	
+      var station_list = null;
+      var mediaplayer = null;
+      var current_selection = 0;
+      var currently_playing = null;
 
-	// If you want to prevent dragging, uncomment this section
-	/*
-	function preventBehavior(e) 
-	{ 
-      e.preventDefault(); 
-    };
-	document.addEventListener("touchmove", preventBehavior, false);
-	*/
-	
-	function onBodyLoad()
-	{
-		document.addEventListener("deviceready",onDeviceReady,false);
-	}
-	
-	/* When this function is called, PhoneGap has been initialized and is ready to roll */
-	function onDeviceReady()
-	{
-		// do your thing!
-	}
-    
+      function selectStation(station) {
+        if ( station != null && station >= 0 && station < station_list.length ) {
+          // station_list[station].name+' '+ station_list[station].id+' '+ station_list[station].guid+' '+ station_list[station].source+' '+ station_list[station].description+' '+ station_list[station].streamUrl+' '+
+          // station_list[station].playlistUrl+ station_list[station].homePage
+          current_selection = station;
+          playCurrentStation();
+        }
+        else {
+          alert("Invalid station");
+        }
+      }
+
+      // Play the station currently selected in the station browser
+      function stopCurrentStation() {
+        if ( currently_playing != null ) {
+           if ( mediaplayer != null ) {
+             mediaplayer.stop();
+           }
+        }
+      }
+
+      // Play the station currently selected in the station browser
+      function playCurrentStation() {
+        // If there is already a station playing, we should stop any media playing
+        stopCurrentStation();
+
+        // Update the text of the currently playing station
+        $("#stationtitle").html(station_list[current_selection].name+" [buffering...]");
+
+        // Update the currently playing var so we can stop this station if a different one is selected
+        currently_playing = current_selection;
+
+        // If we've not played this station before in this session, create a new media object and store it
+        // in the station array entry.
+        if ( mediaplayer == null ) {
+          // Commented out
+          mediaplayer = new Audio(station_list[current_selection].streamUrl);
+          // alert("Here is where the station is created")
+          // alert(station_list[current_selection].streamUrl);
+        }
+
+        // Play the media object for this station
+        mediaplayer.play();
+        $("#stationtitle").html(station_list[current_selection].name);
+        $("#stationstatus").html(station_list[current_selection].description);
+      }
+
+      // Advance to the next station in the station browser
+      function nextStation() {
+        // Wrap around at the end of the array
+        if ( current_selection == station_list.length )
+          current_selection = 0;
+        else
+          current_selection++;
+        // update the UI
+        selectStation(current_selection);
+      }
+
+      function prevStation() {
+        // Wrap around at the start of the array
+        if ( current_selection == 0 )
+          current_selection = station_list.length;
+        else
+          current_selection--;
+        // Update the UI
+        selectStation(current_selection);
+      }
+
+      $(document).ready(function () {
+      
+   		setHeight();
+		myScroll = new iScroll('scroller', {checkDOMChanges: false});
+		
+		$('#buttonpause').hide();
+		$('#stationpage').hide();
+        $('#community').hide();
+        reloadInfo("#newslist","CMA");
+        $('#list').hide();
+        $('#info').hide();
+        $('#twitter').hide();
+
+        $("#stationtitle").html("Loading Stations.....")
+        $("#stationstatus").html("")
+        $('#stations').show();
+
+        // Load the array of currently live stations from the backend web service
+        $.ajax({
+          cache:false,
+          success: function(data) {
+            // Store the retrieved list in the station_list global
+            station_list = data.stationInstanceList;
+            // For debug really, should create a proper warning.
+            if ( station_list == null ) {
+              $("#stationtitle").html("There was a problem loading the station list")
+            }
+            else {
+              // Update the station browser in the UI with the first available station
+              for ( i=0; i<station_list.length; i++ ) {
+                $('#stationslist').append("<li class=\"listitem\"><ul><li class=\"itemlogo\"><img src=\"station_default_logo.png\" title=\"Logo for %STATION%. Click to view station info\"></li><li class=\"button green itemplay\"><a href=\"#\" onClick=\"javascript:selectStation("+i+")\"><img src=\"icon_play.png\"></a></li><li class=\"itemtitle\">"+station_list[i].name+"</li><li class=\"itemteaser\">"+station_list[i].description+"</li></ul></li>")
+              }
+            }
+            $("#stationtitle").html("Please select a station to play.");
+            myScroll.refresh();
+            myScroll.scrollTo(0,0,0);
+          },
+          url:"http://data.thegistfoundation.net/cma/station/list.json"
+        });
+
+      })
+
+      function stations() {
+        $('#community').hide();
+        $('#stations').show();
+        myScroll.refresh();
+    	myScroll.scrollTo(0,0,0);
+      }
+
+      function community() {
+        $('#stations').hide();
+        $('#community').show();
+        myScroll.refresh();
+        myScroll.scrollTo(0,0,0);
+      }
+
+      function selectInfo() {
+        $('#list').hide();
+        $('#info').hide();
+        $('#news').hide();
+        $('#twitter').hide();
+      }
+
+      function selectNews() {
+        $('#list').hide();
+        $('#info').hide();
+        $('#twitter').hide();
+        $('#news').show();
+        reloadInfo("#newslist","CMA");
+      }
+
+      function selectList() {
+        $('#info').hide();
+        $('#twitter').hide();
+        $('#news').hide();
+        $('#list').show();
+        reloadInfo("#maillist","CMAL");
+      }
+
+      function selectTwitter() {
+        $('#list').hide();
+        $('#info').hide();
+        $('#news').hide();
+        $('#twitter').show();
+        reloadInfo("#twitterlist","CMAT");
+      }
+
+      function reloadInfo(element, feedname) {
+        // Load the array of currently live stations from the backend web service
+        $(element).html("");
+        $.ajax({
+          cache:false,
+          success: function(data) {
+            // Store the retrieved list in the station_list global
+            item_list = data.items;
+            // For debug really, should create a proper warning.
+            if ( item_list == null ) {
+            }
+            else {
+              // Update the station browser in the UI with the first available station
+              for ( i=0; i<item_list.length; i++ ) {
+                $(element).append("<li class=\"listitem\"><ul><li class=\"itemdate\">18 Dec</li><li class=\"itemtitle\">"+item_list[i][3]+"</li><li class=\"itemteaser\">"+item_list[i][1]+"</li></ul></li>");
+              }
+            }
+            myScroll.refresh();
+   		    myScroll.scrollTo(0,0,0);
+          },
+          url:"http://data.thegistfoundation.net/cma/info.json?feed="+feedname
+        });
+
+        // icon_chevron.png
+      }
     </script>
+
   </head>
-  <body onload="onBodyLoad()">
-  	
+
+  <body>
+
+<div id="player">
+<ul>
+<li id="buttonhome" class="button green"><a href="#" title="go back to the home screen" onClick="javascript:stations()"><img src="icon_antenna.png"></a></li><li id="buttoninfo" class="button green"><a href="#" title="info about this application" onClick="javascript:info()"><img src="icon_info.png"></a></li><li id="buttonvolume" class="button orange"><a href="#" title="change the player volume"><img src="icon_speaker.png"></a></li><li id="buttonpause" class="button orange" onClick="javascript:playCurrentStation()"><a href="#" title="playing. click to pause" onClick="javascript:stopCurrentStation()"><img src="icon_pause.png"></a></li><li id="buttonplay" class="button green" onClick="javascript:playCurrentStation()"><a href="#" title="paused. click to play" onClick="javascript:stopCurrentStation()"><img src="icon_play.png"></a></li><li id="buttoncommunity" class="button blue"><a href="#"title="view community info for this station" onClick="javascript:community()">Community</a></li><br style="clear:both;"/><li id="stationlogo"><img src="station_default_logo.png" title="Logo for %STATION%. Click to view comminuty info"></li>
+<li id="stationinfo">
+  <ul>
+    <li id="stationtitle">Station Name</li>
+    <br/>
+    <li id="stationstatus">Status text or track playing</li>
+  </ul>
+</li>
+</ul>
+</div>
+<div id="container">
+<div id="scroller">
+	<div id="stations">
+	  <ul class="title">
+	    <li>&nbsp;Stations</li>
+	  </ul>
+	  <ul id="stationslist">
+	  </ul>
+	</div>
+	<div id="community">
+	   <div id="communitybuttons">
+	  <ul><li id="buttonnews" class="button blue"><a href="#" title="read news from this station" onclick="javascript:selectNews()">News</a></li><li id="buttonlist" class="button blue off"><a href="#" title="read this stations mailing list" onclick="javascript:selectList()">Mailing List</a></li><li id="buttontwitter" class="button blue off"><a href="#" title="read twitter items mentioning this station"onclick="javascript:selectTwitter()">Twitter</a></li>
+	  </ul>
+	  </div>
+	  <div id="news">
+	    <ul id="newslist">
+	    </ul>
+	  </div>
+	  <div id="twitter">
+	    <ul id="twitterlist">
+	    </ul>
+	  </div>
+	  <div id="list">
+	    <ul id="maillist">
+	    </ul>
+	  </div>
+	</div>
+	<div id="stationpage">
+	<ul>
+	    <li id="stationtitle">Station Name</li>
+	    <li id="stationstatus">Station Description</li>
+	    <li id="stationlocation">Location: Station Location</li>
+	    <li id="stationcontact"><ul><li>Email: <a href="mailto:mail@mail.com">mail@mail.com</a></li><li>Tel: <a href="tel:011x26262626">011x26262626</a></li><li>Web: <a href="http://example.com/">http://example.com/</a></li></ul></li>
+	 </ul>
+	</div>
+</div>
+</div>
+
   </body>
 </html>

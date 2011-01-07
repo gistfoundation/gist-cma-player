@@ -1,0 +1,6 @@
+/phoneapp/android/cmaplayer/bin
+/phoneapp/android/cmaplayer/gen
+/phoneapp/ios/build
+*.classpath
+*.project
+*._*

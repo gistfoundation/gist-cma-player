@@ -1,0 +1,275 @@
+// !$*UTF8*$!
+{
+	1D3623240D0F684500981E51 /* CanstreamerAppDelegate.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1037, 758}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 266}";
+		};
+	};
+	1D3623250D0F684500981E51 /* CanstreamerAppDelegate.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1037, 1148}}";
+			sepNavSelRange = "{369, 0}";
+			sepNavVisRange = "{561, 1483}";
+		};
+	};
+	1D6058900D05DD3D006BFB54 /* Canstreamer */ = {
+		activeExec = 0;
+		executables = (
+			CA29316512D72AE400924992 /* Canstreamer */,
+		);
+	};
+	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeArchitecturePreference = armv7;
+		activeBuildConfigurationName = Debug;
+		activeExecutable = CA29316512D72AE400924992 /* Canstreamer */;
+		activeSDKPreference = iphoneos4.2;
+		activeTarget = 1D6058900D05DD3D006BFB54 /* Canstreamer */;
+		codeSenseManager = CA2931A212D72B0400924992 /* Code sense */;
+		executables = (
+			CA29316512D72AE400924992 /* Canstreamer */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					859,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 316102010;
+			PBXWorkspaceStateSaveDate = 316102010;
+		};
+		perUserProjectItems = {
+			CAAB022512D75E1200F0BF8A /* PlistBookmark */ = CAAB022512D75E1200F0BF8A /* PlistBookmark */;
+			CAAFAEA112D754FA000E8218 /* PBXTextBookmark */ = CAAFAEA112D754FA000E8218 /* PBXTextBookmark */;
+			CAAFAEA212D754FA000E8218 /* PBXTextBookmark */ = CAAFAEA212D754FA000E8218 /* PBXTextBookmark */;
+			CAAFAEA312D754FA000E8218 /* PBXTextBookmark */ = CAAFAEA312D754FA000E8218 /* PBXTextBookmark */;
+			CAAFAEA412D754FA000E8218 /* PBXTextBookmark */ = CAAFAEA412D754FA000E8218 /* PBXTextBookmark */;
+			CAAFAEA512D754FA000E8218 /* PBXTextBookmark */ = CAAFAEA512D754FA000E8218 /* PBXTextBookmark */;
+			CAAFAEA712D754FA000E8218 /* PBXBookmark */ = CAAFAEA712D754FA000E8218 /* PBXBookmark */;
+			CAAFAEA912D754FA000E8218 /* PBXBookmark */ = CAAFAEA912D754FA000E8218 /* PBXBookmark */;
+			CAAFAEAB12D754FA000E8218 /* PBXBookmark */ = CAAFAEAB12D754FA000E8218 /* PBXBookmark */;
+			CAAFAEAD12D754FA000E8218 /* PBXTextBookmark */ = CAAFAEAD12D754FA000E8218 /* PBXTextBookmark */;
+			CAAFAEAE12D754FA000E8218 /* PlistBookmark */ = CAAFAEAE12D754FA000E8218 /* PlistBookmark */;
+			CAAFAEB712D75558000E8218 /* PlistBookmark */ = CAAFAEB712D75558000E8218 /* PlistBookmark */;
+		};
+		sourceControlManager = CA2931A112D72B0400924992 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	29B97316FDCFA39411CA2CEA /* main.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1037, 758}}";
+			sepNavSelRange = "{370, 0}";
+			sepNavVisRange = "{0, 381}";
+		};
+	};
+	307D28A1123043350040C0FA /* PhoneGapBuildSettings.xcconfig */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1037, 735}}";
+			sepNavSelRange = "{131, 0}";
+			sepNavVisRange = "{0, 131}";
+		};
+	};
+	32CA4F630368D1EE00C91783 /* Canstreamer_Prefix.pch */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1037, 758}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 191}";
+		};
+	};
+	CA29316512D72AE400924992 /* Canstreamer */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = Canstreamer;
+		savedGlobals = {
+		};
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+	};
+	CA2931A112D72B0400924992 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
+		};
+	};
+	CA2931A212D72B0400924992 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	CAAB022512D75E1200F0BF8A /* PlistBookmark */ = {
+		isa = PlistBookmark;
+		fRef = 8D1107310486CEB800E47090 /* Canstreamer-Info.plist */;
+		fallbackIsa = PBXBookmark;
+		isK = 0;
+		kPath = (
+		);
+		name = "/Volumes/DATA/Dropbox/CMAapp/git/phoneapp/ios/Canstreamer-Info.plist";
+		rLen = 0;
+		rLoc = 9223372036854775807;
+	};
+	CAAFAEA112D754FA000E8218 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1D3623240D0F684500981E51 /* CanstreamerAppDelegate.h */;
+		name = "CanstreamerAppDelegate.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 266;
+		vrLoc = 0;
+	};
+	CAAFAEA212D754FA000E8218 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1D3623250D0F684500981E51 /* CanstreamerAppDelegate.m */;
+		name = "CanstreamerAppDelegate.m: 18";
+		rLen = 0;
+		rLoc = 369;
+		rType = 0;
+		vrLen = 1483;
+		vrLoc = 561;
+	};
+	CAAFAEA312D754FA000E8218 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32CA4F630368D1EE00C91783 /* Canstreamer_Prefix.pch */;
+		name = "Canstreamer_Prefix.pch: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 191;
+		vrLoc = 0;
+	};
+	CAAFAEA412D754FA000E8218 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
+		name = "main.m: 16";
+		rLen = 0;
+		rLoc = 370;
+		rType = 0;
+		vrLen = 381;
+		vrLoc = 0;
+	};
+	CAAFAEA512D754FA000E8218 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = CAAFAEA612D754FA000E8218 /* index.html */;
+		name = "index.html: 252";
+		rLen = 0;
+		rLoc = 10101;
+		rType = 0;
+		vrLen = 2591;
+		vrLoc = 0;
+	};
+	CAAFAEA612D754FA000E8218 /* index.html */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = text.html;
+		name = index.html;
+		path = /Volumes/DATA/Dropbox/CMAapp/git/phoneapp/ios/www/index.html;
+		sourceTree = "<absolute>";
+	};
+	CAAFAEA712D754FA000E8218 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = CAAFAEA812D754FA000E8218 /* form-check-on.png */;
+	};
+	CAAFAEA812D754FA000E8218 /* form-check-on.png */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = image.png;
+		name = "form-check-on.png";
+		path = "/Volumes/DATA/Dropbox/CMAapp/git/phoneapp/ios/www/images/form-check-on.png";
+		sourceTree = "<absolute>";
+	};
+	CAAFAEA912D754FA000E8218 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = CAAFAEAA12D754FA000E8218 /* form-check-off.png */;
+	};
+	CAAFAEAA12D754FA000E8218 /* form-check-off.png */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = image.png;
+		name = "form-check-off.png";
+		path = "/Volumes/DATA/Dropbox/CMAapp/git/phoneapp/ios/www/images/form-check-off.png";
+		sourceTree = "<absolute>";
+	};
+	CAAFAEAB12D754FA000E8218 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = CAAFAEAC12D754FA000E8218 /* icon_antenna.png */;
+	};
+	CAAFAEAC12D754FA000E8218 /* icon_antenna.png */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = image.png;
+		name = icon_antenna.png;
+		path = /Volumes/DATA/Dropbox/CMAapp/git/phoneapp/ios/www/icon_antenna.png;
+		sourceTree = "<absolute>";
+	};
+	CAAFAEAD12D754FA000E8218 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 307D28A1123043350040C0FA /* PhoneGapBuildSettings.xcconfig */;
+		name = "PhoneGapBuildSettings.xcconfig: 7";
+		rLen = 0;
+		rLoc = 131;
+		rType = 0;
+		vrLen = 131;
+		vrLoc = 0;
+	};
+	CAAFAEAE12D754FA000E8218 /* PlistBookmark */ = {
+		isa = PlistBookmark;
+		fRef = 30E1352610E2C1420031B30D /* PhoneGap.plist */;
+		fallbackIsa = PBXBookmark;
+		isK = 0;
+		kPath = (
+		);
+		name = /Volumes/DATA/Dropbox/CMAapp/git/phoneapp/ios/PhoneGap.plist;
+		rLen = 0;
+		rLoc = 9223372036854775808;
+	};
+	CAAFAEB712D75558000E8218 /* PlistBookmark */ = {
+		isa = PlistBookmark;
+		fRef = 8D1107310486CEB800E47090 /* Canstreamer-Info.plist */;
+		fallbackIsa = PBXBookmark;
+		isK = 0;
+		kPath = (
+		);
+		name = "/Volumes/DATA/Dropbox/CMAapp/git/phoneapp/ios/Canstreamer-Info.plist";
+		rLen = 0;
+		rLoc = 9223372036854775808;
+	};
+}
