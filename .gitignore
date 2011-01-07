@@ -1,6 +1,7 @@
 /phoneapp/android/cmaplayer/bin
 /phoneapp/android/cmaplayer/gen
 /phoneapp/ios/build
+/phoneapp/ios/Canstreamer.xcodeproj/guru.*
 *.classpath
 *.project
 *._*
