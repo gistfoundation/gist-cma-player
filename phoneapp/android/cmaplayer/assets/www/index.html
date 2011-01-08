@@ -10,23 +10,23 @@
     <script type="text/javascript" src="iscroll.js?v3.7.1"></script>
     <script type="text/javascript" charset="utf-8">
 
-	var myScroll;
-	var a = 0;
-	
-	// Check screen size on orientation change
-	window.addEventListener('onorientationchange' in window ? 'orientationchange' : 'resize', setHeight, false);
-	
-	// Change wrapper height based on device orientation. Not strictly needed by iScroll, you may also use pure CSS techniques.
-	function setHeight() {
-		var headerH = document.getElementById('player').offsetHeight,
-			wrapperH = window.innerHeight - headerH;
-		document.getElementById('container').style.height = wrapperH + 'px';
-	}
-	
-	// Prevent the whole screen to scroll when dragging elements outside of the scroller (ie:header/footer).
-	// If you want to use iScroll in a portion of the screen and still be able to use the native scrolling, do *not* preventDefault on touchmove.
-	document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-	
+  var myScroll;
+  var a = 0;
+  
+  // Check screen size on orientation change
+  window.addEventListener('onorientationchange' in window ? 'orientationchange' : 'resize', setHeight, false);
+  
+  // Change wrapper height based on device orientation. Not strictly needed by iScroll, you may also use pure CSS techniques.
+  function setHeight() {
+    var headerH = document.getElementById('player').offsetHeight,
+      wrapperH = window.innerHeight - headerH;
+    document.getElementById('container').style.height = wrapperH + 'px';
+  }
+  
+  // Prevent the whole screen to scroll when dragging elements outside of the scroller (ie:header/footer).
+  // If you want to use iScroll in a portion of the screen and still be able to use the native scrolling, do *not* preventDefault on touchmove.
+  document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+  
       var station_list = null;
       var current_selection = 0;
       var currently_playing = null;
@@ -110,20 +110,20 @@
 
       $(document).ready(function () {
       
-   	setHeight();
-	myScroll = new iScroll('scroller', {checkDOMChanges: false});
-		
-	$('#buttonpause').hide();
-	$('#stationpage').hide();
-        $('#community').hide();
-        reloadInfo("#newslist","CMA");
-        $('#list').hide();
-        $('#info').hide();
-        $('#twitter').hide();
+     setHeight();
+     myScroll = new iScroll('scroller', {checkDOMChanges: false});
+    
+     $('#buttonpause').hide();
+     $('#stationpage').hide();
+     $('#community').hide();
+     reloadInfo("#newslist","CMA");
+     $('#list').hide();
+     $('#info').hide();
+     $('#twitter').hide();
 
-        $("#stationtitle").html("Loading Stations.....")
-        $("#stationstatus").html("")
-        $('#stations').show();
+     $("#stationtitle").html("Loading Stations.....")
+     $("#stationstatus").html("")
+     $('#stations').show();
 
         // Load the array of currently live stations from the backend web service
         $.ajax({
@@ -155,7 +155,7 @@
         $('#info').hide();
         $('#stations').show();
         myScroll.refresh();
-    	myScroll.scrollTo(0,0,0);
+      myScroll.scrollTo(0,0,0);
       }
 
       function community() {
@@ -167,9 +167,9 @@
       }
 
       function selectInfo() {
-        $('#list').hide();
-        $('#news').hide();
-        $('#twitter').hide();
+        alert("Select info");
+        $('#stations').hide();
+        $('#community').hide();
         $('#info').show();
       }
 
@@ -215,7 +215,7 @@
               }
             }
             myScroll.refresh();
-   		    myScroll.scrollTo(0,0,0);
+           myScroll.scrollTo(0,0,0);
           },
           url:"http://data.thegistfoundation.net/cma/info.json?feed="+feedname
         });
@@ -241,42 +241,46 @@
 </div>
 <div id="container">
 <div id="scroller">
-	<div id="stations">
-	  <ul class="title">
-	    <li>&nbsp;Stations</li>
-	  </ul>
-	  <ul id="stationslist">
-	  </ul>
-	</div>
-	<div id="community">
-	   <div id="communitybuttons">
-	  <ul><li id="buttonnews" class="button blue"><a href="#" title="read news from this station" onclick="javascript:selectNews()">News</a></li><li id="buttonlist" class="button blue off"><a href="#" title="read this stations mailing list" onclick="javascript:selectList()">Mailing List</a></li><li id="buttontwitter" class="button blue off"><a href="#" title="read twitter items mentioning this station"onclick="javascript:selectTwitter()">Twitter</a></li>
-	  </ul>
-	  </div>
-	  <div id="news">
-	    <ul id="newslist">
-	    </ul>
-	  </div>
-	  <div id="twitter">
-	    <ul id="twitterlist">
-	    </ul>
-	  </div>
-	  <div id="list">
-	    <ul id="maillist">
-	    </ul>
-	  </div>
-	</div>
-	<div id="info">
-          This is the application info page.. Please supply content.
-	</div>
-	<div id="stationpage">
-	<ul>
-	    <li id="stationtitle">Station Name</li>
-	    <li id="stationstatus">Station Description</li>
-	    <li id="stationlocation">Location: Station Location</li>
-	    <li id="stationcontact"><ul><li>Email: <a href="mailto:mail@mail.com">mail@mail.com</a></li><li>Tel: <a href="tel:011x26262626">011x26262626</a></li><li>Web: <a href="http://example.com/">http://example.com/</a></li></ul></li>
-	 </ul>
-	</div>
+
+  <div id="stations">
+    <ul class="title">
+      <li>&nbsp;Stations</li>
+    </ul>
+    <ul id="stationslist">
+    </ul>
+  </div>
+
+  <div id="community">
+     <div id="communitybuttons">
+    <ul><li id="buttonnews" class="button blue"><a href="#" title="read news from this station" onclick="javascript:selectNews()">News</a></li><li id="buttonlist" class="button blue off"><a href="#" title="read this stations mailing list" onclick="javascript:selectList()">Mailing List</a></li><li id="buttontwitter" class="button blue off"><a href="#" title="read twitter items mentioning this station"onclick="javascript:selectTwitter()">Twitter</a></li>
+    </ul>
+    </div>
+    <div id="news">
+      <ul id="newslist">
+      </ul>
+    </div>
+    <div id="twitter">
+      <ul id="twitterlist">
+      </ul>
+    </div>
+    <div id="list">
+      <ul id="maillist">
+      </ul>
+    </div>
+  </div>
+
+  <div id="info">
+    This is the application info page.. Please supply content.
+  </div>
+
+  <div id="stationpage">
+  <ul>
+      <li id="stationtitle">Station Name</li>
+      <li id="stationstatus">Station Description</li>
+      <li id="stationlocation">Location: Station Location</li>
+      <li id="stationcontact"><ul><li>Email: <a href="mailto:mail@mail.com">mail@mail.com</a></li><li>Tel: <a href="tel:011x26262626">011x26262626</a></li><li>Web: <a href="http://example.com/">http://example.com/</a></li></ul></li>
+   </ul>
+  </div>
 </div>
 </div>
 
