@@ -89,6 +89,10 @@
 
       function stationInfo(id) {
         alert("Show station info "+id);
+        $('#community').hide();
+        $('#info').hide();
+        $('#stations').hide();
+        $('#stationpage').show();
       }
 
       // Advance to the next station in the station browser
@@ -142,11 +146,12 @@
             else {
               // Update the station browser in the UI with the first available station
               for ( i=0; i<station_list.length; i++ ) {
-                $('#stationslist').append("<li class=\"listitem\"><ul><li class=\"itemlogo\"><img src=\"station_default_logo.png\" title=\"Logo for %STATION%. Click to view station info\"></li>"+
+                $('#stationslist').append("<li class=\"listitem\"><ul>"+
+                  "<li class=\"itemlogo\" onClick=\"javascript:stationInfo("+i+")\"><img src=\"station_default_logo.png\" title=\"Logo for %STATION%. Click to view station info\"></li>"+
                   "<li id=\"stpl"+i+"\" class=\"button green itemplay\"><a href=\"#\" onClick=\"javascript:selectStation("+i+")\"><img src=\"icon_play.png\"></a></li>"+
                   "<li id=\"stst"+i+"\" class=\"button orange itemplay\"><a href=\"#\" onClick=\"javascript:stopCurrentStation()\"><img src=\"icon_pause.png\"></a></li>"+
-                  "<li class=\"itemtitle\"><a href=\"#\" onClick=\"javascript:stationInfo("+i+")\">"+station_list[i].name+"</a></li>"+
-                  "<li class=\"itemteaser\">"+station_list[i].description+"</li></ul></li>")
+                  "<li class=\"itemtitle\" onClick=\"javascript:stationInfo("+i+")\">"+station_list[i].name+"</li>"+
+                  "<li class=\"itemteaser\" onClick=\"javascript:stationInfo("+i+")\">"+station_list[i].description+"</li></ul></li>")
                   station_list[i].playButton = $('#stpl'+i);
                   station_list[i].stopButton = $('#stst'+i);
                   station_list[i].playButton.show();
@@ -163,6 +168,7 @@
       })
 
       function stations() {
+        $('#stationpage').hide();
         $('#community').hide();
         $('#info').hide();
         $('#stations').show();
@@ -171,6 +177,7 @@
       }
 
       function community() {
+        $('#stationpage').hide();
         $('#stations').hide();
         $('#info').hide();
         $('#community').show();
@@ -179,6 +186,7 @@
       }
 
       function selectInfo() {
+        $('#stationpage').hide();
         alert("Select info");
         $('#stations').hide();
         $('#community').hide();
