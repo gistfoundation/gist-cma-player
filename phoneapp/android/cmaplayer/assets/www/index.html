@@ -138,7 +138,10 @@
             else {
               // Update the station browser in the UI with the first available station
               for ( i=0; i<station_list.length; i++ ) {
-                $('#stationslist').append("<li class=\"listitem\"><ul><li class=\"itemlogo\"><img src=\"station_default_logo.png\" title=\"Logo for %STATION%. Click to view station info\"></li><li class=\"button green itemplay\"><a href=\"#\" onClick=\"javascript:selectStation("+i+")\"><img src=\"icon_play.png\"></a></li><li class=\"itemtitle\"><a href=\"javascript:stationInfo("+i+")\">"+station_list[i].name+"</a></li><li class=\"itemteaser\">"+station_list[i].description+"</li></ul></li>")
+                $('#stationslist').append("<li class=\"listitem\"><ul><li class=\"itemlogo\"><img src=\"station_default_logo.png\" title=\"Logo for %STATION%. Click to view station info\"></li>"+
+                  "<li class=\"button green itemplay\"><a href=\"#\" onClick=\"javascript:selectStation("+i+")\"><img src=\"icon_play.png\"></a></li>"+
+                  "<li class=\"itemtitle\"><a href=\"#\" onClick=\"javascript:stationInfo("+i+")\">"+station_list[i].name+"</a></li>"+
+                  "<li class=\"itemteaser\">"+station_list[i].description+"</li></ul></li>")
               }
             }
             $("#stationtitle").html("Please select a station to play.");

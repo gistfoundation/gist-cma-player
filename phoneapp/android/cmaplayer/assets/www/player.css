@@ -218,6 +218,10 @@ color: #888;
 line-height: 20px;
 }
 
+a.itemtitle {
+display: block;
+}
+
 li.itemtitle, li.itemteaser {
 display: block;
 }
