@@ -13,7 +13,7 @@ class StationFeedSyncService {
       def google = new RESTClient("https://ajax.googleapis.com/ajax/services/")
 
       long timestamp = System.currentTimeMillis()
-      println "Loading live feeds from commedia ice cast rss feed"
+      println "Loading live feeds from commedia ice cast rss feed. Timestamp for this update is ${timestamp}"
       def live_feed_url = "http://icecast.commedia.org.uk/rss.xml"
       def rss_response_text = live_feed_url.toURL().text
       // println "Rss response: ${rss_response_text}"
@@ -32,16 +32,17 @@ class StationFeedSyncService {
 
           def station = Station.findByGuid(guid) 
           if ( station == null ) {
+            println "Detected new station.. creating entry"
             def stream_url = getStreamURL(link);
             station = new Station(name:title,description:description,guid:guid,playlistUrl:link,streamUrl:stream_url,source:"CMARSS",lastSeen:timestamp,city:city)
             station.homePage = getStationHomePage(google,title)
           }
           else {
-            // println "Station ${guid} already in db"
+            println "Station ${title} ( ${guid} ) already in db"
           }
           station.live = true;
           station.lastSeen = timestamp
-          if ( station.save() ) {
+          if ( station.save(flush:true) ) {
             // println "${station.name} (${station.guid}) - live"
           }
           else {
@@ -56,8 +57,10 @@ class StationFeedSyncService {
       }
 
       // Finally, all stations where lastSeen < timestamp should be marked offline (live=false)
+      println "Marking stations as live=false if they weren't seen in this update"
       def offline_stations = Station.findAllByLastSeenLessThan(timestamp)
       offline_stations.each {
+        println "Marking ${it.name} offline. Was last seen at ${it.lastSeen}, current timestamp is ${timestamp} "
         it.live = false
         it.save()
       }

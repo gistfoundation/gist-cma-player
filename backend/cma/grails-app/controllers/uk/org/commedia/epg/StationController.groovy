@@ -14,10 +14,13 @@ class StationController {
 
  
    def list = {
-        println "List Stations - ${request.format}"
+        println "List Stations - ${request.format}."
         def response = null;
         if(request?.format && request.format != "html"){
-          response = [stationInstanceList: Station.list(), stationInstanceTotal: Station.count()]
+          // response = [stationInstanceList: Station.list(), stationInstanceTotal: Station.count()]
+          // println "Processing non html response"
+          def live_stations = Station.findAllByLive(true);
+          response = [stationInstanceList: live_stations, stationInstanceTotal:live_stations.size(), flooble: "hello"]
         }
         else {
           params.max = Math.min(params.max ? params.int('max') : 10, 100)
