@@ -24,6 +24,8 @@ class Station {
   String stationLogo
   // Station home page
   String homePage
+  // Station City
+  String city
 
   static constraints = {
     name(nullable:false)
@@ -40,5 +42,6 @@ class Station {
     stationLogo(nullable:true)
     homePage(nullable:true)
     lastSeen(nullable:true)
+    city(nullable:true)
   }
 }

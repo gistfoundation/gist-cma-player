@@ -26,13 +26,14 @@ class StationFeedSyncService {
           def title = it.title?.text()
           def description = it.description?.text()
           def link = it.link?.text()
+          def city = it.city?.text()
 
           // println "Processing station guid:${guid} link:${link} desc:${description} title:${title}"
 
           def station = Station.findByGuid(guid) 
           if ( station == null ) {
             def stream_url = getStreamURL(link);
-            station = new Station(name:title,description:description,guid:guid,playlistUrl:link,streamUrl:stream_url,source:"CMARSS",lastSeen:timestamp)
+            station = new Station(name:title,description:description,guid:guid,playlistUrl:link,streamUrl:stream_url,source:"CMARSS",lastSeen:timestamp,city:city)
             station.homePage = getStationHomePage(google,title)
           }
           else {
