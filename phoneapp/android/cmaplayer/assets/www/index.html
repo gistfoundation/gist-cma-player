@@ -124,6 +124,7 @@
      $('#buttonpause').hide();
      $('#stationpage').hide();
      $('#community').hide();
+     $('#settings').hide();
      reloadInfo("#newslist","CMA");
      $('#list').hide();
      $('#info').hide();
@@ -172,6 +173,7 @@
         $('#stationpage').hide();
         $('#community').hide();
         $('#info').hide();
+        $('#settings').hide();
         $('#stations').show();
         myScroll.refresh();
       myScroll.scrollTo(0,0,0);
@@ -181,15 +183,26 @@
         $('#stationpage').hide();
         $('#stations').hide();
         $('#info').hide();
+        $('#settings').hide();
         $('#community').show();
+        myScroll.refresh();
+        myScroll.scrollTo(0,0,0);
+      }
+
+      function settings() {
+        $('#stationpage').hide();
+        $('#stations').hide();
+        $('#info').hide();
+        $('#community').hide();
+        $('#settings').show();
         myScroll.refresh();
         myScroll.scrollTo(0,0,0);
       }
 
       function selectInfo() {
         $('#stationpage').hide();
-        alert("Select info");
         $('#stations').hide();
+        $('#settings').hide();
         $('#community').hide();
         $('#info').show();
       }
@@ -250,7 +263,7 @@
   <body>
 
 <div id="player">
-<ul><li id="buttonhome" class="button green"><a href="#" title="go back to the home screen" onClick="javascript:stations()"><img src="icon_antenna.png"></a></li><li id="buttoninfo" class="button green"><a href="#" title="info about this application" onClick="javascript:selectInfo()"><img src="icon_info.png"></a></li><li id="buttonvolume" class="button orange"><a href="#" title="change the player volume"><img src="icon_speaker.png"></a></li><li id="buttonpause" class="button orange" onClick="javascript:stopCurrentStation()"><a href="#" title="playing. click to pause" onClick="javascript:stopCurrentStation()"><img src="icon_pause.png"></a></li><li id="buttonplay" class="button green" onClick="javascript:playCurrentStation()"><a href="#" title="paused. click to play" onClick="javascript:stopCurrentStation()"><img src="icon_play.png"></a></li><li id="buttoncommunity" class="button blue"><a href="#"title="view community info for this station" onClick="javascript:community()">Community</a></li><br style="clear:both;"/><li id="stationlogo"><img src="station_default_logo.png" title="Logo for %STATION%. Click to view comminuty info"></li>
+<ul><li id="buttonhome" class="button green"><a href="#" title="go back to the home screen" onClick="javascript:stations()"><img src="icon_antenna.png"></a></li><li id="buttoninfo" class="button green"><a href="#" title="info about this application" onClick="javascript:selectInfo()"><img src="icon_info.png"></a></li><li id="buttonvolume" class="button orange"><a href="#" title="change the player volume" onClick="javascript:settings()"><img src="icon_speaker.png"></a></li><li id="buttonpause" class="button orange" onClick="javascript:stopCurrentStation()"><a href="#" title="playing. click to pause" onClick="javascript:stopCurrentStation()"><img src="icon_pause.png"></a></li><li id="buttonplay" class="button green" onClick="javascript:playCurrentStation()"><a href="#" title="paused. click to play" onClick="javascript:stopCurrentStation()"><img src="icon_play.png"></a></li><li id="buttoncommunity" class="button blue"><a href="#"title="view community info for this station" onClick="javascript:community()">Community</a></li><br style="clear:both;"/><li id="stationlogo"><img src="station_default_logo.png" title="Logo for %STATION%. Click to view comminuty info"></li>
 <li id="stationinfo">
   <ul>
     <li id="stationtitle">Station Name</li>
@@ -294,6 +307,9 @@
     This is the application info page.. Please supply content.
   </div>
 
+  <div id="settings">
+    This is the settings page - Just for volume right now
+  </div>
   <div id="stationpage">
   <ul>
       <li id="stationtitle">Station Name</li>
