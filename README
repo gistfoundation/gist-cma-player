@@ -23,3 +23,11 @@ Instead, I just ran the ant and then manually did "adb install -r ./bin/cmaplaye
 
 
 Hint: If you need to access a service on localhost from the android emulator, use http://10.0.2.2:8080/app/url instead of localhost. Works a treat.
+
+
+Signing... Used
+
+/usr/lib/jvm/java-6-sun/bin/keytool -genkey -v -keystore gist.keystore -alias gist -keyalg RSA -keysize 2048 -validity 10000
+
+To generate a self-signed key
+
