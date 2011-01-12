@@ -90,6 +90,12 @@
 
       function stationInfo(id) {
         alert("Show station info "+id);
+
+        $('stationtitle').html(station_list[id].name);
+        $('stationstatus').html(station_list[id].description);
+        $('stationlocation').html(station_list[id].city);
+        $('stationcontact').html(station_list[id].homePage);
+
         $('#community').hide();
         $('#info').hide();
         $('#stations').hide();
