@@ -4,10 +4,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>PhoneGap</title>
+    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery.ui.all.css" rel="stylesheet" />
     <link rel="stylesheet" href="player.css" type="text/css" media="screen" title="no title" charset="utf-8">
-    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>    
+    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
     <script type="text/javascript" charset="utf-8" src="jquery-1.4.4.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="jquery-ui-1.8.7.custom.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="jquery-ui-1.8.8.custom.min.js"></script>
+    
     <script type="text/javascript" src="iscroll.js?v3.7.1"></script>
     <script type="text/javascript" charset="utf-8">
 
@@ -127,6 +129,8 @@
       
         setHeight();
         myScroll = new iScroll('scroller', {checkDOMChanges: false});
+        
+        $( "#slider" ).slider();
     
         $('#buttonpause').hide();
         $('#stationpage').hide();
@@ -136,6 +140,7 @@
         $('#list').hide();
         $('#info').hide();
         $('#twitter').hide();
+        $('#sliderdiv').hide();
 
         $("#stationtitle").html("Loading Stations.....")
         $("#stationstatus").html("")
@@ -173,7 +178,6 @@
           },
           url:"http://data.thegistfoundation.net/cma/station/list.json"
         });
-        $( "#slider" ).slider();
       })
 
       function stations() {
@@ -183,7 +187,7 @@
         $('#settings').hide();
         $('#stations').show();
         myScroll.refresh();
-      myScroll.scrollTo(0,0,0);
+        myScroll.scrollTo(0,0,0);
       }
 
       function community() {
@@ -195,6 +199,10 @@
         myScroll.refresh();
         myScroll.scrollTo(0,0,0);
       }
+
+	  function volume() {
+		$('#sliderdiv').toggle();
+	  }
 
       function settings() {
         $('#stationpage').hide();
@@ -256,7 +264,7 @@
               }
             }
             myScroll.refresh();
-           myScroll.scrollTo(0,0,0);
+            myScroll.scrollTo(0,0,0);
           },
           url:"http://data.thegistfoundation.net/cma/info.json?feed="+feedname
         });
@@ -270,7 +278,8 @@
   <body>
 
 <div id="player">
-<ul><li id="buttonhome" class="button green"><a href="#" title="go back to the home screen" onClick="javascript:stations()"><img src="icon_antenna.png"></a></li><li id="buttoninfo" class="button green"><a href="#" title="info about this application" onClick="javascript:selectInfo()"><img src="icon_info.png"></a></li><li id="buttonvolume" class="button orange"><a href="#" title="change the player volume" onClick="javascript:settings()"><img src="icon_speaker.png"></a></li><li id="buttonpause" class="button orange" onClick="javascript:stopCurrentStation()"><a href="#" title="playing. click to pause" onClick="javascript:stopCurrentStation()"><img src="icon_pause.png"></a></li><li id="buttonplay" class="button green" onClick="javascript:playCurrentStation()"><a href="#" title="paused. click to play" onClick="javascript:stopCurrentStation()"><img src="icon_play.png"></a></li><li id="buttoncommunity" class="button blue"><a href="#"title="view community info for this station" onClick="javascript:community()">Community</a></li><br style="clear:both;"/><li id="stationlogo"><img src="station_default_logo.png" title="Logo for %STATION%. Click to view comminuty info"></li>
+<div id="sliderdiv" class="orange"><div id="slider"></div></div>
+<ul><li id="buttonhome" class="button green"><a href="#" title="go back to the home screen" onClick="javascript:stations()"><img src="icon_antenna.png"></a></li><li id="buttoninfo" class="button green"><a href="#" title="info about this application" onClick="javascript:selectInfo()"><img src="icon_info.png"></a></li><li id="buttonvolume" class="button orange"><a href="#" title="change the player volume" onClick="javascript:volume()"><img src="icon_speaker.png"></a></li><li id="buttonpause" class="button orange" onClick="javascript:stopCurrentStation()"><a href="#" title="playing. click to pause" onClick="javascript:stopCurrentStation()"><img src="icon_pause.png"></a></li><li id="buttonplay" class="button green" onClick="javascript:playCurrentStation()"><a href="#" title="paused. click to play" onClick="javascript:stopCurrentStation()"><img src="icon_play.png"></a></li><li id="buttoncommunity" class="button blue"><a href="#"title="view community info for this station" onClick="javascript:community()">Community</a></li><br style="clear:both;"/><li id="stationlogo"><img src="station_default_logo.png" title="Logo for %STATION%. Click to view comminuty info"></li>
 <li id="stationinfo">
   <ul>
     <li id="stationtitle">Station Name</li>
@@ -317,7 +326,6 @@
   <div id="settings">
     This is the settings page - Just for volume right now
     Volume:<br/>
-    <div id="slider"></div>
   </div>
   <div id="stationpage">
   <ul>
@@ -329,6 +337,5 @@
   </div>
 </div>
 </div>
-
   </body>
 </html>
