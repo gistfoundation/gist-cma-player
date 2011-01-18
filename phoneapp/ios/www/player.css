@@ -13,11 +13,19 @@ TODO: License Info here.
 
 */
 
+/* kill android orange box highlight */
+* {
+-webkit-tap-highlight-color:  rgba(255, 255, 255, 0); 
+}
+
 body {
 font-family: Helvetica, Arial, sans-serif;
 font-size: 0.85em;
 line-height: 1em;
 font-weight: 400;
+width: 100%;
+height: 100%;
+overflow: hidden;
 }
 
 div { clear: both; }
@@ -25,51 +33,6 @@ div { clear: both; }
 a {
 color: white;
 text-decoration: none;
-}
-
-.button {
-height: 36px;
-font-weight: 800;
-text-align: center;
-display: inline-block;
-vertical-align: middle;
-margin: 0 0 2px 2px;
-border-radius: 5px;
--webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.25),
-					inset 0 16px rgba(255,255,255,0.2),
-					inset 0 12px 16px rgba(255,255,255,0.25),
-					inset 0 -8px 16px rgba(0,0,0,0.3);
-}
-
-.button a {
-display: block;
-line-height: 24px;
-height: 24px;
-padding: 5px;
-}
-
-.button img {
-height: 20px;
-}
-
-.green {
-color: white;
-background: #a4c639 url(button_green.png) 0 0 repeat-x;
-background-size: 6px 200px;
-}
-
-.blue {
-background: #43c1e3 url(button_blue.png) 0 0 repeat-x;
-background-size: 6px 200px;
-}
-
-.orange {
-background: #e8a522 url(button_orange.png) 0 0 repeat-x;
-background-size: 6px 200px;
-}
-
-.button.off {
-background-position-y: -100px;
 }
 
 /* Player Specific items*/
@@ -108,108 +71,120 @@ overflow-y: scroll;
 display: inline-block;
 }
 
-#stationlogo {
- float: right;
- width: 80px;
-}
-
 #stationinfo {
  height: 36px;
  padding: 8px;
+ position: absolute;
+ top: 5px;
+ left: 0px;
 }
 
 #stationtitle {
-font-weight: 800;
+font-weight: 600;
 }
 
 #stationtitle, #stationstatus {
 display: block;
 height: 18px;
-max-width: 220px;
+width: 220px;
 line-height: 18px;
 padding: 0;
 overflow: hidden;
 }
 
-#buttoncommunity {
-width: 84px;
-margin: 2px;
+
+/* setup the sprite  */
+#buttonhome, #buttonplay, #buttoninfo, #buttonvolume, #buttoncommunity,
+#buttonnews, #buttonlist, #buttontwitter,
+.buttonplay, .itemmore {
+cursor: pointer; 
+font-weight: 600;
+margin-top: 3px;
+background-image: url(buttonsprites1x.png);
+background-size: 320px 128px;
+overflow: hidden;
+position: absolute;
 }
 
-#buttonhome, #buttoninfo, #buttonvolume, #buttonplay, #buttonpause {
-width: 56px;
-margin-top: 2px;
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5) {
+	#buttonhome, #buttonplay, #buttoninfo, #buttonvolume, #buttoncommunity,
+	#buttonnews, #buttonlist, #buttontwitter,
+	.buttonplay, .itemmore {
+		background-image: url(buttonsprites.png);
+		background-size: 320px 128px;
+	}
 }
 
-#buttonhome img {
-height: 28px;
+#buttonvolume, #buttonplay, .buttonplay {
+width: 45px;
+height: 45px;
+background-position-y: -69px;
+background-position-x: 0;
 }
 
-#buttonpause img, #buttoninfo img, #buttonplay img, #buttonvolume img {
-padding-top: 2px;
+.itemtext {
+position: absolute;
+left: 60px;
+top: 50%;
+margin-top: -27px;
 }
 
-#buttonhome a {
-padding: 4px;
-}
+.itemmore { width: 12px; height: 35px; right: 12px; top: 50%; margin-top: -18px; }
 
-#stationlogo img {
-width: 80px;
-height: 50px;
-padding: 2px 0 2px 2px;
-}
+#buttoninfo, #buttoncommunity, #buttonhome { height: 34px; bottom: 0; }
+#buttonnews, #buttonlist, #buttontwitter { height: 17px; width: 103px; top: 5px; text-align: center; background-position-x: -218px; background-position-y: -35px; line-height: 0; padding-top: 17px; color: white;}
+
+#communitybuttons { width: 100%; height: 42px; background-color: #00688f; }
+
+/* position sprite in background */
+.on.buttonplay, .on#buttonplay { background-position-x: -45px; }
+#buttonvolume { background-position-x: -135px; }
+#buttonvolume { background-position-x: -90px; }
+#buttoninfo {  width: 45px; background-position-x: -12px;}
+#buttonhome { width: 80px; background-position-x: -58px; background-position-y: 0; }
+#buttoncommunity { width: 80px; background-position-x: -138px; background-position-y: 0; }
+
+.on#buttonnews, .on#buttonlist, .on#buttontwitter { background-position-y: 0px; }
+.on#buttonhome, .on#buttoncommunity { background-position-y: -35px; }
+
+/* position buttons */
+#buttonvolume { top: 10px; right: 5px; }
+#buttonplay { top: 10px; right: 50px; }
+#buttoninfo { left: 5px; }
+#buttoncommunity { left: 51%; }
+#buttonhome { left: 51%; margin-left: -85px; }
+#buttonnews { left: 3px;}
+#buttonlist { left: 34%; }
+#buttontwitter { left: 67%; }
+
+.buttonplay { position: absolute; left: 5px; top: 50%; margin-top: -23px; }
 
 /* List Specific Items */
 
 .listitem {
 min-height: 68px;
 padding: 2px;
-}
-
-#stations, #community {
+clear: both;
+margin-bottom: 2px;
+border-top: 1px solid #e4e4e4;
 position: relative;
 }
 
-#community .listitem {
-margin-bottom: 2px;
-clear: both;
-background: url(listbg.png) bottom repeat-x;
+#stations, #community, #communitybuttons {
+position: relative;
+width: 100%;
 }
 
 #stations .title {
-line-height: 32px;
-font-weight: 800;
-padding: 2px;
-background: #466700;
+line-height: 36px;
+font-weight: 600;
+padding: 3px;
+background: #cc7e00;
 color: white;
-}
-
-#stations .listitem {
-clear: both;
-background: url(listbg.png) bottom repeat-x;
-margin-bottom: 2px;
-}
-
-#buttoncommunityinfo, #buttonstationsinfo {
-width: 32px;
 }
 
 #stations ul, #community ul {
 clear: both;
-}
-
-#buttonnews, #buttonlist, #buttontwitter {
-width: 104px;
-}
-
-.itemlogo {
-float: left;
-padding: 12px 2px;
-}
-
-.itemlogo img {
-width: 64px;
-height: 40px;
 }
 
 .itemdate {
@@ -218,50 +193,50 @@ color: #888;
 line-height: 20px;
 }
 
-li.itemtitle, li.itemteaser {
-display: block;
-}
-
-#stations .itemtitle {
-font-weight: 800;
-line-height: 20px;
-height: 20px;
-overflow: hidden;
-}
-
-#stations .itemteaser {
-line-height: 14px;
-font-size: 0.9em;
-height: 14px;
-overflow: hidden;
-}
-
 .itemtitle {
-font-weight: 800;
-line-height: 16px;
+font-weight: 600;
+line-height: 18px;
 margin-bottom: 2px;
 }
 
-.itemteaser {
-line-height: 14px;
+.itemteaser, .itemlocation {
+line-height: 18px;
 font-size: 0.9em;
-margin-bottom: 4px;
+margin-bottom: 2px;
 }
 
-.button.itemmore, .button.itemplay {
-float: right;
-height: 100%;
-line-height: 64px;
-text-align: middle;
-min-height: 64px;
-min-width: 36px;
+#stations .itemtitle {
+font-weight: 600;
+height: 18px;
+overflow: hidden;
 }
 
-.button.itemmore a, .button.itemplay a {
-min-height: 48px;
+#stations .itemteaser, .itemlocation {
+font-size: 0.9em;
+height: 16px;
+overflow: hidden;
 }
 
-.button.itemmore img, .button.itemplay img {
-margin-top: 14px;
+#sliderdiv {
+z-index: 200;
+position: absolute;
+top: 45px;
+left: 0;
+width: 90%;
+height: 30px;
+margin: 0 20px;
+padding: 10px 30px;
+border-radius: 16px;
+}
+
+.ui-slider-horizontal {
 height: 20px;
+margin-top: 3px;
+}
+
+.ui-slider .ui-slider-handle {
+height: 40px;
+width: 40px;
+margin-left: -20px;
+margin-top: -6px;
 }

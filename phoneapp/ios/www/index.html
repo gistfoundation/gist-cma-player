@@ -3,51 +3,80 @@
   <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-    <title>CamStreamer</title>
-    <link rel="stylesheet" href="player.css" type="text/css" media="screen" title="no title" charset="utf-8">
-    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>    
+    <title>PhoneGap</title>
+    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery.ui.all.css" rel="stylesheet" />
+    <link rel="stylesheet" href="res/player.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
     <script type="text/javascript" charset="utf-8" src="jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="jquery-ui-1.8.8.custom.min.js"></script>
+    
     <script type="text/javascript" src="iscroll.js?v3.7.1"></script>
     <script type="text/javascript" charset="utf-8">
 
-	var myScroll;
-	var a = 0;
-	
-	// Check screen size on orientation change
-	window.addEventListener('onorientationchange' in window ? 'orientationchange' : 'resize', setHeight, false);
-	
-	// Change wrapper height based on device orientation. Not strictly needed by iScroll, you may also use pure CSS techniques.
-	function setHeight() {
-		var headerH = document.getElementById('player').offsetHeight,
-			wrapperH = window.innerHeight - headerH;
-		document.getElementById('container').style.height = wrapperH + 'px';
-	}
-	
-	// Prevent the whole screen to scroll when dragging elements outside of the scroller (ie:header/footer).
-	// If you want to use iScroll in a portion of the screen and still be able to use the native scrolling, do *not* preventDefault on touchmove.
-	document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-	
+  var myScroll;
+  var a = 0;
+  var myStream;
+
+  // Check screen size on orientation change
+  window.addEventListener('onorientationchange' in window ? 'orientationchange' : 'resize', setHeight, false);
+  
+  // Change wrapper height based on device orientation. Not strictly needed by iScroll, you may also use pure CSS techniques.
+  function setHeight() {
+    var headerH = document.getElementById('player').offsetHeight,
+      wrapperH = window.innerHeight - headerH;
+    document.getElementById('container').style.height = wrapperH + 'px';
+  }
+  
+  // Prevent the whole screen to scroll when dragging elements outside of the scroller (ie:header/footer).
+  // If you want to use iScroll in a portion of the screen and still be able to use the native scrolling, do *not* preventDefault on touchmove.
+  document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+  
       var station_list = null;
-      var mediaplayer = null;
-      var current_selection = 0;
+      var current_selection = null;
       var currently_playing = null;
 
       function selectStation(station) {
-
-        if ( station != null && station >= 0 && station < station_list.length ) {
+        if ( station != null && station >= 0 && station < station_list.length && station != current_selection ) {
           // station_list[station].name+' '+ station_list[station].id+' '+ station_list[station].guid+' '+ station_list[station].source+' '+ station_list[station].description+' '+ station_list[station].streamUrl+' '+
           // station_list[station].playlistUrl+ station_list[station].homePage
+		  stopCurrentStation();
           current_selection = station;
           playCurrentStation();
-        }
-        else {
+        } else if (station == current_selection) {
+	      toggleCurrentStation();
+        } else {
           alert("Invalid station");
         }
       }
 
+	  function toggleCurrentStation() {
+	  	  if ( currently_playing != null ) {
+		  	  stopCurrentStation();
+		  } else {
+		  	  playCurrentStation();
+		  }
+	  }
+
+      // Play the station currently selected in the station browser
+      function stopCurrentStation() {
+        if ( currently_playing != null ) {
+           if ( myStream != null ) {
+             myStream.pause();
+           }
+           station_list[currently_playing].playButton.removeClass("on");
+           currently_playing = null;
+        }
+        $('#buttonplay').removeClass('on');
+      }
 
       // Play the station currently selected in the station browser
       function playCurrentStation() {
+        // If there is already a station playing, we should stop any media playing
+        if ( currently_playing != null ) {
+           if ( myStream != null ) {
+             myStream.pause();
+           }
+		}
 
         // Update the text of the currently playing station
         $("#stationtitle").html(station_list[current_selection].name+" [buffering...]");
@@ -57,37 +86,60 @@
 
         // If we've not played this station before in this session, create a new media object and store it
         // in the station array entry.
-        if ( mediaplayer == null ) {
+        if ( myStream == null ) {
           // Commented out
-          mediaplayer = new Audio(station_list[current_selection].streamUrl);
+          myStream = new Audio(station_list[current_selection].streamUrl);
           // alert("Here is where the station is created")
-          // alert(station_list[current_selection].streamUrl);
         } else {
-	      mediaplayer = new Audio(station_list[current_selection].streamUrl);
-        }
+		  myStream.src = station_list[current_selection].streamUrl;
+		}
 
-        // Play the media object for this station
-        mediaplayer.play();
-        $("#stationtitle").html(station_list[current_selection].name);
-        $("#stationstatus").html(station_list[current_selection].description);
+        $('#buttonplay').addClass('on');
+		station_list[currently_playing].playButton.addClass("on");
+
+		// Play the media object for this station
+		$("#stationtitle").html(station_list[current_selection].name);
+		$("#stationstatus").html(station_list[current_selection].description);
+		myStream.play();
+      }
+
+      function stationInfo(id) {
+        //alert("Show station info "+id);
+
+		/*
+        $('stationtitle').html(station_list[id].name);
+        $('stationstatus').html(station_list[id].description);
+        $('stationlocation').html(station_list[id].city);
+        $('stationcontact').html(station_list[id].homePage);
+
+        $('#community').hide();
+        $('#info').hide();
+        $('#stations').hide();
+        $('#stationpage').show();
+		*/
       }
 
       $(document).ready(function () {
       
-   		setHeight();
-		myScroll = new iScroll('scroller', {checkDOMChanges: false});
-		
-		$('#buttonpause').hide();
-		$('#stationpage').hide();
+        setHeight();
+        myScroll = new iScroll('scroller', {checkDOMChanges: false});
+        
+        $( "#slider" ).slider();
+    
+        $('#buttonpause').hide();
+        $('#stationpage').hide();
         $('#community').hide();
+        $('#settings').hide();
         reloadInfo("#newslist","CMA");
         $('#list').hide();
         $('#info').hide();
         $('#twitter').hide();
+        $('#sliderdiv').hide();
 
         $("#stationtitle").html("Loading Stations.....")
         $("#stationstatus").html("")
         $('#stations').show();
+        $('#buttonhome').addClass('on');
 
         // Load the array of currently live stations from the backend web service
         $.ajax({
@@ -102,7 +154,13 @@
             else {
               // Update the station browser in the UI with the first available station
               for ( i=0; i<station_list.length; i++ ) {
-                $('#stationslist').append("<li class=\"listitem\"><ul><li class=\"itemlogo\"><img src=\"station_default_logo.png\" title=\"Logo for %STATION%. Click to view station info\"></li><li class=\"button green itemplay\"><a href=\"#\" onClick=\"javascript:selectStation("+i+");this.blur();\"><img src=\"icon_play.png\"></a></li><li class=\"itemtitle\">"+station_list[i].name+"</li><li class=\"itemteaser\">"+station_list[i].description+"</li></ul></li>")
+                $('#stationslist').append("<li class=\"listitem\">"+
+                  "<div id=\"stpl"+i+"\" class=\"buttonplay\" onClick=\"javascript:selectStation("+i+");\"></div>"+
+                  "<div class=\"itemtext\" onClick=\"javascript:stationInfo("+i+")\"><div class=\"itemtitle\">"+station_list[i].name+"</div>"+
+                  "<div class=\"itemlocation\">"+station_list[i].city+"</div>"+
+                  "<div class=\"itemteaser\">"+station_list[i].description+"</div></div>" +
+                  "<div class=\"itemmore\" onClick=\"javascript:stationInfo("+i+")\"></div></li>")
+                  station_list[i].playButton = $('#stpl'+i);
               }
             }
             $("#stationtitle").html("Please select a station to play.");
@@ -111,28 +169,65 @@
           },
           url:"http://data.thegistfoundation.net/cma/station/list.json"
         });
-
       })
 
+      function resetButtons() {
+      	$('#buttonhome').removeClass('on');
+      	$('#buttoninfo').removeClass('on');
+      	$('#buttonvolume').removeClass('on');
+      	$('#buttoncommunity').removeClass('on');
+      	$('#buttonnews').removeClass('on');
+      	$('#buttonlist').removeClass('on');
+      	$('#buttontwitter').removeClass('on');
+      }
+
       function stations() {
+        $('#stationpage').hide();
         $('#community').hide();
+        $('#info').hide();
+        $('#settings').hide();
         $('#stations').show();
+        resetButtons()
+        $('#buttonhome').addClass('on');
         myScroll.refresh();
-    	myScroll.scrollTo(0,0,0);
+        myScroll.scrollTo(0,0,0);
       }
 
       function community() {
+        $('#stationpage').hide();
         $('#stations').hide();
+        $('#info').hide();
+        $('#settings').hide();
         $('#community').show();
+        resetButtons()
+        $('#buttoncommunity').addClass('on');
+        myScroll.refresh();
+        myScroll.scrollTo(0,0,0);
+      }
+
+	  function volume() {
+		$('#sliderdiv').toggle();
+	  }
+
+      function settings() {
+        $('#stationpage').hide();
+        $('#stations').hide();
+        $('#info').hide();
+        $('#community').hide();
+        $('#settings').show();
+        
         myScroll.refresh();
         myScroll.scrollTo(0,0,0);
       }
 
       function selectInfo() {
-        $('#list').hide();
-        $('#info').hide();
-        $('#news').hide();
-        $('#twitter').hide();
+        $('#stationpage').hide();
+        $('#stations').hide();
+        $('#settings').hide();
+        $('#community').hide();
+        $('#info').show();
+        resetButtons()
+        $('#buttoninfo').addClass('on');
       }
 
       function selectNews() {
@@ -141,6 +236,8 @@
         $('#twitter').hide();
         $('#news').show();
         reloadInfo("#newslist","CMA");
+        resetButtons()
+        $('#buttonnews').addClass('on');
       }
 
       function selectList() {
@@ -149,6 +246,8 @@
         $('#news').hide();
         $('#list').show();
         reloadInfo("#maillist","CMAL");
+        resetButtons()
+        $('#buttonlist').addClass('on');
       }
 
       function selectTwitter() {
@@ -157,6 +256,8 @@
         $('#news').hide();
         $('#twitter').show();
         reloadInfo("#twitterlist","CMAT");
+        resetButtons()
+        $('#buttontwitter').addClass('on');
       }
 
       function reloadInfo(element, feedname) {
@@ -173,11 +274,15 @@
             else {
               // Update the station browser in the UI with the first available station
               for ( i=0; i<item_list.length; i++ ) {
-                $(element).append("<li class=\"listitem\"><ul><li class=\"itemdate\">18 Dec</li><li class=\"itemtitle\">"+item_list[i][3]+"</li><li class=\"itemteaser\">"+item_list[i][1]+"</li></ul></li>");
+		        if (feedname != "CMAT" ) {
+                	$(element).append("<li class=\"listitem\"><ul><li class=\"itemdate\">18 Dec</li><li class=\"itemtitle\">"+item_list[i][3]+"</li><li class=\"itemteaser\">"+item_list[i][1]+"</li></ul></li>");
+                } else {
+                	$(element).append("<li class=\"listitem\"><ul><li class=\"itemdate\">18 Dec</li><li class=\"itemtitle\">"+item_list[i][1]+"</li><li class=\"itemteaser\">@community_media</li></ul></li>");
+                }
               }
             }
             myScroll.refresh();
-   		    myScroll.scrollTo(0,0,0);
+            myScroll.scrollTo(0,0,0);
           },
           url:"http://data.thegistfoundation.net/cma/info.json?feed="+feedname
         });
@@ -185,60 +290,92 @@
         // icon_chevron.png
       }
     </script>
-
   </head>
 
   <body>
 
-<div id="player">
-<ul>
-<li id="buttonhome" class="button green"><a href="#" title="go back to the home screen" onClick="javascript:stations()"><img src="icon_antenna.png"></a></li><li id="buttoninfo" class="button green"><a href="#" title="info about this application" onClick="javascript:info()"><img src="icon_info.png"></a></li><li id="buttonvolume" class="button orange"><a href="#" title="change the player volume"><img src="icon_speaker.png"></a></li><li id="buttonpause" class="button orange" onClick="javascript:playCurrentStation()"><a href="#" title="playing. click to pause" onClick="javascript:stopCurrentStation()"><img src="icon_pause.png"></a></li><li id="buttonplay" class="button green" onClick="javascript:playCurrentStation()"><a href="#" title="paused. click to play" onClick="javascript:stopCurrentStation()"><img src="icon_play.png"></a></li><li id="buttoncommunity" class="button blue"><a href="#"title="view community info for this station" onClick="javascript:community()">Community</a></li><br style="clear:both;"/><li id="stationlogo"><img src="station_default_logo.png" title="Logo for %STATION%. Click to view comminuty info"></li>
-<li id="stationinfo">
-  <ul>
-    <li id="stationtitle">Station Name</li>
-    <br/>
-    <li id="stationstatus">Status text or track playing</li>
-  </ul>
-</li>
-</ul>
+<div id="player"><!--<div id="sliderdiv" class="orange"><div id="slider"></div></div>-->
+<div id="stationinfo"><div id="stationtitle">Station Name</div><div id="stationstatus">Status text or track playing</div></div><div id="buttonplay" onClick="javascript:toggleCurrentStation()"></div><div id="buttonvolume" onClick="javascript:volume()"></div><br/><div id="buttoninfo" onClick="javascript:selectInfo()"></div><div id="buttonhome" onClick="javascript:stations()"></div><div id="buttoncommunity" onClick="javascript:community()"></div>
 </div>
 <div id="container">
 <div id="scroller">
-	<div id="stations">
-	  <ul class="title">
-	    <li>&nbsp;Stations</li>
-	  </ul>
-	  <ul id="stationslist">
-	  </ul>
-	</div>
-	<div id="community">
-	   <div id="communitybuttons">
-	  <ul><li id="buttonnews" class="button blue"><a href="#" title="read news from this station" onclick="javascript:selectNews()">News</a></li><li id="buttonlist" class="button blue off"><a href="#" title="read this stations mailing list" onclick="javascript:selectList()">Mailing List</a></li><li id="buttontwitter" class="button blue off"><a href="#" title="read twitter items mentioning this station"onclick="javascript:selectTwitter()">Twitter</a></li>
-	  </ul>
-	  </div>
-	  <div id="news">
-	    <ul id="newslist">
-	    </ul>
-	  </div>
-	  <div id="twitter">
-	    <ul id="twitterlist">
-	    </ul>
-	  </div>
-	  <div id="list">
-	    <ul id="maillist">
-	    </ul>
-	  </div>
-	</div>
-	<div id="stationpage">
-	<ul>
-	    <li id="stationtitle">Station Name</li>
-	    <li id="stationstatus">Station Description</li>
-	    <li id="stationlocation">Location: Station Location</li>
-	    <li id="stationcontact"><ul><li>Email: <a href="mailto:mail@mail.com">mail@mail.com</a></li><li>Tel: <a href="tel:011x26262626">011x26262626</a></li><li>Web: <a href="http://example.com/">http://example.com/</a></li></ul></li>
-	 </ul>
-	</div>
-</div>
-</div>
 
+  <div id="stations">
+    <ul class="title">
+      <li>&nbsp;Stations On Air</li>
+    </ul>
+    <ul id="stationslist">
+    </ul>
+  </div>
+
+  <div id="community">
+     <div id="communitybuttons"><div id="buttonnews" onclick="javascript:selectNews()">News</div><div id="buttonlist" onclick="javascript:selectList()">Mailing List</div><div id="buttontwitter" onclick="javascript:selectTwitter()">Twitter</div></div>
+     
+    <div id="news">
+      <ul id="newslist">
+      </ul>
+    </div>
+    <div id="twitter">
+      <ul id="twitterlist">
+      </ul>
+    </div>
+    <div id="list">
+      <ul id="maillist">
+      </ul>
+    </div>
+  </div>
+
+    <div id="info">
+  <li class="listitem">
+    <img src="res/cslogo.png" alt="cslogo" />
+    <p>Canstreamer</p>
+    <p>Community Radio. On the move. On Demand.</p>
+   </li>
+   <li class="listitem">
+   <img src="res/csrlogo.png" alt="csrlogo"/>
+   <p>Canstreamer is powered by Canstream from the Community Media Association</p>
+   </li>
+   <li class="listitem">
+   <p>Interested in getting involved in Community Media as a Volunteer or Broadcaster?</p>
+   <p>Contact the Community Media Association</p>
+   <img src="res/cmalogo.png" style="float: inherit; max-height: 45px; padding: 4px 10px; clear: both;" title="Community Media Association">
+   </li>
+   <li class="listitem">
+   In partnership with<br/>
+	<br/>
+   <img src="res/arts-council-england.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="Arts Council England - Lottery Funded">
+   </li>
+   <li class="listitem">
+   The GIST Foundation<br/>
+   <img src="res/gistlogo.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="The GIST Foundation">
+   </li>
+   <li class="listitem">
+   <img src="res/artimelt.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="The Artimelt Academy">
+   </li>
+   <li class="listitem">
+   Conception, Design, Coding &amp; Realisation<br/>
+   <br/>
+   Bill Best (@billbest)<br/>
+   Jag Gill (@jagusti)<br/>
+   Ian Ibbotson (@ianibbo)<br/>
+   Paul Beech (@guru)<br/>
+   
+   </li>
+  </div>
+  
+  <div id="settings">
+    This is the settings page - Just for volume right now
+    Volume:<br/>
+  </div>
+  <div id="stationpage">
+  <ul>
+      <li id="stationtitle">Station Name</li>
+      <li id="stationstatus">Station Description</li>
+      <li id="stationlocation">Location: Station Location</li>
+      <li id="stationcontact"><ul><li>Email: <a href="mailto:mail@mail.com">mail@mail.com</a></li><li>Tel: <a href="tel:011x26262626">011x26262626</a></li><li>Web: <a href="http://example.com/">http://example.com/</a></li></ul></li>
+   </ul>
+  </div>
+</div>
+</div>
   </body>
 </html>
