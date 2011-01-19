@@ -26,6 +26,10 @@ class Station {
   String homePage
   // Station City
   String city
+  // Telephone
+  String telephone
+  // Email
+  String email
 
   static constraints = {
     name(nullable:false)
@@ -43,5 +47,7 @@ class Station {
     homePage(nullable:true)
     lastSeen(nullable:true)
     city(nullable:true)
+    telephone(nullable:true)
+    email(nullable:true)
   }
 }

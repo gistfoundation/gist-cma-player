@@ -27,6 +27,9 @@ class StationFeedSyncService {
           def description = it.description?.text()
           def link = it.link?.text()
           def city = it.city?.text()
+          def telephone = it.telephone?.text()
+          def email = it.email?.text()
+          def website = it.website?.text()
 
           // println "Processing station guid:${guid} link:${link} desc:${description} title:${title}"
 
@@ -34,7 +37,17 @@ class StationFeedSyncService {
           if ( station == null ) {
             println "Detected new station.. creating entry"
             def stream_url = getStreamURL(link);
-            station = new Station(name:title,description:description,guid:guid,playlistUrl:link,streamUrl:stream_url,source:"CMARSS",lastSeen:timestamp,city:city)
+            station = new Station(name:title,
+                                  description:description,
+                                  guid:guid,
+                                  playlistUrl:link,
+                                  streamUrl:stream_url,
+                                  source:"CMARSS",
+                                  lastSeen:timestamp,
+                                  city:city,
+                                  homePage:website,
+                                  telephone:telephone,
+                                  email:email)
             station.homePage = getStationHomePage(google,title)
           }
           else {
