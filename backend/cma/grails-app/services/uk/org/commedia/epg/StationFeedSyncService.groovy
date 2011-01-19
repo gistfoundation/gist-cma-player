@@ -73,9 +73,11 @@ class StationFeedSyncService {
       println "Marking stations as live=false if they weren't seen in this update"
       def offline_stations = Station.findAllByLastSeenLessThan(timestamp)
       offline_stations.each {
-        println "Marking ${it.name} offline. Was last seen at ${it.lastSeen}, current timestamp is ${timestamp} "
-        it.live = false
-        it.save()
+        if ( it.live == true ) {
+          println "Marking ${it.name} offline. Was last seen at ${it.lastSeen}, current timestamp is ${timestamp} "
+          it.live = false
+          it.save(flush:true)
+        }
       }
 
     }
