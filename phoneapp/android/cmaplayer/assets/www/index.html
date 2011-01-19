@@ -103,17 +103,18 @@
       function stationInfo(id) {
       
         //alert("Show station info "+id);
-		/*
         $('stationtitle').html(station_list[id].name);
         $('stationstatus').html(station_list[id].description);
         $('stationlocation').html(station_list[id].city);
         $('stationcontact').html(station_list[id].homePage);
+        $('stationemail').html(station_list[id].email);
+        $('stationtel').html(station_list[id].telephone);
+        $('stationweb').html(station_list[id].homePage);
 
         $('#community').hide();
         $('#info').hide();
         $('#stations').hide();
         $('#stationpage').show();
-        */
       }
 
       $(document).ready(function () {
@@ -368,7 +369,10 @@
       <li id="stationtitle">Station Name</li>
       <li id="stationstatus">Station Description</li>
       <li id="stationlocation">Location: Station Location</li>
-      <li id="stationcontact"><ul><li>Email: <a href="mailto:mail@mail.com">mail@mail.com</a></li><li>Tel: <a href="tel:011x26262626">011x26262626</a></li><li>Web: <a href="http://example.com/">http://example.com/</a></li></ul></li>
+      <li id="stationcontact"><ul>
+      <li id="stationemail">Email</li>
+      <li id="stationtel">Tel</li>
+      <li id="stationweb">Web</li></ul></li>
    </ul>
   </div>
 </div>
