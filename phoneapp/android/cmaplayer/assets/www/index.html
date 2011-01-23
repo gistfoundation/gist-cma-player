@@ -102,14 +102,14 @@
 
       function stationInfo(id) {
       
-        //alert("Show station info "+id);
-        $('stationtitle').html(station_list[id].name);
-        $('stationstatus').html(station_list[id].description);
-        $('stationlocation').html(station_list[id].city);
-        $('stationcontact').html(station_list[id].homePage);
-        $('stationemail').html(station_list[id].email);
-        $('stationtel').html(station_list[id].telephone);
-        $('stationweb').html(station_list[id].homePage);
+        alert("Show station info "+id);
+        $('#spstationtitle').html(station_list[id].name);
+        $('#spstationstatus').html(station_list[id].description);
+        $('#spstationlocation').html(station_list[id].city);
+        $('#spstationcontact').html(station_list[id].homePage);
+        $('#spstationemail').html(station_list[id].email);
+        $('#spstationtel').html(station_list[id].telephone);
+        $('#spstationweb').html(station_list[id].homePage);
 
         $('#community').hide();
         $('#info').hide();
@@ -273,9 +273,9 @@
               // Update the station browser in the UI with the first available station
               for ( i=0; i<item_list.length; i++ ) {
 		        if (feedname != "CMAT" ) {
-                	$(element).append("<li class=\"listitem\"><ul><li class=\"itemdate\"><!--18 Dec--></li><li class=\"itemtitle\">"+item_list[i][3]+"</li><li class=\"itemteaser\">"+item_list[i][1]+"</li></ul></li>");
+                	$(element).append("<li class=\"listitem\"><ul><li class=\"itemdate\">"+item_list[i][6]+"</li><li class=\"itemtitle\">"+item_list[i][3]+"</li><li class=\"itemteaser\">"+item_list[i][1]+"</li></ul></li>");
                 } else {
-                	$(element).append("<li class=\"listitem\"><ul><li class=\"itemdate\">18 Dec</li><li class=\"itemtitle\">"+item_list[i][1]+"</li><li class=\"itemteaser\">@community_media</li></ul></li>");1
+                	$(element).append("<li class=\"listitem\"><ul><li class=\"itemdate\">"+item_list[i][6]+"</li><li class=\"itemtitle\">"+item_list[i][1]+"</li><li class=\"itemteaser\">@community_media</li></ul></li>");1
                 }
               }
             }
@@ -366,13 +366,13 @@
   </div>
   <div id="stationpage">
   <ul>
-      <li id="stationtitle">Station Name</li>
-      <li id="stationstatus">Station Description</li>
-      <li id="stationlocation">Location: Station Location</li>
-      <li id="stationcontact"><ul>
-      <li id="stationemail">Email</li>
-      <li id="stationtel">Tel</li>
-      <li id="stationweb">Web</li></ul></li>
+      <li id="spstationtitle">Station Name</li>
+      <li id="spstationstatus">Station Description</li>
+      <li id="spstationlocation">Location: Station Location</li>
+      <li id="spstationcontact"><ul>
+      <li id="spstationemail">Email</li>
+      <li id="spstationtel">Tel</li>
+      <li id="spstationweb">Web</li></ul></li>
    </ul>
   </div>
 </div>
