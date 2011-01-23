@@ -8,6 +8,7 @@ class FeedItem {
   // String[] category = []
   String title
   String pubDate
+  String displayDate
   String source
   String guid
   String md5
@@ -20,9 +21,10 @@ class FeedItem {
     guid(nullable:true)
     author(nullable:true)
     pubDate(nullable:true)
+    displayDate(nullable:true)
     source(nullable:true)
     md5(nullable:true)
-    timestamp(nullable:true)   
+    timestamp(nullable:false)   
   }
 
   static mapping = {

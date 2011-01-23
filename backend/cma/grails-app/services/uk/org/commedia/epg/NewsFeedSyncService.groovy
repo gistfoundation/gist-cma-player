@@ -37,16 +37,18 @@ class NewsFeedSyncService {
 
 	            // Discover if we already have this news item in the database.
 	            if ( ( guid != null ) && ( guid.length() > 0 ) ) {
-	              println "looking up item by guid ${feed.id} ${guid}"
+	              println "looking up item by guid feed=${feed.id} guid=${guid}"
 	              def item = FeedItem.findByOwnerAndGuid(feed, guid)
 	              if ( item == null ) {
-	                // println "Item not found in database, create record"
+	                println "Item ${guid} not found in database, create record"
+                        def disp_date = new Date().format( 'EEE, MMM d' )
 	                item = new FeedItem(owner:feed, 
                                       guid:guid,
                                       title:title,
                                       description:description,
                                       link:link, 
-                                      timestamp: System.currentTimeMillis())
+                                      timestamp: timestamp,
+                                      displayDate: disp_date)
 	                if ( item.save() ) {
 	                  println "saved"
 	                }

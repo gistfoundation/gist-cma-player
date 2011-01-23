@@ -27,7 +27,7 @@ class InfoController {
       int count = 0
       FeedItem.findAllByOwner(feed, [sort:'timestamp',order:'desc']).each {
         if ( count++ < max_items ) {
-          response["items"].add([it.link, it.description, it.author, it.title, it.pubDate, it.source])
+          response["items"].add([it.link, it.description, it.author, it.title, it.pubDate, it.source, it.displayDate])
         }
       }
     }
