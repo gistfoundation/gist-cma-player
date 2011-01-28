@@ -16,7 +16,7 @@ class NewsFeedSyncService {
 	        def rss = new XmlSlurper().parseText(rss_response_text)
 
           def items_list = []
-	        for ( itm in rss.channel.item ) {
+	  for ( itm in rss.channel.item ) {
             items_list.add(itm)
           }
 
@@ -42,6 +42,15 @@ class NewsFeedSyncService {
 	              if ( item == null ) {
 	                println "Item ${guid} not found in database, create record"
                         def disp_date = new Date().format( 'EEE, MMM d' )
+                        switch ( feed.feedType ) {
+                          case 'twitter':
+                            // We want to break out the feedname: from the first parts of the title and description
+                            title = title.substring(title.indexOf(':')+2, title.length());
+                            description = description.substring(description.indexOf(':')+2, description.length());
+                            break;
+                          default:
+                            break;
+                        }
 	                item = new FeedItem(owner:feed, 
                                       guid:guid,
                                       title:title,

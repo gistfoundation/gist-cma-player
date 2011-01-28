@@ -20,7 +20,7 @@ class BootStrap {
     def cma_news_feed = Feed.findByPlayerFeedCode('CMA') ?: new Feed(baseUrl:'http://www.commedia.org.uk/feed/',playerFeedCode:'CMA', playerFeedName:'CMA').save()
 
     def cma_twitter_feed = Feed.findByPlayerFeedCode('CMAT') ?: new Feed(baseUrl:'http://twitter.com/statuses/user_timeline/community_media.rss',
-                                                                         playerFeedCode:'CMAT', playerFeedName:'CMA Twitter').save()
+                                                                         playerFeedCode:'CMAT', playerFeedName:'CMA Twitter', feedType:'twitter').save()
 
     def cma_list_feed = Feed.findByPlayerFeedCode('CMAL') ?: new Feed(baseUrl:'http://mailman.commedia.org.uk/pipermail/cma-l/rss.xml',
                                                                      playerFeedCode:'CMAL', playerFeedName:'CMA List').save()
