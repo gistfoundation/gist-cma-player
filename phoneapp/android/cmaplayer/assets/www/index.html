@@ -4,7 +4,6 @@
 <meta name="viewport" content="width=device-width, user-scalable=no" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>PhoneGap</title>
-    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery.ui.all.css" rel="stylesheet" />
     <link rel="stylesheet" href="res/player.css" type="text/css" media="screen" title="no title" charset="utf-8">
     <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
     <script type="text/javascript" charset="utf-8" src="jquery-1.4.4.min.js"></script>
@@ -68,6 +67,9 @@
            currently_playing = null;
         }
         $('#buttonplay').removeClass('on');
+        $('#buttonplay').addClass('off');
+        $('#buttonvolume').removeClass('on');
+		$('#buttonvolume').addClass('off');
       }
 
       // Play the station currently selected in the station browser
@@ -91,8 +93,12 @@
         // alert("Here is where the station is created")
 
         // Turn the play button into a pause button
+        $('#buttonplay').removeClass('off');
 		$('#buttonplay').addClass('on');
+		$('#buttonvolume').removeClass('off');
+		$('#buttonvolume').addClass('on');
         station_list[currently_playing].playButton.addClass("on");
+        
 
         // Play the media object for this station
         myStream.play();
@@ -138,6 +144,8 @@
         $("#stationstatus").html("")
         $('#stations').show();
         $('#buttonhome').addClass('on');
+        $('#buttonplay').addClass('off');
+		$('#buttonvolume').addClass('off');
 
         // Load the array of currently live stations from the backend web service
         $.ajax({
@@ -172,7 +180,7 @@
       function resetButtons() {
       	$('#buttonhome').removeClass('on');
       	$('#buttoninfo').removeClass('on');
-      	$('#buttonvolume').removeClass('on');
+      	//$('#buttonvolume').removeClass('on');
       	$('#buttoncommunity').removeClass('on');
       	$('#buttonnews').removeClass('on');
       	$('#buttonlist').removeClass('on');
@@ -204,6 +212,7 @@
       }
 
 	  function volume() {
+	  	$('#buttonvolume').toggleClass('on');
 		$('#sliderdiv').toggle();
 	  }
 
@@ -292,7 +301,7 @@
 
   <body>
 
-<div id="player"><!--<div id="sliderdiv" class="orange"><div id="slider"></div></div>-->
+<div id="player"><div id="sliderdiv"><img id="volmin" src="res/volmin.png" alt="volmin" width="18" height="18" /><img id="volmax" src="res/volmax.png" alt="volmin" width="18" height="18" /><div id="slider"></div></div>
 <div id="stationinfo"><div id="stationtitle">Station Name</div><div id="stationstatus">Status text or track playing</div></div><div id="buttonplay" onClick="javascript:toggleCurrentStation()"></div><div id="buttonvolume" onClick="javascript:volume()"></div><br/><div id="buttoninfo" onClick="javascript:selectInfo()"></div><div id="buttonhome" onClick="javascript:stations()"></div><div id="buttoncommunity" onClick="javascript:community()"></div>
 </div>
 <div id="container">
