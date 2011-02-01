@@ -34,6 +34,7 @@
       var station_list = null;
       var current_selection = null;
       var currently_playing = null;
+      var volume = 0.5;
 
       function selectStation(station) {
         if ( station != null && station >= 0 && station < station_list.length && station != current_selection ) {
@@ -69,7 +70,7 @@
         $('#buttonplay').removeClass('on');
         $('#buttonplay').addClass('off');
         $('#buttonvolume').removeClass('on');
-		$('#buttonvolume').addClass('off');
+	$('#buttonvolume').addClass('off');
       }
 
       // Play the station currently selected in the station browser
@@ -79,7 +80,7 @@
            if ( myStream != null ) {
              myStream.stop();
            }
-		}
+	}
 
         // Update the text of the currently playing station
         $("#stationtitle").html(station_list[current_selection].name+" [buffering...]");
@@ -92,11 +93,14 @@
         myStream = new Media(station_list[current_selection].streamUrl);
         // alert("Here is where the station is created")
 
+        // when setVolume is working
+        // myStream.setVolume(volume,volume);
+
         // Turn the play button into a pause button
         $('#buttonplay').removeClass('off');
-		$('#buttonplay').addClass('on');
-		$('#buttonvolume').removeClass('off');
-		$('#buttonvolume').addClass('on');
+	$('#buttonplay').addClass('on');
+	$('#buttonvolume').removeClass('off');
+	$('#buttonvolume').addClass('on');
         station_list[currently_playing].playButton.addClass("on");
         
 
@@ -128,7 +132,15 @@
         setHeight();
         myScroll = new iScroll('scroller', {checkDOMChanges: false});
         
-        $( "#slider" ).slider();
+        // Some info on various phone volume controls: https://github.com/purplecabbage/phonegap-plugins
+        $( "#slider" ).slider( {
+          change: function(event, ui) {
+            alert("Set volume to "+ui.value);
+            volume = ui.value;
+            // if ( myStream != null )
+            //   myStream.setVolume(volume,volume);
+          }
+        });
     
         $('#buttonpause').hide();
         $('#stationpage').hide();
@@ -211,10 +223,10 @@
         myScroll.scrollTo(0,0,0);
       }
 
-	  function volume() {
-	  	$('#buttonvolume').toggleClass('on');
-		$('#sliderdiv').toggle();
-	  }
+      function volume() {
+        $('#buttonvolume').toggleClass('on');
+        $('#sliderdiv').toggle();
+      }
 
       function settings() {
         $('#stationpage').hide();
