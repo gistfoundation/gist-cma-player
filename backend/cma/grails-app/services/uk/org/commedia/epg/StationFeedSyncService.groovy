@@ -30,6 +30,7 @@ class StationFeedSyncService {
           def telephone = it.telephone?.text()
           def email = it.email?.text()
           def website = it.website?.text()
+          def favicon = it.favicon?.text()
 
           // println "Processing station guid:${guid} link:${link} desc:${description} title:${title}"
 
@@ -47,7 +48,8 @@ class StationFeedSyncService {
                                   city:city,
                                   homePage:website,
                                   telephone:telephone,
-                                  email:email)
+                                  email:email,
+                                  stationLogo: favicon)
             station.homePage = getStationHomePage(google,title)
           }
           else {
