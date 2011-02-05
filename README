@@ -35,3 +35,8 @@ To generate a self-signed key
 Android app screenshots -
 
 use ddms http://developer.android.com/guide/developing/tools/ddms.html
+
+
+Upgrading to a more recent / patched droidgap..
+
+Build a sample test app, then copy the phonegap.n.n.n.jar and .js to the project, don't forget to modify the .js import in the index.html

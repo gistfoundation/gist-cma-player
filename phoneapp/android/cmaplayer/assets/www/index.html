@@ -112,7 +112,6 @@
 
       function stationInfo(id) {
       
-        // alert("Show station info "+id);
         $('#spstationtitle').html(station_list[id].name);
         $('#spstationstatus').html(station_list[id].description);
         $('#spstationlocation').html(station_list[id].city);
@@ -139,6 +138,7 @@
             volume = ui.value;
             // if ( myStream != null )
             //   myStream.setVolume(volume,volume);
+            $('#sliderdiv').toggle();
           }
         });
     
@@ -223,7 +223,7 @@
         myScroll.scrollTo(0,0,0);
       }
 
-      function volume() {
+      function changeVolume() {
         $('#buttonvolume').toggleClass('on');
         $('#sliderdiv').toggle();
       }
@@ -314,7 +314,7 @@
   <body>
 
 <div id="player"><div id="sliderdiv"><img id="volmin" src="res/volmin.png" alt="volmin" width="18" height="18" /><img id="volmax" src="res/volmax.png" alt="volmin" width="18" height="18" /><div id="slider"></div></div>
-<div id="stationinfo"><div id="stationtitle">Station Name</div><div id="stationstatus">Status text or track playing</div></div><div id="buttonplay" onClick="javascript:toggleCurrentStation()"></div><div id="buttonvolume" onClick="javascript:volume()"></div><br/><div id="buttoninfo" onClick="javascript:selectInfo()"></div><div id="buttonhome" onClick="javascript:stations()"></div><div id="buttoncommunity" onClick="javascript:community()"></div>
+<div id="stationinfo"><div id="stationtitle">Station Name</div><div id="stationstatus">Status text or track playing</div></div><div id="buttonplay" onClick="javascript:toggleCurrentStation()"></div><div id="buttonvolume" onClick="javascript:changeVolume()"></div><br/><div id="buttoninfo" onClick="javascript:selectInfo()"></div><div id="buttonhome" onClick="javascript:stations()"></div><div id="buttoncommunity" onClick="javascript:community()"></div>
 </div>
 <div id="container">
 <div id="scroller">
@@ -381,10 +381,6 @@
    </li>
   </div>
 
-  <div id="settings">
-    This is the settings page - Just for volume right now
-    Volume:<br/>
-  </div>
   <div id="stationpage">
   <ul>
       <li id="spstationtitle">Station Name</li>
