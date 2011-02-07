@@ -41,7 +41,7 @@ class NewsFeedSyncService {
 	              def item = FeedItem.findByOwnerAndGuid(feed, guid)
 	              if ( item == null ) {
 	                println "Item ${guid} not found in database, create record"
-                        def disp_date = new Date().format( 'EEE, MMM d' )
+                        def disp_date = new Date().format( 'EEE, d MMM h:mm a' )
 	                item = new FeedItem(owner:feed, 
                                       guid:guid,
                                       title:title,
