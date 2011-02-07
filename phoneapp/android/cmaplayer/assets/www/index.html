@@ -93,9 +93,6 @@
         myStream = new Media(station_list[current_selection].streamUrl);
         // alert("Here is where the station is created")
 
-        // when setVolume is working
-        // myStream.setVolume(volume,volume);
-
         // Turn the play button into a pause button
         $('#buttonplay').removeClass('off');
 	$('#buttonplay').addClass('on');
@@ -106,6 +103,8 @@
 
         // Play the media object for this station
         myStream.play();
+        myStream.setVolume(volume,volume);
+
         $("#stationtitle").html(station_list[current_selection].name);
         $("#stationstatus").html(station_list[current_selection].description);
       }
@@ -133,11 +132,14 @@
         
         // Some info on various phone volume controls: https://github.com/purplecabbage/phonegap-plugins
         $( "#slider" ).slider( {
+          min: 0,
+          max: 1,
+          step: 0.1,
           change: function(event, ui) {
             alert("Set volume to "+ui.value);
             volume = ui.value;
-            // if ( myStream != null )
-            //   myStream.setVolume(volume,volume);
+            if ( myStream != null )
+              myStream.setVolume(volume,volume);
             $('#sliderdiv').toggle();
           }
         });
