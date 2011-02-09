@@ -41,7 +41,7 @@ class NewsFeedSyncService {
 	              def item = FeedItem.findByOwnerAndGuid(feed, guid)
 	              if ( item == null ) {
 	                println "Item ${guid} not found in database, create record"
-                        def disp_date = new Date().format( 'hh:mm:ss a EEE, MMM d' )
+                        def disp_date = new Date().format( 'hh:mm a EEE, MMM d' )
                         switch ( feed.feedType ) {
                           case 'twitter':
                             // We want to break out the feedname: from the first parts of the title and description
