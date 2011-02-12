@@ -11,6 +11,7 @@ class Feed {
   String copyright
   String skipHours
   String skipDays
+  String feedType
   Long lastCheck = 0
 
   Set items = []
@@ -24,5 +25,6 @@ class Feed {
     copyright(nullable:true)
     skipHours(nullable:true)
     skipDays(nullable:true)
+    feedType(nullable:true)
   }
 }

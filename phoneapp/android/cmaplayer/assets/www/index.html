@@ -4,9 +4,8 @@
 <meta name="viewport" content="width=device-width, user-scalable=no" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>PhoneGap</title>
-    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery.ui.all.css" rel="stylesheet" />
     <link rel="stylesheet" href="res/player.css" type="text/css" media="screen" title="no title" charset="utf-8">
-    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+    <script type="text/javascript" charset="utf-8" src="phonegap.0.9.4.js"></script>
     <script type="text/javascript" charset="utf-8" src="jquery-1.4.4.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="jquery-ui-1.8.8.custom.min.js"></script>
     
@@ -35,6 +34,7 @@
       var station_list = null;
       var current_selection = null;
       var currently_playing = null;
+      var volume = 0.5;
 
       function selectStation(station) {
         if ( station != null && station >= 0 && station < station_list.length && station != current_selection ) {
@@ -68,6 +68,9 @@
            currently_playing = null;
         }
         $('#buttonplay').removeClass('on');
+        $('#buttonplay').addClass('off');
+        $('#buttonvolume').removeClass('on');
+	$('#buttonvolume').addClass('off');
       }
 
       // Play the station currently selected in the station browser
@@ -77,7 +80,7 @@
            if ( myStream != null ) {
              myStream.stop();
            }
-		}
+	}
 
         // Update the text of the currently playing station
         $("#stationtitle").html(station_list[current_selection].name+" [buffering...]");
@@ -91,18 +94,23 @@
         // alert("Here is where the station is created")
 
         // Turn the play button into a pause button
-		$('#buttonplay').addClass('on');
+        $('#buttonplay').removeClass('off');
+	$('#buttonplay').addClass('on');
+	$('#buttonvolume').removeClass('off');
+	$('#buttonvolume').addClass('on');
         station_list[currently_playing].playButton.addClass("on");
+        
 
         // Play the media object for this station
         myStream.play();
+        myStream.setVolume(volume,volume);
+
         $("#stationtitle").html(station_list[current_selection].name);
         $("#stationstatus").html(station_list[current_selection].description);
       }
 
       function stationInfo(id) {
       
-        // alert("Show station info "+id);
         $('#spstationtitle').html(station_list[id].name);
         $('#spstationstatus').html(station_list[id].description);
         $('#spstationlocation').html(station_list[id].city);
@@ -122,8 +130,21 @@
         setHeight();
         myScroll = new iScroll('scroller', {checkDOMChanges: false});
         
-        $( "#slider" ).slider();
+        // Some info on various phone volume controls: https://github.com/purplecabbage/phonegap-plugins
+        $( "#slider" ).slider( {
+          min: 0,
+          max: 1,
+          step: 0.1,
+          change: function(event, ui) {
+            // alert("Set volume to "+ui.value);
+            volume = ui.value;
+            if ( myStream != null )
+              myStream.setVolume(volume,volume);
+            $('#sliderdiv').toggle();
+          }
+        });
     
+        $('#feedbackform').hide();
         $('#buttonpause').hide();
         $('#stationpage').hide();
         $('#community').hide();
@@ -138,6 +159,8 @@
         $("#stationstatus").html("")
         $('#stations').show();
         $('#buttonhome').addClass('on');
+        $('#buttonplay').addClass('off');
+		$('#buttonvolume').addClass('off');
 
         // Load the array of currently live stations from the backend web service
         $.ajax({
@@ -172,7 +195,7 @@
       function resetButtons() {
       	$('#buttonhome').removeClass('on');
       	$('#buttoninfo').removeClass('on');
-      	$('#buttonvolume').removeClass('on');
+      	//$('#buttonvolume').removeClass('on');
       	$('#buttoncommunity').removeClass('on');
       	$('#buttonnews').removeClass('on');
       	$('#buttonlist').removeClass('on');
@@ -203,9 +226,10 @@
         myScroll.scrollTo(0,0,0);
       }
 
-	  function volume() {
-		$('#sliderdiv').toggle();
-	  }
+      function changeVolume() {
+        $('#buttonvolume').toggleClass('on');
+        $('#sliderdiv').toggle();
+      }
 
       function settings() {
         $('#stationpage').hide();
@@ -272,10 +296,10 @@
             else {
               // Update the station browser in the UI with the first available station
               for ( i=0; i<item_list.length; i++ ) {
-		        if (feedname != "CMAT" ) {
-                	$(element).append("<li class=\"listitem\"><ul><li class=\"itemdate\">"+item_list[i][6]+"</li><li class=\"itemtitle\">"+item_list[i][3]+"</li><li class=\"itemteaser\">"+item_list[i][1]+"</li></ul></li>");
+	        if (feedname != "CMAT" ) {
+               	$(element).append("<li class=\"listitem\" onClick=\""+item_list[i][0]+"\"><ul><li class=\"itemdate\">"+item_list[i][6]+"</li><li class=\"itemtitle\">"+item_list[i][3]+"</li><li class=\"itemteaser\">"+item_list[i][1]+"</li></ul></li>");
                 } else {
-                	$(element).append("<li class=\"listitem\"><ul><li class=\"itemdate\">"+item_list[i][6]+"</li><li class=\"itemtitle\">"+item_list[i][1]+"</li><li class=\"itemteaser\">@community_media</li></ul></li>");1
+               	$(element).append("<li class=\"listitem\"><ul><li class=\"itemdate\">"+item_list[i][6]+"</li><li class=\"itemtitle\">"+item_list[i][1]+"</li><li class=\"itemteaser\">@community_media</li></ul></li>");1
                 }
               }
             }
@@ -292,8 +316,8 @@
 
   <body>
 
-<div id="player"><!--<div id="sliderdiv" class="orange"><div id="slider"></div></div>-->
-<div id="stationinfo"><div id="stationtitle">Station Name</div><div id="stationstatus">Status text or track playing</div></div><div id="buttonplay" onClick="javascript:toggleCurrentStation()"></div><div id="buttonvolume" onClick="javascript:volume()"></div><br/><div id="buttoninfo" onClick="javascript:selectInfo()"></div><div id="buttonhome" onClick="javascript:stations()"></div><div id="buttoncommunity" onClick="javascript:community()"></div>
+<div id="player"><div id="sliderdiv"><img id="volmin" src="res/volmin.png" alt="volmin" width="18" height="18" /><img id="volmax" src="res/volmax.png" alt="volmin" width="18" height="18" /><div id="slider"></div></div>
+<div id="stationinfo"><div id="stationtitle">Station Name</div><div id="stationstatus">Status text or track playing</div></div><div id="buttonplay" onClick="javascript:toggleCurrentStation()"></div><div id="buttonvolume" onClick="javascript:changeVolume()"></div><br/><div id="buttoninfo" onClick="javascript:selectInfo()"></div><div id="buttonhome" onClick="javascript:stations()"></div><div id="buttoncommunity" onClick="javascript:community()"></div>
 </div>
 <div id="container">
 <div id="scroller">
@@ -331,41 +355,42 @@
    </li>
    <li class="listitem">
    <img src="res/csrlogo.png" alt="csrlogo"/>
-   <p>Canstreamer is powered by Canstream from the Community Media Association</p>
+   <p>Canstreamer is powered by <a href="http://www.canstreamer.co.uk/">Canstream</a> from the <a href="http://www.commedia.org.uk/">Community Media Association</a></p>
+   </li>
+   <li class="listitem">
+   <a href="http://bit.ly/canstreamerfeedbackembedded">Leave Feedback About Canstreamer</a>
    </li>
    <li class="listitem">
    <p>Interested in getting involved in Community Media as a Volunteer or Broadcaster?</p>
-   <p>Contact the Community Media Association</p>
+   <p>Contact the <a href="http://www.commedia.org.uk/">Community Media Association</a></p>
    <img src="res/cmalogo.png" style="float: inherit; max-height: 45px; padding: 4px 10px; clear: both;" title="Community Media Association">
    </li>
    <li class="listitem">
    In partnership with<br/>
 	<br/>
-   <img src="res/arts-council-england.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="Arts Council England - Lottery Funded">
+   <a href="http://www.artscouncil.org.uk/"><img src="res/arts-council-england.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="Arts Council England - Lottery Funded"></a>
    </li>
    <li class="listitem">
-   The GIST Foundation<br/>
-   <img src="res/gistlogo.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="The GIST Foundation">
+   <a href="http://thegisthub.net/about/">The GIST Foundation</a><br/>
+   <a href="http://thegisthub.net/about/"><img src="res/gistlogo.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="The GIST Foundation"></a>
    </li>
    <li class="listitem">
-   <img src="res/artimelt.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="The Artimelt Academy">
+   <a href="http://www.artimelt.com/"><img src="res/artimelt.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="The Artimelt Academy"></a>
    </li>
    <li class="listitem">
    Conception, Design, Coding &amp; Realisation<br/><br/>
-   Bill Best (@billbest)<br/>
-   Jag Gill (@jagusti)<br/>
-   Ian Ibbotson (@ianibbo)<br/>
-   Paul Beech (@guru)<br/>
+   Bill Best (<a href="http://twitter.com/billbest">@billbest</a>)<br/>
+   Jag Gill (<a href="http://twitter.com/jagusti">@jagusti</a>)<br/>
+   Ian Ibbotson (<a href="http://twitter.com/ianibbo">@ianibbo</a>)<br/>
+   Paul Beech (<a href="http://twitter.com/guru">@guru</a>)<br/>
    
+   Canstreamer uses <a href="http://www.gyford.com/phil/writing/2009/05/13/mailman_archive_scraper.php">Mailman RSS Scraper</a> by <a href="http://www.gyford.com/">Phil Gyford</a>.
    </li>
   </div>
 
-  <div id="settings">
-    This is the settings page - Just for volume right now
-    Volume:<br/>
-  </div>
   <div id="stationpage">
   <ul>
+  	  <li id="spstationback"><div style="display: block; width: 48px; height: 37px; background: url(res/buttonsprites.png); background-size: 320px 128px; background-position: -272px -90px;"></div></li>
       <li id="spstationtitle">Station Name</li>
       <li id="spstationstatus">Station Description</li>
       <li id="spstationlocation">Location: Station Location</li>
@@ -375,6 +400,9 @@
       <li id="spstationweb">Web</li></ul></li>
    </ul>
   </div>
+  
+  <div id="feedbackform" style="padding: 10px;">TODO: Load http://bit.ly/canstreamerfeedbackembedded via AJAX.</div>
+
 </div>
 </div>
   </body>
