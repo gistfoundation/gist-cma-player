@@ -5,7 +5,7 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>PhoneGap</title>
     <link rel="stylesheet" href="res/player.css" type="text/css" media="screen" title="no title" charset="utf-8">
-    <script type="text/javascript" charset="utf-8" src="phonegap.0.9.4.js"></script>
+    <script type="text/javascript" charset="utf-8" src="phonegap.0.9.4.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="jquery-1.4.4.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="jquery-ui-1.8.8.custom.min.js"></script>
     
@@ -50,6 +50,7 @@
       var volume = 0.5;
 
       function selectStation(station) {
+	  
         if ( station != null && station >= 0 && station < station_list.length && station != current_selection ) {
 	      if (current_selection != null) {station_list[current_selection].playButton.removeClass("on");}
           // station_list[station].name+' '+ station_list[station].id+' '+ station_list[station].guid+' '+ station_list[station].source+' '+ station_list[station].description+' '+ station_list[station].streamUrl+' '+
@@ -75,7 +76,11 @@
       function stopCurrentStation() {
         if ( currently_playing != null ) {
            if ( myStream != null ) {
-             myStream.stop();
+             if (device.platform.indexOf("iPhone") != -1) {
+					myStream.pause();
+				} else {
+				    myStream.stop();
+				}
            }
            station_list[currently_playing].playButton.removeClass("on");
            currently_playing = null;
@@ -91,19 +96,31 @@
         // If there is already a station playing, we should stop any media playing
         if ( currently_playing != null ) {
            if ( myStream != null ) {
-             myStream.stop();
+				if (device.platform.indexOf("iPhone") != -1) {
+					myStream.pause();
+				} else {
+				    myStream.stop();
+				}
            }
 	}
 
         // Update the text of the currently playing station
-        $("#stationtitle").html(station_list[current_selection].name+" [buffering...]");
+        $("#stationtitle").html(station_list[current_selection].name);
 
         // Update the currently playing var so we can stop this station if a different one is selected
         currently_playing = current_selection;
 
         // If we've not played this station before in this session, create a new media object and store it
         // in the station array entry.
-        myStream = new Media(station_list[current_selection].streamUrl);
+		if (device.platform.indexOf("iPhone") != -1) {
+			if ( myStream == null ) {
+				myStream = new Audio(station_list[current_selection].streamUrl);
+			} else {
+				myStream.src = station_list[current_selection].streamUrl;
+			}
+		} else {
+			myStream = new Media(station_list[current_selection].streamUrl);
+		}
         // alert("Here is where the station is created")
 
         // Turn the play button into a pause button
@@ -112,11 +129,14 @@
 	$('#buttonvolume').removeClass('off');
 	$('#buttonvolume').addClass('on');
         station_list[currently_playing].playButton.addClass("on");
-        
 
         // Play the media object for this station
         myStream.play();
-        myStream.setVolume(volume,volume);
+		if (device.platform.indexOf("iPhone") != -1) {
+			myStream.volume = volume;
+		} else {
+			myStream.setVolume(volume,volume);
+		}
 
         $("#stationtitle").html(station_list[current_selection].name);
         $("#stationstatus").html(station_list[current_selection].description);
@@ -136,6 +156,9 @@
         $('#info').hide();
         $('#stations').hide();
         $('#stationpage').show();
+		myScroll.refresh();
+        myScroll.scrollTo(0,0,0);
+
       }
 
       $(document).ready(function () {
@@ -152,7 +175,12 @@
             // alert("Set volume to "+ui.value);
             volume = ui.value;
             if ( myStream != null )
-              myStream.setVolume(volume,volume);
+				
+              if (device.platform.indexOf("iPhone") != -1) {
+					myStream.volume = volume;
+				} else {
+					myStream.setVolume(volume,volume);
+				}
             $('#sliderdiv').toggle();
           }
         });
@@ -251,7 +279,6 @@
         $('#info').hide();
         $('#community').hide();
         $('#settings').show();
-        
         myScroll.refresh();
         myScroll.scrollTo(0,0,0);
       }
@@ -264,6 +291,8 @@
         $('#info').show();
         resetButtons()
         $('#buttoninfo').addClass('on');
+		myScroll.refresh();
+        myScroll.scrollTo(0,0,0);
       }
 
       function selectNews() {
@@ -274,6 +303,7 @@
         reloadInfo("#newslist","CMA");
         resetButtons()
         $('#buttonnews').addClass('on');
+		myScroll.refresh();
       }
 
       function selectList() {
@@ -284,6 +314,7 @@
         reloadInfo("#maillist","CMAL");
         resetButtons()
         $('#buttonlist').addClass('on');
+		myScroll.refresh();
       }
 
       function selectTwitter() {
@@ -294,6 +325,7 @@
         reloadInfo("#twitterlist","CMAT");
         resetButtons()
         $('#buttontwitter').addClass('on');
+		myScroll.refresh();
       }
 
       function reloadInfo(element, feedname) {
@@ -325,7 +357,8 @@
             myScroll.refresh();
             myScroll.scrollTo(0,0,0);
           },
-          url:"http://data.thegistfoundation.net/cma/info.json?feed="+feedname
+		  url:"http://playerinfo.canstreamer.co.uk/cma/info.json?feed="+feedname
+          //url:"http://data.thegistfoundation.net/cma/info.json?feed="+feedname
         });
 
         // icon_chevron.png
@@ -367,6 +400,7 @@
   </div>
 
   <div id="info">
+  <ul style="clear: both">
   <li class="listitem">
     <img src="res/cslogo.png" alt="cslogo" />
     <p>Canstreamer</p>
@@ -374,44 +408,45 @@
    </li>
    <li class="listitem">
    <img src="res/csrlogo.png" alt="csrlogo"/>
-   <p>Canstreamer is powered by <a href="http://www.canstreamer.co.uk/">Canstream</a> from the <a href="http://www.commedia.org.uk/">Community Media Association</a></p>
+   <p>Canstreamer is powered by <a href="http://www.canstreamer.co.uk/" target="_blank">Canstream</a> from the <a href="http://www.commedia.org.uk/" target="_blank">Community Media Association</a></p>
    </li>
    <li class="listitem">
-   <a href="http://bit.ly/canstreamerfeedbackembedded">Leave Feedback About Canstreamer</a>
+   <a href="http://bit.ly/canstreamerfeedbackembedded" target="_blank">Leave Feedback About Canstreamer</a>
    </li>
    <li class="listitem">
    <p>Interested in getting involved in Community Media as a Volunteer or Broadcaster?</p>
-   <p>Contact the <a href="http://www.commedia.org.uk/">Community Media Association</a></p>
+   <p>Contact the <a href="http://www.commedia.org.uk/" target="_blank">Community Media Association</a></p>
    <img src="res/cmalogo.png" style="float: inherit; max-height: 45px; padding: 4px 10px; clear: both;" title="Community Media Association">
    </li>
    <li class="listitem">
    In partnership with<br/>
 	<br/>
-   <a href="http://www.artscouncil.org.uk/"><img src="res/arts-council-england.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="Arts Council England - Lottery Funded"></a>
+   <a href="http://www.artscouncil.org.uk/" target="_blank"><img src="res/arts-council-england.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="Arts Council England - Lottery Funded"></a>
    </li>
    <li class="listitem">
-   <a href="http://thegisthub.net/about/">The GIST Foundation</a><br/>
-   <a href="http://thegisthub.net/about/"><img src="res/gistlogo.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="The GIST Foundation"></a>
+   <a href="http://thegisthub.net/about/" target="_blank">The GIST Foundation</a><br/>
+   <a href="http://thegisthub.net/about/" target="_blank"><img src="res/gistlogo.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="The GIST Foundation"></a>
    </li>
    <li class="listitem">
-   <a href="http://www.artimelt.com/"><img src="res/artimelt.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="The Artimelt Academy"></a>
+   <a href="http://www.artimelt.com/" target="_blank"><img src="res/artimelt.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="The Artimelt Academy"></a>
    </li>
    <li class="listitem">
    Conception, Design, Coding &amp; Realisation<br/><br/>
-   Bill Best (<a href="http://twitter.com/billbest">@billbest</a>)<br/>
-   Jag Gill (<a href="http://twitter.com/jagusti">@jagusti</a>)<br/>
-   Ian Ibbotson (<a href="http://twitter.com/ianibbo">@ianibbo</a>)<br/>
-   Paul Beech (<a href="http://twitter.com/guru">@guru</a>)<br/>
+   Bill Best (<a href="http://twitter.com/billbest" target="_blank">@billbest</a>)<br/>
+   Jag Gill (<a href="http://twitter.com/jagusti" target="_blank">@jagusti</a>)<br/>
+   Ian Ibbotson (<a href="http://twitter.com/ianibbo" target="_blank">@ianibbo</a>)<br/>
+   Paul Beech (<a href="http://twitter.com/guru" target="_blank">@guru</a>)<br/>
    
-   Canstreamer uses <a href="http://www.gyford.com/phil/writing/2009/05/13/mailman_archive_scraper.php">Mailman RSS Scraper</a> by <a href="http://www.gyford.com/">Phil Gyford</a>.
+   Canstreamer uses <a href="http://www.gyford.com/phil/writing/2009/05/13/mailman_archive_scraper.php" target="_blank">Mailman RSS Scraper</a> by <a href="http://www.gyford.com/">Phil Gyford</a>.
    </li>
+   </ul>
   </div>
 
   <div id="stationpage">
   <ul>
-  	  <li id="spstationback"><div style="display: block; width: 48px; height: 37px; background: url(res/buttonsprites.png); background-size: 320px 128px; background-position: -272px -90px;"></div></li>
-      <li id="spstationtitle">Station Name</li>
-      <li id="spstationstatus">Station Description</li>
+  	  <li id="spstationback"><div onClick="javascript:stations()" style="display: block; width: 48px; height: 37px; background: url(res/buttonsprites.png); background-size: 320px 128px; background-position: -272px -90px;"></div></li>
+      <li id="spstationtitle" style="font-size: 1.6em; font-weight: bold;">Station Name</li>
+      <li id="spstationstatus" style="font-weight: bold">Station Description</li>
       <li id="spstationlocation">Location: Station Location</li>
       <li id="spstationcontact"><ul>
       <li id="spstationemail">Email</li>

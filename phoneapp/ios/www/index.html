@@ -1,45 +1,60 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+<meta name="viewport" content="width=device-width, user-scalable=no" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>PhoneGap</title>
-    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery.ui.all.css" rel="stylesheet" />
     <link rel="stylesheet" href="res/player.css" type="text/css" media="screen" title="no title" charset="utf-8">
-    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+    <script type="text/javascript" charset="utf-8" src="phonegap.0.9.4.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="jquery-1.4.4.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="jquery-ui-1.8.8.custom.min.js"></script>
     
     <script type="text/javascript" src="iscroll.js?v3.7.1"></script>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-1727442-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
     <script type="text/javascript" charset="utf-8">
 
   var myScroll;
-  var a = 0;
   var myStream;
+  var a = 0;
 
   // Check screen size on orientation change
   window.addEventListener('onorientationchange' in window ? 'orientationchange' : 'resize', setHeight, false);
   
   // Change wrapper height based on device orientation. Not strictly needed by iScroll, you may also use pure CSS techniques.
   function setHeight() {
+  	$('body').css("width: "+window.innerWidth+"px;");
     var headerH = document.getElementById('player').offsetHeight,
-      wrapperH = window.innerHeight - headerH;
+    wrapperH = window.innerHeight - headerH;
     document.getElementById('container').style.height = wrapperH + 'px';
   }
   
   // Prevent the whole screen to scroll when dragging elements outside of the scroller (ie:header/footer).
   // If you want to use iScroll in a portion of the screen and still be able to use the native scrolling, do *not* preventDefault on touchmove.
-  document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+  //document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
   
       var station_list = null;
       var current_selection = null;
       var currently_playing = null;
+      var volume = 0.5;
 
       function selectStation(station) {
+	  
         if ( station != null && station >= 0 && station < station_list.length && station != current_selection ) {
+	      if (current_selection != null) {station_list[current_selection].playButton.removeClass("on");}
           // station_list[station].name+' '+ station_list[station].id+' '+ station_list[station].guid+' '+ station_list[station].source+' '+ station_list[station].description+' '+ station_list[station].streamUrl+' '+
           // station_list[station].playlistUrl+ station_list[station].homePage
-		  stopCurrentStation();
           current_selection = station;
           playCurrentStation();
         } else if (station == current_selection) {
@@ -61,12 +76,19 @@
       function stopCurrentStation() {
         if ( currently_playing != null ) {
            if ( myStream != null ) {
-             myStream.pause();
+             if (device.platform.indexOf("iPhone") != -1) {
+					myStream.pause();
+				} else {
+				    myStream.stop();
+				}
            }
            station_list[currently_playing].playButton.removeClass("on");
            currently_playing = null;
         }
         $('#buttonplay').removeClass('on');
+        $('#buttonplay').addClass('off');
+        $('#buttonvolume').removeClass('on');
+	$('#buttonvolume').addClass('off');
       }
 
       // Play the station currently selected in the station browser
@@ -74,49 +96,69 @@
         // If there is already a station playing, we should stop any media playing
         if ( currently_playing != null ) {
            if ( myStream != null ) {
-             myStream.pause();
+				if (device.platform.indexOf("iPhone") != -1) {
+					myStream.pause();
+				} else {
+				    myStream.stop();
+				}
            }
-		}
+	}
 
         // Update the text of the currently playing station
-        $("#stationtitle").html(station_list[current_selection].name+" [buffering...]");
+        $("#stationtitle").html(station_list[current_selection].name);
 
         // Update the currently playing var so we can stop this station if a different one is selected
         currently_playing = current_selection;
 
         // If we've not played this station before in this session, create a new media object and store it
         // in the station array entry.
-        if ( myStream == null ) {
-          // Commented out
-          myStream = new Audio(station_list[current_selection].streamUrl);
-          // alert("Here is where the station is created")
-        } else {
-		  myStream.src = station_list[current_selection].streamUrl;
+		if (device.platform.indexOf("iPhone") != -1) {
+			if ( myStream == null ) {
+				myStream = new Audio(station_list[current_selection].streamUrl);
+			} else {
+				myStream.src = station_list[current_selection].streamUrl;
+			}
+		} else {
+			myStream = new Media(station_list[current_selection].streamUrl);
+		}
+        // alert("Here is where the station is created")
+
+        // Turn the play button into a pause button
+        $('#buttonplay').removeClass('off');
+	$('#buttonplay').addClass('on');
+	$('#buttonvolume').removeClass('off');
+	$('#buttonvolume').addClass('on');
+        station_list[currently_playing].playButton.addClass("on");
+
+        // Play the media object for this station
+        myStream.play();
+		if (device.platform.indexOf("iPhone") != -1) {
+			myStream.volume = volume;
+		} else {
+			myStream.setVolume(volume,volume);
 		}
 
-        $('#buttonplay').addClass('on');
-		station_list[currently_playing].playButton.addClass("on");
-
-		// Play the media object for this station
-		$("#stationtitle").html(station_list[current_selection].name);
-		$("#stationstatus").html(station_list[current_selection].description);
-		myStream.play();
+        $("#stationtitle").html(station_list[current_selection].name);
+        $("#stationstatus").html(station_list[current_selection].description);
       }
 
       function stationInfo(id) {
-        //alert("Show station info "+id);
-
-		/*
-        $('stationtitle').html(station_list[id].name);
-        $('stationstatus').html(station_list[id].description);
-        $('stationlocation').html(station_list[id].city);
-        $('stationcontact').html(station_list[id].homePage);
+      
+        $('#spstationtitle').html(station_list[id].name);
+        $('#spstationstatus').html(station_list[id].description);
+        $('#spstationlocation').html(station_list[id].city);
+        $('#spstationcontact').html(station_list[id].homePage);
+        $('#spstationemail').html(station_list[id].email);
+        $('#spstationtel').html(station_list[id].telephone);
+        $('#spstationweb').html(station_list[id].homePage);
 
         $('#community').hide();
         $('#info').hide();
         $('#stations').hide();
         $('#stationpage').show();
-		*/
+		myScroll.refresh();
+        myScroll.scrollTo(0,0,0);
+
       }
 
       $(document).ready(function () {
@@ -124,8 +166,26 @@
         setHeight();
         myScroll = new iScroll('scroller', {checkDOMChanges: false});
         
-        $( "#slider" ).slider();
+        // Some info on various phone volume controls: https://github.com/purplecabbage/phonegap-plugins
+        $( "#slider" ).slider( {
+          min: 0,
+          max: 1,
+          step: 0.1,
+          change: function(event, ui) {
+            // alert("Set volume to "+ui.value);
+            volume = ui.value;
+            if ( myStream != null )
+				
+              if (device.platform.indexOf("iPhone") != -1) {
+					myStream.volume = volume;
+				} else {
+					myStream.setVolume(volume,volume);
+				}
+            $('#sliderdiv').toggle();
+          }
+        });
     
+        $('#feedbackform').hide();
         $('#buttonpause').hide();
         $('#stationpage').hide();
         $('#community').hide();
@@ -140,6 +200,8 @@
         $("#stationstatus").html("")
         $('#stations').show();
         $('#buttonhome').addClass('on');
+        $('#buttonplay').addClass('off');
+		$('#buttonvolume').addClass('off');
 
         // Load the array of currently live stations from the backend web service
         $.ajax({
@@ -167,14 +229,15 @@
             myScroll.refresh();
             myScroll.scrollTo(0,0,0);
           },
-          url:"http://data.thegistfoundation.net/cma/station/list.json"
+          url:"http://playerinfo.canstreamer.co.uk/cma/station/list.json"
+          //url:"http://data.thegistfoundation.net/cma/station/list.json"
         });
       })
 
       function resetButtons() {
       	$('#buttonhome').removeClass('on');
       	$('#buttoninfo').removeClass('on');
-      	$('#buttonvolume').removeClass('on');
+      	//$('#buttonvolume').removeClass('on');
       	$('#buttoncommunity').removeClass('on');
       	$('#buttonnews').removeClass('on');
       	$('#buttonlist').removeClass('on');
@@ -205,9 +268,10 @@
         myScroll.scrollTo(0,0,0);
       }
 
-	  function volume() {
-		$('#sliderdiv').toggle();
-	  }
+      function changeVolume() {
+        $('#buttonvolume').toggleClass('on');
+        $('#sliderdiv').toggle();
+      }
 
       function settings() {
         $('#stationpage').hide();
@@ -215,7 +279,6 @@
         $('#info').hide();
         $('#community').hide();
         $('#settings').show();
-        
         myScroll.refresh();
         myScroll.scrollTo(0,0,0);
       }
@@ -228,6 +291,8 @@
         $('#info').show();
         resetButtons()
         $('#buttoninfo').addClass('on');
+		myScroll.refresh();
+        myScroll.scrollTo(0,0,0);
       }
 
       function selectNews() {
@@ -238,6 +303,7 @@
         reloadInfo("#newslist","CMA");
         resetButtons()
         $('#buttonnews').addClass('on');
+		myScroll.refresh();
       }
 
       function selectList() {
@@ -248,6 +314,7 @@
         reloadInfo("#maillist","CMAL");
         resetButtons()
         $('#buttonlist').addClass('on');
+		myScroll.refresh();
       }
 
       function selectTwitter() {
@@ -258,6 +325,7 @@
         reloadInfo("#twitterlist","CMAT");
         resetButtons()
         $('#buttontwitter').addClass('on');
+		myScroll.refresh();
       }
 
       function reloadInfo(element, feedname) {
@@ -274,17 +342,23 @@
             else {
               // Update the station browser in the UI with the first available station
               for ( i=0; i<item_list.length; i++ ) {
-		        if (feedname != "CMAT" ) {
-                	$(element).append("<li class=\"listitem\"><ul><li class=\"itemdate\">18 Dec</li><li class=\"itemtitle\">"+item_list[i][3]+"</li><li class=\"itemteaser\">"+item_list[i][1]+"</li></ul></li>");
+	        if (feedname != "CMAT" ) {
+                 	$(element).append("<li class=\"listitem\" onClick=\"window.open("+item_list[i][0]+")\"><ul>"+
+                                      "<li class=\"itemtitle\">"+item_list[i][3]+"</li>"+
+                                      "<li class=\"itemteaser\">"+item_list[i][6]+"</li></ul></li>");  // Really itemdate, but use the itemteaser formatting/
                 } else {
-                	$(element).append("<li class=\"listitem\"><ul><li class=\"itemdate\">18 Dec</li><li class=\"itemtitle\">"+item_list[i][1]+"</li><li class=\"itemteaser\">@community_media</li></ul></li>");
+               	// $(element).append("<li class=\"listitem\" onClick=\"window.open("+item_list[i][0]+")\"><ul><li class=\"itemdate\">"+item_list[i][6]+"</li><li class=\"itemtitle\">"+item_list[i][1]+"</li><li class=\"itemteaser\"></li></ul></li>");1
+                 	$(element).append("<li class=\"listitem\" onClick=\"window.open("+item_list[i][0]+")\"><ul>"+
+                                      "<li class=\"itemtitle\">"+item_list[i][3]+"</li>"+
+                                      "<li class=\"itemteaser\">"+item_list[i][6]+"</li></ul></li>");  // Really itemdate, but use the itemteaser formatting/
                 }
               }
             }
             myScroll.refresh();
             myScroll.scrollTo(0,0,0);
           },
-          url:"http://data.thegistfoundation.net/cma/info.json?feed="+feedname
+		  url:"http://playerinfo.canstreamer.co.uk/cma/info.json?feed="+feedname
+          //url:"http://data.thegistfoundation.net/cma/info.json?feed="+feedname
         });
 
         // icon_chevron.png
@@ -294,8 +368,8 @@
 
   <body>
 
-<div id="player"><!--<div id="sliderdiv" class="orange"><div id="slider"></div></div>-->
-<div id="stationinfo"><div id="stationtitle">Station Name</div><div id="stationstatus">Status text or track playing</div></div><div id="buttonplay" onClick="javascript:toggleCurrentStation()"></div><div id="buttonvolume" onClick="javascript:volume()"></div><br/><div id="buttoninfo" onClick="javascript:selectInfo()"></div><div id="buttonhome" onClick="javascript:stations()"></div><div id="buttoncommunity" onClick="javascript:community()"></div>
+<div id="player"><div id="sliderdiv"><img id="volmin" src="res/volmin.png" alt="volmin" width="18" height="18" /><img id="volmax" src="res/volmax.png" alt="volmin" width="18" height="18" /><div id="slider"></div></div>
+<div id="stationinfo"><div id="stationtitle">Station Name</div><div id="stationstatus">Status text or track playing</div></div><div id="buttonplay" onClick="javascript:toggleCurrentStation()"></div><div id="buttonvolume" onClick="javascript:changeVolume()"></div><br/><div id="buttoninfo" onClick="javascript:selectInfo()"></div><div id="buttonhome" onClick="javascript:stations()"></div><div id="buttoncommunity" onClick="javascript:community()"></div>
 </div>
 <div id="container">
 <div id="scroller">
@@ -325,7 +399,8 @@
     </div>
   </div>
 
-    <div id="info">
+  <div id="info">
+  <ul style="clear: both">
   <li class="listitem">
     <img src="res/cslogo.png" alt="cslogo" />
     <p>Canstreamer</p>
@@ -333,48 +408,55 @@
    </li>
    <li class="listitem">
    <img src="res/csrlogo.png" alt="csrlogo"/>
-   <p>Canstreamer is powered by Canstream from the Community Media Association</p>
+   <p>Canstreamer is powered by <a href="http://www.canstreamer.co.uk/" target="_blank">Canstream</a> from the <a href="http://www.commedia.org.uk/" target="_blank">Community Media Association</a></p>
+   </li>
+   <li class="listitem">
+   <a href="http://bit.ly/canstreamerfeedbackembedded" target="_blank">Leave Feedback About Canstreamer</a>
    </li>
    <li class="listitem">
    <p>Interested in getting involved in Community Media as a Volunteer or Broadcaster?</p>
-   <p>Contact the Community Media Association</p>
+   <p>Contact the <a href="http://www.commedia.org.uk/" target="_blank">Community Media Association</a></p>
    <img src="res/cmalogo.png" style="float: inherit; max-height: 45px; padding: 4px 10px; clear: both;" title="Community Media Association">
    </li>
    <li class="listitem">
    In partnership with<br/>
 	<br/>
-   <img src="res/arts-council-england.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="Arts Council England - Lottery Funded">
+   <a href="http://www.artscouncil.org.uk/" target="_blank"><img src="res/arts-council-england.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="Arts Council England - Lottery Funded"></a>
    </li>
    <li class="listitem">
-   The GIST Foundation<br/>
-   <img src="res/gistlogo.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="The GIST Foundation">
+   <a href="http://thegisthub.net/about/" target="_blank">The GIST Foundation</a><br/>
+   <a href="http://thegisthub.net/about/" target="_blank"><img src="res/gistlogo.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="The GIST Foundation"></a>
    </li>
    <li class="listitem">
-   <img src="res/artimelt.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="The Artimelt Academy">
+   <a href="http://www.artimelt.com/" target="_blank"><img src="res/artimelt.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="The Artimelt Academy"></a>
    </li>
    <li class="listitem">
-   Conception, Design, Coding &amp; Realisation<br/>
-   <br/>
-   Bill Best (@billbest)<br/>
-   Jag Gill (@jagusti)<br/>
-   Ian Ibbotson (@ianibbo)<br/>
-   Paul Beech (@guru)<br/>
+   Conception, Design, Coding &amp; Realisation<br/><br/>
+   Bill Best (<a href="http://twitter.com/billbest" target="_blank">@billbest</a>)<br/>
+   Jag Gill (<a href="http://twitter.com/jagusti" target="_blank">@jagusti</a>)<br/>
+   Ian Ibbotson (<a href="http://twitter.com/ianibbo" target="_blank">@ianibbo</a>)<br/>
+   Paul Beech (<a href="http://twitter.com/guru" target="_blank">@guru</a>)<br/>
    
+   Canstreamer uses <a href="http://www.gyford.com/phil/writing/2009/05/13/mailman_archive_scraper.php" target="_blank">Mailman RSS Scraper</a> by <a href="http://www.gyford.com/">Phil Gyford</a>.
    </li>
-  </div>
-  
-  <div id="settings">
-    This is the settings page - Just for volume right now
-    Volume:<br/>
-  </div>
-  <div id="stationpage">
-  <ul>
-      <li id="stationtitle">Station Name</li>
-      <li id="stationstatus">Station Description</li>
-      <li id="stationlocation">Location: Station Location</li>
-      <li id="stationcontact"><ul><li>Email: <a href="mailto:mail@mail.com">mail@mail.com</a></li><li>Tel: <a href="tel:011x26262626">011x26262626</a></li><li>Web: <a href="http://example.com/">http://example.com/</a></li></ul></li>
    </ul>
   </div>
+
+  <div id="stationpage">
+  <ul>
+  	  <li id="spstationback"><div onClick="javascript:stations()" style="display: block; width: 48px; height: 37px; background: url(res/buttonsprites.png); background-size: 320px 128px; background-position: -272px -90px;"></div></li>
+      <li id="spstationtitle" style="font-size: 1.6em; font-weight: bold;">Station Name</li>
+      <li id="spstationstatus" style="font-weight: bold">Station Description</li>
+      <li id="spstationlocation">Location: Station Location</li>
+      <li id="spstationcontact"><ul>
+      <li id="spstationemail">Email</li>
+      <li id="spstationtel">Tel</li>
+      <li id="spstationweb">Web</li></ul></li>
+   </ul>
+  </div>
+  
+  <div id="feedbackform" style="padding: 10px;">TODO: Load http://bit.ly/canstreamerfeedbackembedded via AJAX.</div>
+
 </div>
 </div>
   </body>

@@ -2,8 +2,8 @@
 //  CanstreamerAppDelegate.h
 //  Canstreamer
 //
-//  Created by dev on 23/12/2010.
-//  Copyright __MyCompanyName__ 2010. All rights reserved.
+//  Created by Paul Beech on 22/02/2011.
+//  Copyright __MyCompanyName__ 2011. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

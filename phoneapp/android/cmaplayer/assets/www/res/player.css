@@ -222,6 +222,10 @@ height: 16px;
 overflow: hidden;
 }
 
+#stationpage li {
+padding: 8px;
+}
+
 #info .listitem  {
 text-align: center;
 padding: 15px 10px;
