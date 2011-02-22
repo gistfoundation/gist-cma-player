@@ -77,11 +77,11 @@ display: inline-block;
  left: 0px;
 }
 
-#stationtitle {
+#stationtitle, #spstationtitle {
 font-weight: 600;
 }
 
-#stationtitle, #stationstatus {
+#stationtitle, #stationstatus, #spstationstatus, #spstationtitle, #spstationlocation {
 display: block;
 height: 18px;
 width: 220px;
