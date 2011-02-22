@@ -110,16 +110,18 @@
 
         // If we've not played this station before in this session, create a new media object and store it
         // in the station array entry.
-		if (device.platform.indexOf("iPhone") != -1) {
-			if ( myStream == null ) {
-				myStream = new Audio(station_list[current_selection].streamUrl);
-			} else {
-				myStream.src = station_list[current_selection].streamUrl;
-			}
+        // device doesn't seem to be set on android... So testing it first
+	if ( ( typeof(device)!='undefined') && ( device.platform.indexOf("iPhone") > -1) ) {
+          // We are on iPhone
+	  myStream = new Media(station_list[current_selection].streamUrl);
+	} else {
+          // Android
+		if ( myStream == null ) {
+			myStream = new Audio(station_list[current_selection].streamUrl);
 		} else {
-			myStream = new Media(station_list[current_selection].streamUrl);
+			myStream.src = station_list[current_selection].streamUrl;
 		}
-        // alert("Here is where the station is created")
+	}
 
         // Turn the play button into a pause button
         $('#buttonplay').removeClass('off');
@@ -174,11 +176,11 @@
             volume = ui.value;
             if ( myStream != null )
 				
-              if (device.platform.indexOf("iPhone") != -1) {
-					myStream.volume = volume;
-				} else {
-					myStream.setVolume(volume,volume);
-				}
+              if ( ( typeof(device) != 'undefined' ) && ( device.platform.indexOf("iPhone") != -1) ) {
+		myStream.volume = volume;
+		} else {
+			myStream.setVolume(volume,volume);
+		}
             $('#sliderdiv').toggle();
           }
         });
@@ -446,15 +448,18 @@
 
   <div id="stationpage">
   <ul>
-  	  <li id="spstationback"><div onClick="javascript:stations()" style="display: block; width: 48px; height: 37px; background: url(res/buttonsprites.png); background-size: 320px 128px; background-position: -272px -90px;"></div></li>
       <li id="spstationtitle" style="font-size: 1.6em; font-weight: bold;">Station Name</li>
       <li id="spstationstatus" style="font-weight: bold">Station Description</li>
       <li id="spstationlocation">Location: Station Location</li>
-      <li id="spstationcontact"><ul>
-      <li id="spstationemail">Email</li>
-      <li id="spstationtel">Tel</li>
-      <li id="spstationweb">Web</li></ul></li>
-   </ul>
+      <li id="spstationcontact">
+        <ul>
+          <li id="spstationemail">Email</li>
+          <li id="spstationtel">Tel</li>
+          <li id="spstationweb">Web</li>
+        </ul>
+      </li>
+      <li id="spstationback"><div onClick="javascript:stations()" style="display: block; width: 48px; height: 37px; background: url(res/buttonsprites.png); background-size: 320px 128px; background-position: -272px -90px;"></div> </li>
+  </ul>
   </div>
   
   <div id="feedbackform" style="padding: 10px;">TODO: Load http://bit.ly/canstreamerfeedbackembedded via AJAX.</div>

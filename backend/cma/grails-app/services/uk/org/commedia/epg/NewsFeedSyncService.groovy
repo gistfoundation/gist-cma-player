@@ -26,7 +26,7 @@ class NewsFeedSyncService {
 	            def title = itm.title?.text()
 	            def description = itm.description?.text()
 	            def link = itm.link?.text()
-              def pubDate = itm.pubDate?.text()
+                    def pubDate = itm.pubDate?.text()
 	            //println "Processing station guid:${guid} link:${link} desc:${description} title:${title}"
 
               if ( ( guid == null ) || ( guid.length() == 0 ) ) {
