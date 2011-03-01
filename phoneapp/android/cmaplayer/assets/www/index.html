@@ -34,7 +34,7 @@
   
   // Change wrapper height based on device orientation. Not strictly needed by iScroll, you may also use pure CSS techniques.
   function setHeight() {
-  	$('body').css("width: "+window.innerWidth+"px;");
+    $('body').css("width: "+window.innerWidth+"px;");
     var headerH = document.getElementById('player').offsetHeight,
     wrapperH = window.innerHeight - headerH;
     document.getElementById('container').style.height = wrapperH + 'px';
@@ -50,35 +50,35 @@
       var volume = 0.5;
 
       function selectStation(station) {
-	  
+    
         if ( station != null && station >= 0 && station < station_list.length && station != current_selection ) {
-	      if (current_selection != null) {station_list[current_selection].playButton.removeClass("on");}
+        if (current_selection != null) {station_list[current_selection].playButton.removeClass("on");}
           current_selection = station;
           playCurrentStation();
         } else if (station == current_selection) {
-	      toggleCurrentStation();
+        toggleCurrentStation();
         } else {
           alert("Invalid station");
         }
       }
 
-	  function toggleCurrentStation() {
-	  	  if ( currently_playing != null ) {
-		  	  stopCurrentStation();
-		  } else {
-		  	  playCurrentStation();
-		  }
-	  }
+    function toggleCurrentStation() {
+        if ( currently_playing != null ) {
+          stopCurrentStation();
+      } else {
+          playCurrentStation();
+      }
+    }
 
       // Play the station currently selected in the station browser
       function stopCurrentStation() {
         if ( currently_playing != null ) {
            if ( myStream != null ) {
-             if (device.platform.indexOf("iPhone") != -1) {
-					myStream.pause();
-				} else {
-				    myStream.stop();
-				}
+       if ( ( typeof(device)!='undefined') && ( device.platform.indexOf("iPhone") > -1) ) {
+          myStream.pause();
+        } else {
+            myStream.stop();
+        }
            }
            station_list[currently_playing].playButton.removeClass("on");
            currently_playing = null;
@@ -86,7 +86,7 @@
         $('#buttonplay').removeClass('on');
         $('#buttonplay').addClass('off');
         $('#buttonvolume').removeClass('on');
-	$('#buttonvolume').addClass('off');
+  $('#buttonvolume').addClass('off');
       }
 
       // Play the station currently selected in the station browser
@@ -94,13 +94,13 @@
         // If there is already a station playing, we should stop any media playing
         if ( currently_playing != null ) {
            if ( myStream != null ) {
-				if (device.platform.indexOf("iPhone") != -1) {
-					myStream.pause();
-				} else {
-				    myStream.stop();
-				}
+       if ( ( typeof(device)!='undefined') && ( device.platform.indexOf("iPhone") > -1) ) {
+          myStream.pause();
+        } else {
+            myStream.stop();
+        }
            }
-	}
+  }
 
         // Update the text of the currently playing station
         $("#stationtitle").html(station_list[current_selection].name+" [buffering...]");
@@ -111,32 +111,35 @@
         // If we've not played this station before in this session, create a new media object and store it
         // in the station array entry.
         // device doesn't seem to be set on android... So testing it first
-	if ( ( typeof(device)!='undefined') && ( device.platform.indexOf("iPhone") > -1) ) {
+        // On Android we use the phonegap Media object - On iPhone the html Audio object
+        if ( ( typeof(device)!='undefined') && ( device.platform.indexOf("iPhone") > -1) ) {
           // We are on iPhone
-	  myStream = new Media(station_list[current_selection].streamUrl);
-	} else {
+          if ( myStream == null ) {
+            myStream = new Audio(station_list[current_selection].streamUrl);
+          } else {
+            myStream.src = station_list[current_selection].streamUrl;
+          }
+        } else {
           // Android
-		if ( myStream == null ) {
-			myStream = new Audio(station_list[current_selection].streamUrl);
-		} else {
-			myStream.src = station_list[current_selection].streamUrl;
-		}
-	}
+          myStream = new Media(station_list[current_selection].streamUrl);
+        }
 
         // Turn the play button into a pause button
         $('#buttonplay').removeClass('off');
-	$('#buttonplay').addClass('on');
-	$('#buttonvolume').removeClass('off');
-	$('#buttonvolume').addClass('on');
+  $('#buttonplay').addClass('on');
+  $('#buttonvolume').removeClass('off');
+  $('#buttonvolume').addClass('on');
         station_list[currently_playing].playButton.addClass("on");
 
         // Play the media object for this station
         myStream.play();
-		if (device.platform.indexOf("iPhone") != -1) {
-			myStream.volume = volume;
-		} else {
-			myStream.setVolume(volume,volume);
-		}
+        if ( ( typeof(device)!='undefined') && ( device.platform.indexOf("iPhone") > -1) ) {
+          // iPhone Audio variant
+          myStream.volume = volume;
+        } else {
+          // droidgap media 
+          myStream.setVolume(volume,volume);
+        }
 
         $("#stationtitle").html(station_list[current_selection].name);
         $("#stationstatus").html("<marquee loop=\"4\" behavior=\"alternate\">"+station_list[current_selection].description+"</marquee>");
@@ -156,7 +159,7 @@
         $('#info').hide();
         $('#stations').hide();
         $('#stationpage').show();
-		myScroll.refresh();
+    myScroll.refresh();
         myScroll.scrollTo(0,0,0);
 
       }
@@ -175,12 +178,13 @@
             // alert("Set volume to "+ui.value);
             volume = ui.value;
             if ( myStream != null )
-				
+        
               if ( ( typeof(device) != 'undefined' ) && ( device.platform.indexOf("iPhone") != -1) ) {
-		myStream.volume = volume;
-		} else {
-			myStream.setVolume(volume,volume);
-		}
+                myStream.volume = volume;
+              } else {
+                myStream.setVolume(volume,volume);
+              }
+
             $('#sliderdiv').toggle();
           }
         });
@@ -201,7 +205,7 @@
         $('#stations').show();
         $('#buttonhome').addClass('on');
         $('#buttonplay').addClass('off');
-		$('#buttonvolume').addClass('off');
+    $('#buttonvolume').addClass('off');
 
         // Load the array of currently live stations from the backend web service
         $.ajax({
@@ -239,13 +243,13 @@
       })
 
       function resetButtons() {
-      	$('#buttonhome').removeClass('on');
-      	$('#buttoninfo').removeClass('on');
-      	//$('#buttonvolume').removeClass('on');
-      	$('#buttoncommunity').removeClass('on');
-      	$('#buttonnews').removeClass('on');
-      	$('#buttonlist').removeClass('on');
-      	$('#buttontwitter').removeClass('on');
+        $('#buttonhome').removeClass('on');
+        $('#buttoninfo').removeClass('on');
+        //$('#buttonvolume').removeClass('on');
+        $('#buttoncommunity').removeClass('on');
+        $('#buttonnews').removeClass('on');
+        $('#buttonlist').removeClass('on');
+        $('#buttontwitter').removeClass('on');
       }
 
       function stations() {
@@ -295,7 +299,7 @@
         $('#info').show();
         resetButtons()
         $('#buttoninfo').addClass('on');
-		myScroll.refresh();
+    myScroll.refresh();
         myScroll.scrollTo(0,0,0);
       }
 
@@ -307,7 +311,7 @@
         reloadInfo("#newslist","CMA");
         resetButtons()
         $('#buttonnews').addClass('on');
-		myScroll.refresh();
+    myScroll.refresh();
       }
 
       function selectList() {
@@ -318,7 +322,7 @@
         reloadInfo("#maillist","CMAL");
         resetButtons()
         $('#buttonlist').addClass('on');
-		myScroll.refresh();
+    myScroll.refresh();
       }
 
       function selectTwitter() {
@@ -329,7 +333,7 @@
         reloadInfo("#twitterlist","CMAT");
         resetButtons()
         $('#buttontwitter').addClass('on');
-		myScroll.refresh();
+    myScroll.refresh();
       }
 
       function reloadInfo(element, feedname) {
@@ -346,13 +350,13 @@
             else {
               // Update the station browser in the UI with the first available station
               for ( i=0; i<item_list.length; i++ ) {
-	        if (feedname != "CMAT" ) {
-                 	$(element).append("<li class=\"listitem\" onClick=\"window.open("+item_list[i][0]+")\"><ul>"+
+          if (feedname != "CMAT" ) {
+                   $(element).append("<li class=\"listitem\" onClick=\"window.open("+item_list[i][0]+")\"><ul>"+
                                       "<li class=\"itemtitle\">"+item_list[i][3]+"</li>"+
                                       "<li class=\"itemteaser\">"+item_list[i][6]+"</li></ul></li>");  // Really itemdate, but use the itemteaser formatting/
                 } else {
-               	// $(element).append("<li class=\"listitem\" onClick=\"window.open("+item_list[i][0]+")\"><ul><li class=\"itemdate\">"+item_list[i][6]+"</li><li class=\"itemtitle\">"+item_list[i][1]+"</li><li class=\"itemteaser\"></li></ul></li>");1
-                 	$(element).append("<li class=\"listitem\" onClick=\"window.open("+item_list[i][0]+")\"><ul>"+
+                 // $(element).append("<li class=\"listitem\" onClick=\"window.open("+item_list[i][0]+")\"><ul><li class=\"itemdate\">"+item_list[i][6]+"</li><li class=\"itemtitle\">"+item_list[i][1]+"</li><li class=\"itemteaser\"></li></ul></li>");1
+                   $(element).append("<li class=\"listitem\" onClick=\"window.open("+item_list[i][0]+")\"><ul>"+
                                       "<li class=\"itemtitle\">"+item_list[i][3]+"</li>"+
                                       "<li class=\"itemteaser\">"+item_list[i][6]+"</li></ul></li>");  // Really itemdate, but use the itemteaser formatting/
                 }
@@ -361,7 +365,7 @@
             myScroll.refresh();
             myScroll.scrollTo(0,0,0);
           },
-		  url:"http://playerinfo.canstreamer.co.uk/cma/info.json?feed="+feedname
+      url:"http://playerinfo.canstreamer.co.uk/cma/info.json?feed="+feedname
           //url:"http://data.thegistfoundation.net/cma/info.json?feed="+feedname
         });
 
@@ -424,7 +428,7 @@
    </li>
    <li class="listitem">
    In partnership with<br/>
-	<br/>
+  <br/>
    <a href="http://www.artscouncil.org.uk/" target="_blank"><img src="res/arts-council-england.png" style="float: inherit; max-height: 90px; padding: 4px 10px; clear: both;" title="Arts Council England - Lottery Funded"></a>
    </li>
    <li class="listitem">
