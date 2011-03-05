@@ -17,6 +17,7 @@
       _gaq.push(['_trackPageview']);
 
       (function() {
+        alert("tracking")
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
@@ -351,12 +352,12 @@
               // Update the station browser in the UI with the first available station
               for ( i=0; i<item_list.length; i++ ) {
           if (feedname != "CMAT" ) {
-                   $(element).append("<li class=\"listitem\" onClick=\"window.open("+item_list[i][0]+")\"><ul>"+
+                   $(element).append("<li class=\"listitem\" onClick=\"window.open('"+item_list[i][0]+"')\"><ul>"+
                                       "<li class=\"itemtitle\">"+item_list[i][3]+"</li>"+
                                       "<li class=\"itemteaser\">"+item_list[i][6]+"</li></ul></li>");  // Really itemdate, but use the itemteaser formatting/
                 } else {
                  // $(element).append("<li class=\"listitem\" onClick=\"window.open("+item_list[i][0]+")\"><ul><li class=\"itemdate\">"+item_list[i][6]+"</li><li class=\"itemtitle\">"+item_list[i][1]+"</li><li class=\"itemteaser\"></li></ul></li>");1
-                   $(element).append("<li class=\"listitem\" onClick=\"window.open("+item_list[i][0]+")\"><ul>"+
+                   $(element).append("<li class=\"listitem\" onClick=\"window.open('"+item_list[i][0]+"')\"><ul>"+
                                       "<li class=\"itemtitle\">"+item_list[i][3]+"</li>"+
                                       "<li class=\"itemteaser\">"+item_list[i][6]+"</li></ul></li>");  // Really itemdate, but use the itemteaser formatting/
                 }
