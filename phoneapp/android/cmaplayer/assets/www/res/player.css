@@ -82,12 +82,10 @@ font-weight: 600;
 }
 
 #stationtitle, #stationstatus, #spstationtitle, #spstationlocation {
-display: block;
-/* height: 18px; */
-width: 220px;
-/*line-height: 18px;*/
-padding: 0;
-/*overflow: hidden;*/
+}
+
+#spstationlocation {
+clear: both;
 }
 
 #spstationstatus {
@@ -95,11 +93,10 @@ padding: 0;
 
 #spstationicon {
 float:left;
-margin-right:12px;
+margin-right:6px;
 }
 
 #spstationinfo {
-/*float:left;*/
 }
 
 

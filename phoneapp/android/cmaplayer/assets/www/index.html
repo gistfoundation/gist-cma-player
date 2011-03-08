@@ -143,8 +143,8 @@
       myStream.setVolume(volume,volume);
     }
 
-    $("#stationtitle").html("<div onClick=\"window.open('"+item_list[i][0]+"')\">"+station_list[current_selection].name+"</div>");
-    $("#stationstatus").html("<marquee onClick=\"window.open('"+item_list[i][0]+"')\" loop=\"4\" behavior=\"alternate\">"+station_list[current_selection].description+"</marquee>");
+    $("#stationtitle").html("<div onClick=\"javascript:stationInfo("+current_selection+");\">"+station_list[current_selection].name+"</div>");
+    $("#stationstatus").html("<marquee onClick=\"javascript:stationInfo("+current_selection+");\" loop=\"4\" behavior=\"alternate\">"+station_list[current_selection].description+"</marquee>");
   }
 
       function stationInfo(id) {
@@ -458,7 +458,7 @@
 
   <div id="stationpage">
   <ul>
-      <li id="spstationinfo"><div id="spstationicon">Station Name</div><div id="spstationtitle">Station Name</div> </li>
+      <li id="spstationinfo"><div id="spstationtitle">Station Name</div><div id="spstationicon">Station Icon</div></li> 
       <li id="spstationstatus">Station Description</li>
       <li id="spstationlocation">Location: Station Location</li>
       <li id="spstationcontact">
