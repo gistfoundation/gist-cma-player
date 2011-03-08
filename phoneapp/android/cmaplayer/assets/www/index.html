@@ -84,10 +84,11 @@
            station_list[currently_playing].playButton.removeClass("on");
            currently_playing = null;
         }
-        $('#buttonplay').removeClass('on');
-        $('#buttonplay').addClass('off');
-        $('#buttonvolume').removeClass('on');
-  $('#buttonvolume').addClass('off');
+        // II Removed for issue - Pause and volume buttons greyed out when paused.
+        // $('#buttonplay').removeClass('on');
+        // $('#buttonplay').addClass('off');
+        // $('#buttonvolume').removeClass('on');
+        //$('#buttonvolume').addClass('off');
       }
 
       // Play the station currently selected in the station browser
