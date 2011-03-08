@@ -30,7 +30,7 @@ class StationFeedSyncService {
           def telephone = it.telephone?.text()
           def email = it.email?.text()
           def website = it.website?.text()
-          def favicon = it.favicon?.text()
+          def favicon = it.icon?.text()
 
           // println "Processing station guid:${guid} link:${link} desc:${description} title:${title}"
 

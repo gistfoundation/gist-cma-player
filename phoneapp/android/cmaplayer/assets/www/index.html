@@ -17,7 +17,6 @@
       _gaq.push(['_trackPageview']);
 
       (function() {
-        alert("tracking")
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
@@ -45,23 +44,24 @@
   // If you want to use iScroll in a portion of the screen and still be able to use the native scrolling, do *not* preventDefault on touchmove.
   //document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
   
-      var station_list = null;
-      var current_selection = null;
-      var currently_playing = null;
-      var volume = 0.5;
+  var station_list = null;
+  var current_selection = null;
+  var currently_playing = null;
+  var volume = 0.5;
 
-      function selectStation(station) {
+  function selectStation(station) {
     
-        if ( station != null && station >= 0 && station < station_list.length && station != current_selection ) {
-        if (current_selection != null) {station_list[current_selection].playButton.removeClass("on");}
-          current_selection = station;
-          playCurrentStation();
-        } else if (station == current_selection) {
-        toggleCurrentStation();
-        } else {
-          alert("Invalid station");
-        }
-      }
+    if ( station != null && station >= 0 && station < station_list.length && station != current_selection ) {
+      if (current_selection != null) {station_list[current_selection].playButton.removeClass("on");}
+      current_selection = station;
+      playCurrentStation();
+    } else if (station == current_selection) {
+      toggleCurrentStation();
+    } else {
+      alert("Invalid station");
+    }
+
+  }
 
     function toggleCurrentStation() {
         if ( currently_playing != null ) {
@@ -91,65 +91,66 @@
         //$('#buttonvolume').addClass('off');
       }
 
-      // Play the station currently selected in the station browser
-      function playCurrentStation() {
-        // If there is already a station playing, we should stop any media playing
-        if ( currently_playing != null ) {
-           if ( myStream != null ) {
-       if ( ( typeof(device)!='undefined') && ( device.platform.indexOf("iPhone") > -1) ) {
+  // Play the station currently selected in the station browser
+  function playCurrentStation() {
+    // If there is already a station playing, we should stop any media playing
+    if ( currently_playing != null ) {
+      if ( myStream != null ) {
+        if ( ( typeof(device)!='undefined') && ( device.platform.indexOf("iPhone") > -1) ) {
           myStream.pause();
         } else {
             myStream.stop();
         }
            }
-  }
+    }
 
-        // Update the text of the currently playing station
-        $("#stationtitle").html(station_list[current_selection].name+" [buffering...]");
+    // Update the text of the currently playing station
+    $("#stationtitle").html(station_list[current_selection].name+" [buffering...]");
 
-        // Update the currently playing var so we can stop this station if a different one is selected
-        currently_playing = current_selection;
+    // Update the currently playing var so we can stop this station if a different one is selected
+    currently_playing = current_selection;
 
-        // If we've not played this station before in this session, create a new media object and store it
-        // in the station array entry.
-        // device doesn't seem to be set on android... So testing it first
-        // On Android we use the phonegap Media object - On iPhone the html Audio object
-        if ( ( typeof(device)!='undefined') && ( device.platform.indexOf("iPhone") > -1) ) {
-          // We are on iPhone
-          if ( myStream == null ) {
-            myStream = new Audio(station_list[current_selection].streamUrl);
-          } else {
-            myStream.src = station_list[current_selection].streamUrl;
-          }
-        } else {
-          // Android
-          myStream = new Media(station_list[current_selection].streamUrl);
-        }
-
-        // Turn the play button into a pause button
-        $('#buttonplay').removeClass('off');
-  $('#buttonplay').addClass('on');
-  $('#buttonvolume').removeClass('off');
-  $('#buttonvolume').addClass('on');
-        station_list[currently_playing].playButton.addClass("on");
-
-        // Play the media object for this station
-        myStream.play();
-        if ( ( typeof(device)!='undefined') && ( device.platform.indexOf("iPhone") > -1) ) {
-          // iPhone Audio variant
-          myStream.volume = volume;
-        } else {
-          // droidgap media 
-          myStream.setVolume(volume,volume);
-        }
-
-        $("#stationtitle").html(station_list[current_selection].name);
-        $("#stationstatus").html("<marquee loop=\"4\" behavior=\"alternate\">"+station_list[current_selection].description+"</marquee>");
+    // If we've not played this station before in this session, create a new media object and store it
+    // in the station array entry.
+    // device doesn't seem to be set on android... So testing it first
+    // On Android we use the phonegap Media object - On iPhone the html Audio object
+    if ( ( typeof(device)!='undefined') && ( device.platform.indexOf("iPhone") > -1) ) {
+      // We are on iPhone
+      if ( myStream == null ) {
+        myStream = new Audio(station_list[current_selection].streamUrl);
+      } else {
+        myStream.src = station_list[current_selection].streamUrl;
       }
+    } else {
+      // Android
+      myStream = new Media(station_list[current_selection].streamUrl);
+    }
+
+    // Turn the play button into a pause button
+    $('#buttonplay').removeClass('off');
+    $('#buttonplay').addClass('on');
+    $('#buttonvolume').removeClass('off');
+    $('#buttonvolume').addClass('on');
+    station_list[currently_playing].playButton.addClass("on");
+
+    // Play the media object for this station
+    myStream.play();
+    if ( ( typeof(device)!='undefined') && ( device.platform.indexOf("iPhone") > -1) ) {
+      // iPhone Audio variant
+      myStream.volume = volume;
+    } else {
+      // droidgap media 
+      myStream.setVolume(volume,volume);
+    }
+
+    $("#stationtitle").html("<div onClick=\"window.open('"+item_list[i][0]+"')\">"+station_list[current_selection].name+"</div>");
+    $("#stationstatus").html("<marquee onClick=\"window.open('"+item_list[i][0]+"')\" loop=\"4\" behavior=\"alternate\">"+station_list[current_selection].description+"</marquee>");
+  }
 
       function stationInfo(id) {
       
         $('#spstationtitle').html(station_list[id].name);
+        $('#spstationicon').html("<img src='"+station_list[id].stationLogo+"'/>");
         $('#spstationstatus').html(station_list[id].description);
         $('#spstationlocation').html(station_list[id].city);
         $('#spstationcontact').html(station_list[id].homePage);
@@ -457,8 +458,8 @@
 
   <div id="stationpage">
   <ul>
-      <li id="spstationtitle" style="font-size: 1.6em; font-weight: bold;">Station Name</li>
-      <li id="spstationstatus" style="font-weight: bold">Station Description</li>
+      <li id="spstationinfo"><div id="spstationicon">Station Name</div><div id="spstationtitle">Station Name</div> </li>
+      <li id="spstationstatus">Station Description</li>
       <li id="spstationlocation">Location: Station Location</li>
       <li id="spstationcontact">
         <ul>

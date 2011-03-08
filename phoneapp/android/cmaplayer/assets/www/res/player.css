@@ -81,13 +81,25 @@ display: inline-block;
 font-weight: 600;
 }
 
-#stationtitle, #stationstatus, #spstationstatus, #spstationtitle, #spstationlocation {
+#stationtitle, #stationstatus, #spstationtitle, #spstationlocation {
 display: block;
-height: 18px;
+/* height: 18px; */
 width: 220px;
-line-height: 18px;
+/*line-height: 18px;*/
 padding: 0;
-overflow: hidden;
+/*overflow: hidden;*/
+}
+
+#spstationstatus {
+}
+
+#spstationicon {
+float:left;
+margin-right:12px;
+}
+
+#spstationinfo {
+/*float:left;*/
 }
 
 
