@@ -1,5 +1,7 @@
 package uk.org.commedia.epg
 
+import java.text.SimpleDateFormat
+
 class NewsFeedSyncService {
 
     static transactional = true
@@ -7,6 +9,9 @@ class NewsFeedSyncService {
     def updateFeeds() {
       println "updateNewsFeeds"
       def timestamp = System.currentTimeMillis()
+
+      // Dates are of format Fri, 11 Mar 2011 12:14:17 GMT
+      def date_parser = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss ZZZ");
 
       uk.org.commedia.epg.Feed.list().each { feed ->
         def elapsed = timestamp - ( feed.lastCheck != null ? feed.lastCheck : 0 )
@@ -27,6 +32,13 @@ class NewsFeedSyncService {
 	            def description = itm.description?.text()
 	            def link = itm.link?.text()
                     def pubDate = itm.pubDate?.text()
+
+                    def parsed_date = date_parser.parse(pubDate);
+                    if ( parsed_date != null ) {
+                      timestamp = parsed_date.getTime()
+                      println "Converted date string ${pubDate} to time ${timestamp}"
+                    }
+
 	            //println "Processing station guid:${guid} link:${link} desc:${description} title:${title}"
 
               if ( ( guid == null ) || ( guid.length() == 0 ) ) {
