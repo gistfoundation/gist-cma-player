@@ -18,6 +18,11 @@ environments {
           username = "gist"
           password = "gist"
           url = "jdbc:mysql://localhost/cmadev?autoReconnect=true&amp;characterEncoding=utf8"
+          properties {
+            validationQuery="select 1"
+            testWhileIdle=true
+            timeBetweenEvictionRunsMillis=60000
+          }
           //   dbCreate = "create-drop" // one of 'create', 'create-drop','update'
           //   url = "jdbc:hsqldb:mem:devDB"
         }
@@ -35,6 +40,11 @@ environments {
           username = "gist"
           password = "gist"
           url = "jdbc:mysql://localhost/cmalive?autoReconnect=true&amp;characterEncoding=utf8"
+          properties { 
+            validationQuery="select 1"
+            testWhileIdle=true
+            timeBetweenEvictionRunsMillis=60000
+          } 
         }
     }
 }
