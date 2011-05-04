@@ -45,6 +45,11 @@ Build a sample test app, then copy the phonegap.n.n.n.jar and .js to the project
 
 --- Deployment to android market ---
 
+<<<<<<< HEAD
+=======
+Release Build Process:
+ant release
+>>>>>>> 822b6756db9d8365cf88a719dfa9c168873a9fc8
 http://market.android.com/publish/Home
 
 --- Deployment to apple store ---
