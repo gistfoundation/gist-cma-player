@@ -48,3 +48,14 @@ Build a sample test app, then copy the phonegap.n.n.n.jar and .js to the project
 Release Build Process:
 ant release
 http://market.android.com/publish/Home
+
+
+
+
+---
+
+ios build
+
+git clone...
+cd phoneapp/ios
+
