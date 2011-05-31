@@ -4,8 +4,16 @@ This is a collaborative learning project organised by the GIST foundation's mobi
 
 
 
+ios notes
+---------
 
-Some notes
+https://github.com/phonegap/phonegap-iphone
+
+http://ofps.oreilly.com/titles/9780596805784/
+
+
+Android notes
+-------------
 
 The android app was first generated with the command
 droidgap gen cmaplayer, and it can be found in the phoneapp,android folder
